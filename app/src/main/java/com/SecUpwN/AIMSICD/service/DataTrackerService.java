@@ -69,8 +69,11 @@ public class DataTrackerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String action = intent.getAction();
-        if(action != null && action.equals(ACTION_SYNC_DATA)) syncData();
+        if (intent == null &&
+            intent.getAction() != null &&
+            intent.getAction().equals(ACTION_SYNC_DATA))
+                syncData();
+        
         return START_STICKY;
     }
 
