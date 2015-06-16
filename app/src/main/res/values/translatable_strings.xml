@@ -135,6 +135,8 @@
     <string name="pref_enable_cell_monitoring_summ">Enable Automatic Cell Monitoring</string>
     <string name="pref_request_ocid_key">Request OCID API Key</string>
     <string name="pref_ocid_requestkey_summary">Request API key for OpenCellID data access</string>
+    <string name="pref_opt_in_data_tracker_title">Opt-in to data collection.</string>
+    <string name="pref_opt_in_data_tracker_summ">For research purposes only. No personal information is collected.</string>
 
     <!-- MAP PREFERENCES -->
     <string name="pref_map_title">Map Viewer Preferences</string>
