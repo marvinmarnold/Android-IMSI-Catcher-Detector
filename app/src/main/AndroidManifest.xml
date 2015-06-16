@@ -204,6 +204,11 @@
             android:name=".smsdetection.AdvancedUserSmsActivity"
             android:label="@string/title_activity_advanced_user" >
         </activity>
+        <receiver android:name=".receiver.ConnectivityReceiver">
+            <intent-filter android:priority="3000">
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

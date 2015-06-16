@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -47,10 +48,12 @@ public class DataTrackerService extends Service {
     private Runnable mUploaderRunnable;
     private ScheduledFuture mUploader;
     private static final int UPLOAD_FREQUENCY_VALUE = 10;
-    private static final TimeUnit UPLOAD_FREQUENCY_UNIT = TimeUnit.SECONDS;
+    private static final TimeUnit UPLOAD_FREQUENCY_UNIT = TimeUnit.MINUTES;
 
     private final static String mUploadAPIBase ="https://whispering-sea-9303.herokuapp.com/api/v1/";
     private RequestQueue mQueue;
+    private ArrayList<DataRequestParams> mOfflineRequests;
+    public static String ACTION_SYNC_DATA = "ACTION_SYNC_DATA";
 
     public class LocalBinder extends Binder {
         public DataTrackerService getService() {
@@ -64,6 +67,13 @@ public class DataTrackerService extends Service {
         return mBinder;
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        String action = intent.getAction();
+        if(action != null && action.equals(ACTION_SYNC_DATA)) syncData();
+        return START_STICKY;
+    }
+
     public void initUploader(LocationTracker locationTracker) {
         if(isInitialized) return;
         Context context = getApplicationContext();
@@ -71,6 +81,7 @@ public class DataTrackerService extends Service {
         this.mWifiTracker = new WifiTracker(context);
         this.mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         this.mQueue = Volley.newRequestQueue(context);
+        this.mOfflineRequests = new ArrayList<>();
 
         mScheduler = Executors.newScheduledThreadPool(1);
         mUploaderRunnable = new Runnable() {
@@ -84,47 +95,6 @@ public class DataTrackerService extends Service {
 
             public void upload(DataRequestParams dataRequestParams) {
                 mQueue.add(buildRequest(dataRequestParams));
-            }
-
-            JsonObjectRequest buildRequest(final DataRequestParams dataRequestParams) {
-                final String requestUrl = mUploadAPIBase + dataRequestParams.getEndpoint();
-
-                final JsonObjectRequest jsonRequest = new JsonObjectRequest(
-                        Request.Method.POST,
-                        requestUrl,
-                        dataRequestParams.getJsonObject(),
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                Log.d(TAG, "Successfully uploaded data");
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.e(TAG, "Unsuccessful data upload to: " + requestUrl, error);
-                            }
-                        });
-
-                return jsonRequest;
-            }
-
-            class DataRequestParams {
-                public JSONObject getJsonObject() {
-                    return mJsonObject;
-                }
-
-                public String getEndpoint() {
-                    return mEndpoint;
-                }
-
-                private final JSONObject mJsonObject;
-                private final String mEndpoint;
-
-                public DataRequestParams(JSONObject jsonObject, String endpoint) {
-                    this.mJsonObject = jsonObject;
-                    this.mEndpoint = endpoint;
-                }
             }
 
             JSONObject getImsiJSON() {
@@ -158,7 +128,7 @@ public class DataTrackerService extends Service {
                 return datum;
             }
 
-            public JSONObject addComonFields(JSONObject jsonObject) throws JSONException {
+            JSONObject addComonFields(JSONObject jsonObject) throws JSONException {
                 jsonObject.put("latitude_degrees", mLocationTracker.lastKnownLocation().getLatitudeInDegrees());
                 jsonObject.put("longitude_degrees", mLocationTracker.lastKnownLocation().getLongitudeInDegrees());
                 jsonObject.put("observed_at", DateFormat.getDateTimeInstance().format(new Date()));
@@ -219,5 +189,61 @@ public class DataTrackerService extends Service {
         NetworkInfo activeNetwork = mConnectivityManager.getActiveNetworkInfo();
         return activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
+    }
+
+    private class DataRequestParams {
+        public JSONObject getJsonObject() {
+            return mJsonObject;
+        }
+
+        public String getEndpoint() {
+            return mEndpoint;
+        }
+
+        private final JSONObject mJsonObject;
+        private final String mEndpoint;
+
+        public DataRequestParams(JSONObject jsonObject, String endpoint) {
+            this.mJsonObject = jsonObject;
+            this.mEndpoint = endpoint;
+        }
+    }
+
+    public void syncData() {
+        Log.d(TAG, "Syncing data");
+        if(isInitialized && isOnline()) {
+            ArrayList<DataRequestParams> t = (ArrayList<DataRequestParams>) mOfflineRequests.clone();
+            mOfflineRequests.clear();
+
+            for(DataRequestParams offlineDatum : t) {
+                Log.d(TAG, "Syncing a datum");
+                mQueue.add(buildRequest(offlineDatum));
+            }
+        }
+    }
+
+    public JsonObjectRequest buildRequest(final DataRequestParams dataRequestParams) {
+        final String requestUrl = mUploadAPIBase + dataRequestParams.getEndpoint();
+
+        final JsonObjectRequest jsonRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                requestUrl,
+                dataRequestParams.getJsonObject(),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "Successfully uploaded data");
+                        syncData();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        mOfflineRequests.add(dataRequestParams);
+                        Log.e(TAG, "Unsuccessful data upload to: " + requestUrl, error);
+                    }
+                });
+
+        return jsonRequest;
     }
 }
