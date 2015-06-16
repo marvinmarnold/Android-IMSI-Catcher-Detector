@@ -453,6 +453,8 @@ public class AIMSICD extends BaseActivity implements AsyncResponse {
                     * */
                 SmsDetection();
             }
+
+            initAndScheduleDataTracker();
         }
 
         @Override
@@ -486,20 +488,28 @@ public class AIMSICD extends BaseActivity implements AsyncResponse {
     private final ServiceConnection mDataTrackerServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder binder) {
+            Log.d(TAG, "DataTrackerService Connected");
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             mDataTrackerService = ((DataTrackerService.LocalBinder) binder).getService();
             mBoundToDataTrackerService = true;
 
-            mDataTrackerService.initUploader();
-            mDataTrackerService.scheduleUploader();
+            if(!mBound) return;
+            initAndScheduleDataTracker();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            Log.e(TAG, "Service Disconnected");
-            mBound = false;
+            Log.e(TAG, "DataTrackerService Disconnected");
+            mBoundToDataTrackerService = false;
         }
     };
+
+    private void initAndScheduleDataTracker() {
+        if(mBoundToDataTrackerService) {
+            mDataTrackerService.initUploader(mAimsicdService.getLocationTracker());
+            mDataTrackerService.scheduleUploader();
+        }
+    }
 
     private void startDataTrackerService() {
         SharedPreferences prefs = getApplicationContext().getSharedPreferences(AimsicdService.SHARED_PREFERENCES_BASENAME, 0);
@@ -508,6 +518,7 @@ public class AIMSICD extends BaseActivity implements AsyncResponse {
         if (!prefs.getBoolean(optInString, false)) return;
 
         if (!mBoundToDataTrackerService) {
+            Log.d(TAG, "Stated DataTrackerService");
             // Bind to LocalService
             Intent intent = new Intent(AIMSICD.this, DataTrackerService.class);
             //Start Service before binding to keep it resident when activity is destroyed

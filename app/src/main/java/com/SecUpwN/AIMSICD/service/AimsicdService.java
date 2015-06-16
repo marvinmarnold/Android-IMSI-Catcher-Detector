@@ -228,6 +228,10 @@ public class AimsicdService extends Service {
         }
     }
 
+    public LocationTracker getLocationTracker() {
+        return this.mLocationTracker;
+    }
+
     private void enableLocationServices() {
         if (isLocationRequestShowing) return; // only show dialog once
 
