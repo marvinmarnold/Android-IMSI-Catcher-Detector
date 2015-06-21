@@ -48,7 +48,7 @@ public class DataTrackerService extends Service {
     private Runnable mUploaderRunnable;
     private ScheduledFuture mUploader;
     private static final int UPLOAD_FREQUENCY_VALUE = 10;
-    private static final TimeUnit UPLOAD_FREQUENCY_UNIT = TimeUnit.MINUTES;
+    private static final TimeUnit UPLOAD_FREQUENCY_UNIT = TimeUnit.SECONDS;
 
     private final static String mUploadAPIBase ="https://whispering-sea-9303.herokuapp.com/api/v1/";
     private RequestQueue mQueue;
@@ -69,6 +69,7 @@ public class DataTrackerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "Start");
         if (intent == null &&
             intent.getAction() != null &&
             intent.getAction().equals(ACTION_SYNC_DATA))
