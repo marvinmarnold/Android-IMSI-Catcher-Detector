@@ -19,7 +19,6 @@ import com.SecUpwN.AIMSICD.adapters.BaseInflaterAdapter;
 import com.SecUpwN.AIMSICD.adapters.BtsMeasureCardInflater;
 import com.SecUpwN.AIMSICD.adapters.BtsMeasureItemData;
 import com.SecUpwN.AIMSICD.adapters.CardItemData;
-import com.SecUpwN.AIMSICD.adapters.CellCardInflater;
 import com.SecUpwN.AIMSICD.adapters.DbViewerSpinnerAdapter;
 import com.SecUpwN.AIMSICD.adapters.DbeImportCardInflater;
 import com.SecUpwN.AIMSICD.adapters.DbeImportItemData;
@@ -29,6 +28,8 @@ import com.SecUpwN.AIMSICD.adapters.EventLogItemData;
 import com.SecUpwN.AIMSICD.adapters.MeasuredCellStrengthCardData;
 import com.SecUpwN.AIMSICD.adapters.MeasuredCellStrengthCardInflater;
 import com.SecUpwN.AIMSICD.adapters.SilentSmsCardData;
+import com.SecUpwN.AIMSICD.adapters.UniqueBtsCardInflater;
+import com.SecUpwN.AIMSICD.adapters.UniqueBtsItemData;
 import com.SecUpwN.AIMSICD.constants.DBTableColumnIds;
 import com.SecUpwN.AIMSICD.constants.Examples;
 import com.SecUpwN.AIMSICD.enums.StatesDbViewer;
@@ -195,11 +196,11 @@ public class DbViewerFragment extends Fragment {
             switch (mTableSelected) {
                 case UNIQUE_BTS_DATA: {
                     //TODO this is a pain because in Dbi_bts there is no lat lon rss so I have to get data from Dbi_measure also.
-                    BaseInflaterAdapter<BtsMeasureItemData> adapter
-                            = new BaseInflaterAdapter<>(new BtsMeasureCardInflater());
+                    BaseInflaterAdapter<UniqueBtsItemData> adapter
+                            = new BaseInflaterAdapter<>(new UniqueBtsCardInflater());
                     int count = tableData.getCount();
                     while (tableData.moveToNext()) {
-                        BtsMeasureItemData data = new BtsMeasureItemData(
+                        UniqueBtsItemData data = new UniqueBtsItemData(
                                 "MCC: " + String.valueOf(tableData.getInt(tableData.getColumnIndex(DBTableColumnIds.DBI_BTS_MCC))),
                                 "MNC: " + String.valueOf(tableData.getInt(tableData.getColumnIndex(DBTableColumnIds.DBI_BTS_MNC))),
                                 "LAC: " + String.valueOf(tableData.getInt(tableData.getColumnIndex(DBTableColumnIds.DBI_BTS_LAC))),
@@ -209,7 +210,7 @@ public class DbViewerFragment extends Fragment {
                                 "Time Last: " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_BTS_TIME_LAST)),
                                 "LAT: " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_BTS_LAT)),
                                 "LON: " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_BTS_LON)));
-                               // "" + (tableData.getPosition() + 1) + " / " + count);
+                        // "" + (tableData.getPosition() + 1) + " / " + count);
                         adapter.addItem(data,false);
                     }
                     if (!tableData.isClosed()) {
@@ -220,53 +221,36 @@ public class DbViewerFragment extends Fragment {
                 }
 
                 case BTS_MEASUREMENTS: {
-                    BaseInflaterAdapter<CardItemData> adapter
-                            = new BaseInflaterAdapter<>(new CellCardInflater());
-                    int count = tableData.getCount();
-                    while (tableData.moveToNext()) {
-                        //TODO we need to make new layout for this data CardItemData is annoying and very hard to understand
-
-                        CardItemData data = new CardItemData(
-                                "CID: " + String.valueOf(tableData.getInt(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_BTS_ID))),
-                                "TIME: " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_TIME)),
-                                "GPSD LAT: " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_GPSD_LAT)),
-                                "GPSD LON: " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_GPSD_LON)),
-                                "GPSD ACC: " + String.valueOf(tableData.getInt(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_GPSD_ACCURACY))),
-                                "RAT: " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_RAT)),//THIS is new and was added
-                                "Avg Sig Str: " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_BB_POWER)),
-                                "" + (tableData.getPosition() + 1) + " / " + count);
-                        adapter.addItem(data, false);
-                    }
-                    if (!tableData.isClosed()) {
-                        tableData.close();
-                    }
-                    return adapter;
-
-                    /*//TODO here is an example marvin
-                                        BaseInflaterAdapter<BtsMeasureItemData> adapter
+                    BaseInflaterAdapter<BtsMeasureItemData> adapter
                             = new BaseInflaterAdapter<>(new BtsMeasureCardInflater());
-                    int count = tableData.getCount();
+//                    int count = tableData.getCount();
+                    String[] tableColumnNames = {
+                            DBTableColumnIds.DBI_MEASURE_BTS_ID,
+                            DBTableColumnIds.DBI_MEASURE_NC_LIST,
+                            DBTableColumnIds.DBI_MEASURE_TIME,
+                            DBTableColumnIds.DBI_MEASURE_GPSD_LAT,
+                            DBTableColumnIds.DBI_MEASURE_GPSD_LON,
+                            DBTableColumnIds.DBI_MEASURE_GPSD_ACCURACY,
+                            DBTableColumnIds.DBI_MEASURE_BB_POWER,
+                            DBTableColumnIds.DBI_MEASURE_RX_SIGNAL,
+                            DBTableColumnIds.DBI_MEASURE_RAT,
+                            DBTableColumnIds.DBI_MEASURE_IS_SUBMITTED,
+                            DBTableColumnIds.DBI_MEASURE_IS_NEIGHBOUR,
+                    };
                     while (tableData.moveToNext()) {
-                        //TODO we need to make new layout for this data CardItemData is annoying and very hard to understand
-
-                        BtsMeasureItemData data = new BtsMeasureItemData(
-                                "CID: " + String.valueOf(tableData.getInt(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_BTS_ID))),
-                                "TIME: " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_TIME)),
-                                "GPSD LAT: " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_GPSD_LAT)),
-                                "GPSD LON: " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_GPSD_LON)),
-                                "GPSD ACC: " + String.valueOf(tableData.getInt(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_GPSD_ACCURACY))),
-                                "RAT: " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_RAT)),//THIS is new and was added
-                                "Avg Sig Str: " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_BB_POWER)),
-                                "" + (tableData.getPosition() + 1) + " / " + count);
+                        String[] btsMeasureColumns = new String[tableColumnNames.length];
+                        for (int i = 0; i < tableColumnNames.length; i++) {
+                            String columnName = tableColumnNames[i];
+                            btsMeasureColumns[i] = columnName + ": " + String.valueOf(tableData.getInt(tableData.getColumnIndex(columnName)));
+//                           "" + (tableData.getPosition() + 1) + " / " + count
+                        }
+                        BtsMeasureItemData data = new BtsMeasureItemData(btsMeasureColumns);
                         adapter.addItem(data, false);
                     }
                     if (!tableData.isClosed()) {
                         tableData.close();
                     }
                     return adapter;
-
-
-                     */
                 }
 
                 case IMPORTED_OCID_DATA: {

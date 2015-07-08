@@ -35,15 +35,28 @@ public class BtsMeasureCardInflater implements IAdapterViewInflater<BtsMeasureIt
 
         private final View mRootView;
 
-        private final TextView LAC;
-        private final TextView CID;
-        private final TextView MCC;
-        private final TextView MNC;
-        private final TextView PSC;
-        private final TextView TIME_FIRST;
-        private final TextView TIME_LAST;
-        private final TextView LAT;
-        private final TextView LON;
+        private TextView bts_id;
+        private TextView nc_list;
+        private TextView time;
+        private TextView gpsd_lat;
+        private TextView gpsd_lon;
+        private TextView gpsd_accu;
+        private TextView gpse_lat;
+        private TextView gpse_lon;
+        private TextView bb_power;
+        private TextView bb_rf_temp;
+        private TextView tx_power;
+        private TextView rx_signal;
+        private TextView rx_stype;
+        private TextView rat;
+        private TextView BCCH;
+        private TextView TMSI;
+        private TextView TA;
+        private TextView PD;
+        private TextView BER;
+        private TextView AvgEcNo;
+        private TextView isSubmitted;
+        private TextView isNeighbour;
 
 
         public ViewHolder(View rootView) {
@@ -64,19 +77,28 @@ public class BtsMeasureCardInflater implements IAdapterViewInflater<BtsMeasureIt
         }
 
         public void updateDisplay(BtsMeasureItemData item) {
-
-            LAC.setText(item.getLac());
-            CID.setText(item.getCid());
-
-            MCC.setText(item.getMcc());
-            MNC.setText(item.getMnc());
-            PSC.setText(item.getPsc());
-
-            TIME_FIRST.setText(item.getTime_first());
-            TIME_LAST.setText(item.getTime_last());
-
-            LAT.setText(String.valueOf(item.getLat()));
-            LON.setText(String.valueOf(item.getLon()));
+            bts_id.setText(item.getBts_id());
+            nc_list.setText(item.getNc_list());
+            time.setText(item.getTime());
+            gpsd_lat.setText(item.getGpsd_lat());
+            gpsd_lon.setText(item.getGpsd_lon());
+            gpsd_accu.setText(item.getGpsd_accu());
+            gpse_lat.setText(item.getGpse_lat());
+            gpse_lon.setText(item.getGpse_lon());
+            bb_power.setText(item.getBb_power());
+            bb_rf_temp.setText(item.getBb_rf_temp());
+            tx_power.setText(item.getTx_power());
+            rx_signal.setText(item.getRx_signal());
+            rx_stype.setText(item.getRx_stype());
+            rat.setText(item.getRat());
+            BCCH.setText(item.getBCCH());
+            TMSI.setText(item.getTMSI());
+            TA.setText(item.getTA());
+            PD.setText(item.getPD());
+            BER.setText(item.getBER());
+            AvgEcNo.setText(item.getAvgEcNo());
+            isSubmitted.setText(item.getIsSubmitted());
+            isNeighbour.setText(item.getIsNeighbour());
 
         }
     }
