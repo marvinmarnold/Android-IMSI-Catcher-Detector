@@ -131,6 +131,7 @@ public class RequestTask extends BaseAsyncTask<String, Integer, String> {
             // UPLOADING !!
             case DBE_UPLOAD_REQUEST:   // OCID upload request from "APPLICATION" drawer title
                 try {
+
                         boolean prepared = mDbAdapter.prepareOpenCellUploadData();
                         Log.i(TAG, mTAG + ": OCID upload data prepared - " + String.valueOf(prepared));
                         if (prepared) {
@@ -259,21 +260,21 @@ public class RequestTask extends BaseAsyncTask<String, Integer, String> {
                 }
 
             case BACKUP_DATABASE:
-                mDbAdapter.open();
+             //#   mDbAdapter.open();
                 if (mDbAdapter.backupDB()) {
-                    mDbAdapter.close();
+             //#       mDbAdapter.close();
                     return "Successful";
                 }
-                mDbAdapter.close();
+             //#   mDbAdapter.close();
                 return null;
 
             case RESTORE_DATABASE:
-                mDbAdapter.open();
+             //#   mDbAdapter.open();
                 if (mDbAdapter.restoreDB()) {
-                    mDbAdapter.close();
+                //#    mDbAdapter.close();
                     return "Successful";
                 }
-                mDbAdapter.close();
+               //# mDbAdapter.close();
                 return null;
         }
 
@@ -321,13 +322,13 @@ public class RequestTask extends BaseAsyncTask<String, Integer, String> {
         switch (mType) {
             case DBE_DOWNLOAD_REQUEST:
                 if (result != null && result.equals("Successful")) {
-                    mDbAdapter.open();
-                    if (mDbAdapter.updateOpenCellID()) {
+             //#       mDbAdapter.open();
+                    if (mDbAdapter.populateDBeImport()) {
                         Helpers.msgShort(mAppContext, mAppContext.getString(R.string.opencellid_data_successfully_received));
                     }
 
                     mDbAdapter.checkDBe();
-                    mDbAdapter.close();
+                //#    mDbAdapter.close();
                     tinydb.putBoolean("ocid_downloaded", true);
                 } else {
                     Helpers.msgLong(mAppContext, mAppContext.getString(R.string.error_retrieving_opencellid_data));
@@ -336,14 +337,14 @@ public class RequestTask extends BaseAsyncTask<String, Integer, String> {
 
             case DBE_DOWNLOAD_REQUEST_FROM_MAP:
                 if (result != null && result.equals("Successful")) {
-                    mDbAdapter.open();
-                    if (mDbAdapter.updateOpenCellID()) {
+                //#    mDbAdapter.open();
+                    if (mDbAdapter.populateDBeImport()) {
                         Intent intent = new Intent(MapViewerOsmDroid.updateOpenCellIDMarkers);
                         LocalBroadcastManager.getInstance(mAppContext).sendBroadcast(intent);
                         Helpers.msgShort(mAppContext, mAppContext.getString(R.string.opencellid_data_successfully_received_markers_updated));
 
                         mDbAdapter.checkDBe();
-                        mDbAdapter.close();
+                  //#      mDbAdapter.close();
                         tinydb.putBoolean("ocid_downloaded", true);
                     }
                 } else {

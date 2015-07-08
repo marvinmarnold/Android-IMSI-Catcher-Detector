@@ -13,6 +13,8 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
+
+import com.SecUpwN.AIMSICD.adapters.AIMSICDDbAdapter;
 import com.SecUpwN.AIMSICD.service.AimsicdService;
 import com.SecUpwN.AIMSICD.utils.Device;
 import com.SecUpwN.AIMSICD.utils.MiscUtils;
@@ -51,7 +53,8 @@ public class SmsDetector extends Thread {
     private AimsicdService mAimsicdService;
     private SharedPreferences prefs;
     private boolean mBound;
-    SmsDetectionDbAccess dbacess;
+    //SmsDetectionDbAccess dbacess;
+    AIMSICDDbAdapter dbacess;
     static Context tContext;
 
     String[] SILENT_ONLY_TAGS;
@@ -74,11 +77,11 @@ public class SmsDetector extends Thread {
 
     public SmsDetector(Context newcontext){
         tContext = newcontext;
-        dbacess =  new SmsDetectionDbAccess(newcontext);
+        dbacess =  new AIMSICDDbAdapter(newcontext);//SmsDetectionDbAccess(newcontext);
 
-        dbacess.open();
+        //#  dbacess.open();
         ArrayList<AdvanceUserItems> silent_string = dbacess.getDetectionStrings();
-        dbacess.close();
+        //#   dbacess.close();
         SILENT_ONLY_TAGS = new String[silent_string.size()];
         for(int x = 0;x <silent_string.size();x++)
         {
@@ -226,18 +229,20 @@ public class SmsDetector extends Thread {
                             setmsg.setCurrent_lac(mAimsicdService.getCellTracker().getMonitorCell().getLAC());
                             setmsg.setCurrent_cid(mAimsicdService.getCellTracker().getMonitorCell().getCID());
                             setmsg.setCurrent_nettype(Device.getNetworkTypeName(mAimsicdService.getCell().getNetType()));
-                            setmsg.setCurrent_roam_status(mAimsicdService.getCellTracker().getDevice().isRoaming());
+                            int isRoaming = 0;
+                            if(mAimsicdService.getCellTracker().getDevice().isRoaming() == "true"){isRoaming = 1;}
+                            setmsg.setCurrent_roam_status(isRoaming);
                             //TODO is this the right place to get upto date geo location?
                             setmsg.setCurrent_gps_lat(mAimsicdService.lastKnownLocation().getLatitudeInDegrees());
                             setmsg.setCurrent_gps_lon(mAimsicdService.lastKnownLocation().getLongitudeInDegrees());
 
                             //only alert if timestamp is not in the data base
-                            dbacess.open();
+                            //#     dbacess.open();
                             if(!dbacess.isTimeStampInDB(logcat_timestamp)) {
                                  dbacess.storeCapturedSms(setmsg);
                                  MiscUtils.startPopUpInfo(tContext, 6);
                             }
-                            dbacess.close();
+                            //#     dbacess.close();
 
                         //SILENT_ONLY_TAGS[arrayindex].split("#")[0] <-- index 0 is the detection string
                         //SILENT_ONLY_TAGS[arrayindex].split("#")[1] <-- index 1 is the sms TYPE WAPPUSH TYPE0 ETC...
@@ -280,18 +285,20 @@ public class SmsDetector extends Thread {
                             setmsg.setCurrent_lac(mAimsicdService.getCellTracker().getMonitorCell().getLAC());
                             setmsg.setCurrent_cid(mAimsicdService.getCellTracker().getMonitorCell().getCID());
                             setmsg.setCurrent_nettype(Device.getNetworkTypeName(mAimsicdService.getCell().getNetType()));
-                            setmsg.setCurrent_roam_status(mAimsicdService.getCellTracker().getDevice().isRoaming());
+                            int isRoaming = 0;
+                            if(mAimsicdService.getCellTracker().getDevice().isRoaming() == "true"){isRoaming = 1;}
+                            setmsg.setCurrent_roam_status(isRoaming);
                             //TODO is this the right place to get upto date geo location?
                             setmsg.setCurrent_gps_lat(mAimsicdService.lastKnownLocation().getLatitudeInDegrees());
                             setmsg.setCurrent_gps_lon(mAimsicdService.lastKnownLocation().getLongitudeInDegrees());
 
                             //only alert if timestamp is not in the data base
-                            dbacess.open();
+                            //#    dbacess.open();
                             if(!dbacess.isTimeStampInDB(logcat_timestamp)) {
                                 dbacess.storeCapturedSms(setmsg);
                                 MiscUtils.startPopUpInfo(tContext, 7);
                             }
-                            dbacess.close();
+                            //#    dbacess.close();
                         }else if(SILENT_ONLY_TAGS[arrayindex].split("#")[1].trim().equals("WAPPUSH")){
                             /*
                                 Wap Push in logcat shows no data only senders number
@@ -337,18 +344,20 @@ public class SmsDetector extends Thread {
                                 setmsg.setCurrent_lac(mAimsicdService.getCellTracker().getMonitorCell().getLAC());
                                 setmsg.setCurrent_cid(mAimsicdService.getCellTracker().getMonitorCell().getCID());
                                 setmsg.setCurrent_nettype(Device.getNetworkTypeName(mAimsicdService.getCell().getNetType()));
-                                setmsg.setCurrent_roam_status(mAimsicdService.getCellTracker().getDevice().isRoaming());
+                                int isRoaming = 0;
+                                if(mAimsicdService.getCellTracker().getDevice().isRoaming() == "true"){isRoaming = 1;}
+                                setmsg.setCurrent_roam_status(isRoaming);
                                 //TODO is this the right place to get upto date geo location?
                                 setmsg.setCurrent_gps_lat(mAimsicdService.lastKnownLocation().getLatitudeInDegrees());
                                 setmsg.setCurrent_gps_lon(mAimsicdService.lastKnownLocation().getLongitudeInDegrees());
 
                                 //only alert if timestamp is not in the data base
-                                dbacess.open();
+                                //#     dbacess.open();
                                 if(!dbacess.isTimeStampInDB(logcat_timestamp)) {
                                     dbacess.storeCapturedSms(setmsg);
                                     MiscUtils.startPopUpInfo(tContext, 8);
                                 }
-                                dbacess.close();
+                                //#    dbacess.close();
                             }// end of if contains("DestPort 0x0B84")
                         }
                         break;

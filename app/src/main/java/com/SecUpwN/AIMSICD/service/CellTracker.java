@@ -41,6 +41,7 @@ import com.SecUpwN.AIMSICD.utils.Device;
 import com.SecUpwN.AIMSICD.utils.DeviceApi17;
 import com.SecUpwN.AIMSICD.utils.Helpers;
 import com.SecUpwN.AIMSICD.utils.Icon;
+import com.SecUpwN.AIMSICD.utils.MiscUtils;
 import com.SecUpwN.AIMSICD.utils.OCIDResponse;
 import com.SecUpwN.AIMSICD.utils.Status;
 import com.SecUpwN.AIMSICD.utils.TinyDB;
@@ -150,9 +151,10 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
 
         dbHelper = new AIMSICDDbAdapter(context);
         if (!CELL_TABLE_CLEANSED) {
-            dbHelper.open();
+            //TODO Eva what and why is this used why remove all cells from Dbi_bts table?
+            //dbHelper.open();
             dbHelper.cleanseCellTable();
-            dbHelper.close();
+            //dbHelper.close();
             SharedPreferences.Editor prefsEditor;
             prefsEditor = prefs.edit();
             prefsEditor.putBoolean(context.getString(R.string.pref_cell_table_cleansed), true);
@@ -161,9 +163,6 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
 
         mDevice.refreshDeviceInfo(tm, context); //Telephony Manager
         mMonitorCell = new Cell();
-
-        //Register receiver for Silent SMS Interception Notification
-        context.registerReceiver(mMessageReceiver, new IntentFilter(SILENT_SMS));
     }
 
     public boolean isTrackingCell() {
@@ -219,7 +218,6 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
         tm.listen(mCellSignalListener, PhoneStateListener.LISTEN_NONE);
         prefs.unregisterOnSharedPreferenceChangeListener(this);
 
-        context.unregisterReceiver(mMessageReceiver);
     }
 
     /**
@@ -273,20 +271,6 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
         }
         setNotification();
     }
-
-    private final BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final Bundle bundle = intent.getExtras();
-            if (bundle != null) {
-                dbHelper.open();
-                dbHelper.insertSilentSms(bundle);
-                dbHelper.close();
-                setSilentSmsStatus(true);
-            }
-        }
-    };
-
 
     /**
      *  Description:    This handles the settings/choices and default preferences, when changed.
@@ -611,7 +595,7 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
                     mMonitorCell.setLAC(gsmCellLocation.getLac());
                     mMonitorCell.setCID(gsmCellLocation.getCid());
 
-                    dbHelper.open();
+                    //dbHelper.open();
                     boolean lacOK = dbHelper.checkLAC(mMonitorCell);
                     if (!lacOK) {
                         mChangedLAC = true;
@@ -623,15 +607,25 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
                     if ( tinydb.getBoolean("ocid_downloaded") ) {
                         if (!dbHelper.openCellExists(mMonitorCell.getCID())) {
                             Log.i(mTAG, "ALERT: Connected to unknown CID not in DBe_import: " + mMonitorCell.getCID());
-
-                            // Code Place-holder: TODO: Add to EventLog table!!
+                            //dbHelper.open();
+                            dbHelper.insertEventLog(MiscUtils.getCurrentTimeStamp(),
+                                    mMonitorCell.getLAC(),
+                                    mMonitorCell.getCID(),
+                                    mMonitorCell.getPSC(),
+                                    String.valueOf(mMonitorCell.getLat()),
+                                    String.valueOf(mMonitorCell.getLon()),
+                                    (int)mMonitorCell.getAccuracy(),
+                                    1,"CID not in DBe_import"
+                                    );
+                            //dbHelper.close();
+                            // Code Place-holder: TODO: Add to EventLog table!! NOW ADDED!!!!
 
                             mCellIdNotInOpenDb = true;
                             setNotification();
                         } else {
                             mCellIdNotInOpenDb = false;
                         }
-                        dbHelper.close();
+                        //dbHelper.close();
                     }
                 }
                 break;
@@ -642,7 +636,7 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
                     mMonitorCell.setLAC(cdmaCellLocation.getNetworkId());
                     mMonitorCell.setCID(cdmaCellLocation.getBaseStationId());
 
-                    dbHelper.open();
+                    //dbHelper.open();
                     boolean lacOK = dbHelper.checkLAC(mMonitorCell);
                     if (!lacOK) {
                         mChangedLAC = true;
@@ -650,7 +644,7 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
                     } else {
                         mChangedLAC = false;
                     }
-                    dbHelper.close();
+                    //dbHelper.close();
                 }
         }
 
@@ -886,19 +880,6 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
 
     };
 
-    void setSilentSmsStatus(boolean state) {
-        mTypeZeroSmsDetected = state;
-        setNotification();
-        if (state) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setMessage(R.string.sms_message).setTitle(R.string.sms_title);
-            AlertDialog alert = builder.create();
-            alert.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-            alert.show();
-            mTypeZeroSmsDetected = false;
-        }
-    }
-
     /**
      *  Description:  TODO: add more info
      *
@@ -965,37 +946,32 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
                             String.valueOf(loc.getLongitude()));
             prefsEditor.apply();
 
+
             if (mTrackingCell) {
-                dbHelper.open();
 
-                // LOCATION_TABLE (locationinfo)    ==>  DBi_measure + DBi_bts
-                dbHelper.insertLocation(
-                        mDevice.mCell.getLAC(),     // Lac
-                        mDevice.mCell.getCID(),     // CellID
-                        mDevice.mCell.getNetType(), // Net
-                        mDevice.mCell.getLat(),     // Lat
-                        mDevice.mCell.getLon(),     // Lng
-                        mDevice.mCell.getDBM(),     // Signal
-                        mDevice.getCellInfo()       // Connection
-                );
+                /*
+                    This function inserts bts and also the data to dbi_measure
+                    there is 2 versions of this in the database with the same name
+                    this one dbHelper.insertBTS(mDevice); inserts only data that we
+                    can access so far we cant get tmsi and alot of other data yet
 
-                // CELL_TABLE                       (cellinfo)      ==>  DBi_measure + DBi_bts
-                dbHelper.insertCell(
-                        mDevice.mCell.getLAC(),     // Lac
-                        mDevice.mCell.getCID(),     // CellID
-                        mDevice.mCell.getNetType(), // Net
-                        mDevice.mCell.getLat(),     // Lat
-                        mDevice.mCell.getLon(),     // Lng
-                        mDevice.mCell.getDBM(),     // Signal
-                        mDevice.mCell.getMCC(),     // Mcc
-                        mDevice.mCell.getMNC(),     // Mnc
-                        mDevice.mCell.getAccuracy(),// Accuracy
-                        mDevice.mCell.getSpeed(),   // Speed
-                        mDevice.mCell.getBearing(), // Direction
-                        mDevice.getNetworkTypeName(),         // NetworkType
-                        SystemClock.currentThreadTimeMillis() // MeasurementTaken [ms]
-                );
-                dbHelper.close();
+                    the other insertBTS functions inserts all data in the table
+
+                        public void insertBTS( String rat,
+                           int mcc,
+                           int mnc,
+                           int lac,
+                           int cid,
+                           int psc,
+                           int t3231,
+                           int a5x,
+                           int st_id,
+                           String time_first,
+                           String time_last)
+
+                 */
+                dbHelper.insertBTS(mDevice);
+
             }
         }
     }
@@ -1055,7 +1031,7 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
         String tickerText;
         String contentText = "Phone Type " + mDevice.getPhoneType();
 
-        if (mFemtoDetected || mTypeZeroSmsDetected) {
+       if (mFemtoDetected || mTypeZeroSmsDetected) {
             Status.setCurrentStatus(Status.Type.ALARM, this.context);
         } else if (mChangedLAC) {
             Status.setCurrentStatus(Status.Type.MEDIUM, this.context);
@@ -1241,7 +1217,7 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
         }
 
         /* if it is an evDo network */
-        // TODO
+        //
         else {
             /* get network ID */
             if (tm != null) {
@@ -1327,5 +1303,6 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
     public Cell getMonitorCell() {
         return mMonitorCell;
     }
+
 
 }

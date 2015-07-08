@@ -33,6 +33,7 @@ import com.SecUpwN.AIMSICD.AppAIMSICD;
 import com.SecUpwN.AIMSICD.BuildConfig;
 import com.SecUpwN.AIMSICD.R;
 import com.SecUpwN.AIMSICD.adapters.AIMSICDDbAdapter;
+import com.SecUpwN.AIMSICD.constants.DBTableColumnIds;
 import com.SecUpwN.AIMSICD.constants.TinyDbKeys;
 import com.SecUpwN.AIMSICD.map.CellTowerGridMarkerClusterer;
 import com.SecUpwN.AIMSICD.map.CellTowerMarker;
@@ -420,7 +421,7 @@ public class MapViewerOsmDroid extends BaseActivity implements OnSharedPreferenc
 
                 LinkedList<CellTowerMarker> items = new LinkedList<>();
 
-                mDbHelper.open();
+                //# mDbHelper.open();
                 Cursor c = null;
                 try {
                     // Grab cell data from CELL_TABLE (cellinfo) --> DBi_bts
@@ -432,17 +433,17 @@ public class MapViewerOsmDroid extends BaseActivity implements OnSharedPreferenc
                     do {
                         if (isCancelled()) return null;
                         // The indexing here is that of the Cursor and not the DB table itself
-                        final int cellID = c.getInt(0);  // CID
-                        final int lac = c.getInt(1);     // LAC
-                        final int net = c.getInt(2);     // RAT
-                        final int mcc = c.getInt(6);     // MCC
-                        final int mnc = c.getInt(7);     // MNC
-                        final double dlat = Double.parseDouble(c.getString(3)); // Lat
-                        final double dlng = Double.parseDouble(c.getString(4)); // Lon
+                        final int cellID = c.getInt(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_CID));  // CID
+                        final int lac = c.getInt(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_LAC));     // LAC
+                        //final int net = Integer.parseInt(c.getString(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_RAT)));     // RAT
+                        final int mcc = c.getInt(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_MCC));     // MCC
+                        final int mnc = c.getInt(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_MNC));    // MNC
+                        final double dlat = Double.parseDouble(c.getString(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_GPS_LAT))); // Lat
+                        final double dlng = Double.parseDouble(c.getString(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_GPS_LON))); // Lon
                         if (dlat == 0.0 && dlng == 0.0) {
                             continue;
                         }
-                        signal = c.getInt(5);  // signal
+                        signal = c.getInt(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_AVG_SIGNAL));  // signal
                         // In case of missing or negative signal, set a default fake signal,
                         // so that we can still draw signal circles.  ?
                         if (signal <= 0) {
@@ -494,7 +495,7 @@ public class MapViewerOsmDroid extends BaseActivity implements OnSharedPreferenc
                 if(c != null) {
                     c.close();
                 }
-                mDbHelper.close();
+               //# mDbHelper.close();
 
                 // plot neighbouring cells
                 while (mAimsicdService == null) try {
@@ -539,7 +540,7 @@ public class MapViewerOsmDroid extends BaseActivity implements OnSharedPreferenc
                 // DBe_import tower pins.
                 Drawable cellTowerMarkerIcon = getResources().getDrawable(R.drawable.ic_map_pin_green);
 
-                mDbHelper.open();
+               //# mDbHelper.open();
                 IProjection p = mMap.getProjection();
                 Cursor c = mDbHelper.getOpenCellIDDataByRegion(
                     p.getSouthWest().getLatitude(), p.getSouthWest().getLongitude(),
@@ -548,6 +549,19 @@ public class MapViewerOsmDroid extends BaseActivity implements OnSharedPreferenc
                 if (c.moveToFirst()) {
                     if (isCancelled()) return;
                     do {
+                        // The indexing here is that of the Cursor and not the DB table itself:
+                        // CellID,Lac,Mcc,Mnc,Lat,Lng,AvgSigStr,Samples
+         /*               final int cellID = c.getInt(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_CID));
+                        final int lac = c.getInt(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_LAC));
+                        final int mcc = c.getInt(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_MCC));
+                        final int mnc = c.getInt(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_MNC));
+                        final double dlat = Double.parseDouble(c.getString(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_GPS_LAT))); // Lat
+                        final double dlng = Double.parseDouble(c.getString(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_GPS_LON))); // Lon
+                        final GeoPoint location = new GeoPoint(dlat, dlng);
+                        //
+                        final int samples = c.getInt(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_SAMPLES));
+*/
+
                         // The indexing here is that of the Cursor and not the DB table itself:
                         // CellID,Lac,Mcc,Mnc,Lat,Lng,AvgSigStr,Samples
                         final int cellID = c.getInt(0);
@@ -559,7 +573,6 @@ public class MapViewerOsmDroid extends BaseActivity implements OnSharedPreferenc
                         final GeoPoint location = new GeoPoint(dlat, dlng);
                         //
                         final int samples = c.getInt(7);
-
                         // Add map marker for CellID
                         CellTowerMarker ovm = new CellTowerMarker(mContext, mMap,
                                 "Cell ID: " + cellID,
@@ -579,7 +592,7 @@ public class MapViewerOsmDroid extends BaseActivity implements OnSharedPreferenc
                     } while (c.moveToNext());
                 }
                 c.close();
-                mDbHelper.close();
+                //# mDbHelper.close();
 
                 mCellTowerGridMarkerClusterer.addAll(items);
             }

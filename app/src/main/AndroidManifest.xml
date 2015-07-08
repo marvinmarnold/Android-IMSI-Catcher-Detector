@@ -200,7 +200,7 @@
         </activity>
         <activity
             android:name=".smsdetection.AdvancedUserSmsActivity"
-            android:label="@string/title_activity_advanced_user" >
+            android:label="@string/title_activity_advanced_user_sms" >
         </activity>
     </application>
 

@@ -44,7 +44,6 @@ import com.SecUpwN.AIMSICD.fragments.AtCommandFragment;
 import com.SecUpwN.AIMSICD.fragments.DetailsContainerFragment;
 import com.SecUpwN.AIMSICD.service.AimsicdService;
 import com.SecUpwN.AIMSICD.service.CellTracker;
-import com.SecUpwN.AIMSICD.smsdetection.SmsDetectionDbHelper;
 import com.SecUpwN.AIMSICD.utils.AsyncResponse;
 import com.SecUpwN.AIMSICD.utils.Cell;
 import com.SecUpwN.AIMSICD.utils.GeoLocation;
@@ -87,7 +86,6 @@ public class AIMSICD extends BaseActivity implements AsyncResponse {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     public static ProgressBar mProgressBar;
-    SmsDetectionDbHelper dbhelper;
 
     //Back press to exit timer
     private long mLastPress = 0;
@@ -101,9 +99,6 @@ public class AIMSICD extends BaseActivity implements AsyncResponse {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /* add new detection strings if any*/
-        MiscUtils.refreshDetectionDbStrings(getApplicationContext());
-
         moveData();
 
         getWindow().requestFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
@@ -111,9 +106,6 @@ public class AIMSICD extends BaseActivity implements AsyncResponse {
         mNavConf = new DrawerMenuActivityConfiguration.Builder(this).build();
 
         setContentView(mNavConf.getMainLayout());
-
-        //create the database on first install
-        dbhelper = new SmsDetectionDbHelper(this);
 
         mDrawerLayout = (DrawerLayout) findViewById(mNavConf.getDrawerLayoutId());
         mDrawerList = (ListView) findViewById(mNavConf.getLeftDrawerId());
@@ -152,6 +144,7 @@ public class AIMSICD extends BaseActivity implements AsyncResponse {
         mActionBar.setHomeButtonEnabled(true);
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mProgressBar.setVisibility(View.VISIBLE);
 
         prefs = mContext.getSharedPreferences( AimsicdService.SHARED_PREFERENCES_BASENAME, 0);
 
@@ -567,6 +560,9 @@ public class AIMSICD extends BaseActivity implements AsyncResponse {
                     mAimsicdService.stopSmsTracking();
                 }
             }catch (Exception ee){System.out.println("Error Stopping sms detection");}
+            //Close database on Exit
+            Log.i(TAG, "Closing db from AIMSICD.java");
+            new AIMSICDDbAdapter(getApplicationContext()).close();
             finish();
         }
     }

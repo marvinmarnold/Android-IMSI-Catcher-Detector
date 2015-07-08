@@ -16,12 +16,11 @@ import java.util.Locale;
  */
 public class MeasuredCellStrengthCardData {
 
-    private final long timestamp;
+    private final String timestamp;
     private final int signal;
     private final int cellID;
-    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
-    public MeasuredCellStrengthCardData(int cellID, int signal, long timestamp) {
+    public MeasuredCellStrengthCardData(int cellID, int signal, String timestamp) {
         this.cellID = cellID;
         this.signal = signal;
         this.timestamp = timestamp;
@@ -45,6 +44,6 @@ public class MeasuredCellStrengthCardData {
     }
 
     public String getTimestamp() {
-        return "Timestamp: "+formatter.format(timestamp);
+        return "Time: " +timestamp;
     }
 }

@@ -291,7 +291,8 @@
     
     <!-- Advanced User Settings: Delete Detected SMS -->
     <string name="adv_user_sms_info">This menu is for advanced users only!\nTo delete a detected SMS long press it in listview.</string>
-    <string name="title_activity_advanced_user">Delete Detected SMS</string>
+    <string name="title_activity_advanced_user">Delete/Insert Detection Strings</string>
+    <string name="title_activity_advanced_user_sms">Delete Detected SMS</string>
 
     <string name="adv_user_pref_header">Advanced User Settings</string>
     <string name="adv_user_pref_launch">Detection Strings</string>

@@ -16,13 +16,9 @@ import android.util.Log;
 import com.SecUpwN.AIMSICD.AIMSICD;
 import com.SecUpwN.AIMSICD.R;
 import com.SecUpwN.AIMSICD.activities.CustomPopUp;
-import com.SecUpwN.AIMSICD.smsdetection.SmsDetectionDbAccess;
-import com.SecUpwN.AIMSICD.smsdetection.SmsDetectionDbHelper;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
@@ -120,64 +116,7 @@ public class MiscUtils {
          "detection_type":"WAPPUSH"}
 
       */
-    public static void refreshDetectionDbStrings(Context con){
-        SmsDetectionDbAccess dbaccess = new SmsDetectionDbAccess(con);
-        BufferedReader reader = null;
-        StringBuilder json_file = new StringBuilder();
-        try{
-            reader = new BufferedReader(new InputStreamReader(con.getAssets().open("det_strings.json")));
-            String rline = reader.readLine();
 
-            while (rline != null ){
-                json_file.append(rline);
-                rline = reader.readLine();
-            }
-            Log.i("refreshDetectionDbStrings", json_file.toString());
-        } catch (Exception ee){
-            ee.printStackTrace();
-        }finally {
-            if(reader != null){
-                try {
-                    reader.close();
-                } catch (Exception ee){
-                    ee.printStackTrace();
-                }
-            }
-        }
-
-        JSONObject json_response;
-
-        try {
-
-            json_response = new JSONObject(json_file.toString());
-            JSONArray json_array_node = json_response.optJSONArray("load_detection_strings");
-
-            int json_array_len = json_array_node.length();
-            dbaccess.open();
-            for(int i=0; i < json_array_len; i++)
-            {
-                
-                JSONObject current_json_object = json_array_node.getJSONObject(i);
-                ContentValues store_new_det_string = new ContentValues();
-                store_new_det_string.put(SmsDetectionDbHelper.SILENT_SMS_STRING_COLUMN,
-                        current_json_object.optString("detection_string").toString());
-                store_new_det_string.put(SmsDetectionDbHelper.SILENT_SMS_TYPE_COLUMN,
-                        current_json_object.optString("detection_type").toString());
-                if(dbaccess.insertNewDetectionString(store_new_det_string)){
-                    Log.i("refreshDetectionDbStrings",">>>String added success");
-                }
-                
-
-            }
-            dbaccess.close();
-        } catch (JSONException e) {
-            dbaccess.close();
-            Log.e("refreshDetectionDbStrings",">>> Error parsing JsonFile "+e.toString());
-            e.printStackTrace();
-        }
-
-    }
-    
     /*
         Returns a timestamp in this format 20150617223311
         this is used to detect if the sms was already picked up
