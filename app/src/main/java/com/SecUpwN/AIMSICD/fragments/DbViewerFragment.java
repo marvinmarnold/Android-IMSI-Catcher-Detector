@@ -224,27 +224,35 @@ public class DbViewerFragment extends Fragment {
                     BaseInflaterAdapter<BtsMeasureItemData> adapter
                             = new BaseInflaterAdapter<>(new BtsMeasureCardInflater());
 //                    int count = tableData.getCount();
-                    String[] tableColumnNames = {
-                            DBTableColumnIds.DBI_MEASURE_BTS_ID,
-                            DBTableColumnIds.DBI_MEASURE_NC_LIST,
-                            DBTableColumnIds.DBI_MEASURE_TIME,
-                            DBTableColumnIds.DBI_MEASURE_GPSD_LAT,
-                            DBTableColumnIds.DBI_MEASURE_GPSD_LON,
-                            DBTableColumnIds.DBI_MEASURE_GPSD_ACCURACY,
-                            DBTableColumnIds.DBI_MEASURE_BB_POWER,
-                            DBTableColumnIds.DBI_MEASURE_RX_SIGNAL,
-                            DBTableColumnIds.DBI_MEASURE_RAT,
-                            DBTableColumnIds.DBI_MEASURE_IS_SUBMITTED,
-                            DBTableColumnIds.DBI_MEASURE_IS_NEIGHBOUR,
-                    };
+
                     while (tableData.moveToNext()) {
-                        String[] btsMeasureColumns = new String[tableColumnNames.length];
-                        for (int i = 0; i < tableColumnNames.length; i++) {
-                            String columnName = tableColumnNames[i];
-                            btsMeasureColumns[i] = columnName + ": " + String.valueOf(tableData.getInt(tableData.getColumnIndex(columnName)));
-//                           "" + (tableData.getPosition() + 1) + " / " + count
-                        }
-                        BtsMeasureItemData data = new BtsMeasureItemData(btsMeasureColumns);
+                        BtsMeasureItemData data = new BtsMeasureItemData(
+                                R.string.bts_measurement_bts_id + ": " + String.valueOf(tableData.getInt(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_BTS_ID))),
+                        R.string.bts_measurement_nc_list + ": " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_NC_LIST)),
+                        R.string.bts_measurement_time + ": " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_TIME)),
+                        R.string.bts_measurement_gpsd_lat + ": " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_GPSD_LAT)),
+                        R.string.bts_measurement_gpsd_lon + ": " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_GPSD_LON)),
+                        R.string.bts_measurement_gpsd_accu + ": " + String.valueOf(tableData.getInt(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_GPSD_ACCURACY))),
+//                        R.string.bts_measurement_gpse_lat + ": " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_GPSE_LAT)),
+//                        R.string.bts_measurement_gpse_lon + ": " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_GPSE_LON)),
+                        R.string.bts_measurement_bb_power + ": " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_BB_POWER)),
+//                        R.string.bts_measurement_bb_rf_temp + ": " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_BB_RF_TEMP)),
+//                        R.string.bts_measurement_tx_power + ": " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_TX_POWER)),
+                        R.string.bts_measurement_rx_signal + ": " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_RX_SIGNAL)),
+//                        R.string.bts_measurement_rx_stype + ": " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_RX_STYPE)),
+                        R.string.bts_measurement_rat + ": " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_RAT)),
+//                        R.string.bts_measurement_BCCH + ": " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_BCCH)),
+//                        R.string.bts_measurement_TMSI + ": " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_TMSI)),
+//                        R.string.bts_measurement_TA + ": " + String.valueOf(tableData.getInt(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_TA))),
+//                        R.string.bts_measurement_PD + ": " + String.valueOf(tableData.getInt(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_PD))),
+//                        R.string.bts_measurement_BER + ": " + String.valueOf(tableData.getInt(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_BER))),
+//                        R.string.bts_measurement_AvgEcNo + ": " + tableData.getString(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_AVG_EC_NO)),
+                        R.string.bts_measurement_isSubmitted + ": " + String.valueOf(tableData.getInt(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_IS_SUBMITTED))),
+                        R.string.bts_measurement_isNeighbour + ": " + String.valueOf(tableData.getInt(tableData.getColumnIndex(DBTableColumnIds.DBI_MEASURE_IS_NEIGHBOUR)))
+
+                                //"" + (tableData.getPosition() + 1) + " / " + count
+
+                        );
                         adapter.addItem(data, false);
                     }
                     if (!tableData.isClosed()) {

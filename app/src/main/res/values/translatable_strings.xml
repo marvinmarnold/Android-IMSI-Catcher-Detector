@@ -163,6 +163,29 @@
         <item>@string/eventlog</item>
     </string-array>
     <string name="database_export_successful">Export successful</string>
+    <!-- Database Viewer: BTS Measurement Data -->
+    <string name="bts_measurement_bts_id">Base Station ID</string>
+    <string name="bts_measurement_nc_list">Neighbours List</string>
+    <string name="bts_measurement_time">Time</string>
+    <string name="bts_measurement_gpsd_lat">Latitude</string>
+    <string name="bts_measurement_gpsd_lon">Longituted</string>
+    <string name="bts_measurement_gpsd_accu">Accuracy</string>
+    <string name="bts_measurement_gpse_lat">GPSE Lat</string>
+    <string name="bts_measurement_gpse_lon">GPSE Long</string>
+    <string name="bts_measurement_bb_power">BB Power</string>
+    <string name="bts_measurement_bb_rf_temp">BB RF Temp</string>
+    <string name="bts_measurement_tx_power">TX Power</string>
+    <string name="bts_measurement_rx_signal">RX Signal</string>
+    <string name="bts_measurement_rx_stype">RX SType</string>
+    <string name="bts_measurement_rat">RAT</string>
+    <string name="bts_measurement_BCCH">BCCH</string>
+    <string name="bts_measurement_TMSI">TMSI</string>
+    <string name="bts_measurement_TA">Timing Advance</string>
+    <string name="bts_measurement_PD">PD</string>
+    <string name="bts_measurement_BER">BER</string>
+    <string name="bts_measurement_AvgEcNo">Avg Ec No</string>
+    <string name="bts_measurement_isSubmitted">Is Submitted</string>
+    <string name="bts_measurement_isNeighbour">Is Neighbour</string>
 
     <!-- AT Command Interface  -->
     <string name="at_command_title">AT Command Interface</string>
