@@ -25,108 +25,248 @@
             <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
-
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:id="@+id/tv_uniquebts_lac"
-                    android:layout_weight="0.1"
-                    android:textColor="@color/medium_blue" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:id="@+id/tv_uniquebts_cid"
+                    android:id="@+id/tv_bts_measure_bts_id"
                     android:layout_weight="0.1"
                     android:textColor="@color/medium_blue" />
             </TableRow>
-        </TableLayout>
-
-        <TableLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-
             <TableRow
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent" >
-
+                android:layout_height="fill_parent">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:id="@+id/tv_uniquebts_mcc"
-                    android:layout_weight="0.1"
-                    android:textColor="@color/medium_blue" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:id="@+id/tv_uniquebts_mnc"
+                    android:id="@+id/tv_bts_measure_nc_list"
                     android:layout_weight="0.1"
                     android:textColor="@color/medium_blue" />
             </TableRow>
-        </TableLayout>
-
-        <TableLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-
             <TableRow
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent" >
-
+                android:layout_height="fill_parent">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:id="@+id/tv_uniquebts_lat"
-                    android:layout_weight="0.1"
-                    android:textColor="@color/medium_blue" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:id="@+id/tv_uniquebts_lon"
+                    android:id="@+id/tv_bts_measure_time"
                     android:layout_weight="0.1"
                     android:textColor="@color/medium_blue" />
             </TableRow>
-        </TableLayout>
-
-        <TableLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-
             <TableRow
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent" >
-
+                android:layout_height="fill_parent">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:id="@+id/tv_uniquebts_psc"
+                    android:id="@+id/tv_bts_measure_gpsd_lat"
                     android:layout_weight="0.1"
                     android:textColor="@color/medium_blue" />
             </TableRow>
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:id="@+id/tv_bts_measure_gpsd_lon"
+                    android:layout_weight="0.1"
+                    android:textColor="@color/medium_blue" />
+            </TableRow>
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:id="@+id/tv_bts_measure_gpsd_accu"
+                    android:layout_weight="0.1"
+                    android:textColor="@color/medium_blue" />
+            </TableRow>
+            <!--<TableRow-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="fill_parent">-->
+                <!--<TextView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+                    <!--android:id="@+id/tv_bts_measure_gpse_lat"-->
+                    <!--android:layout_weight="0.1"-->
+                    <!--android:textColor="@color/medium_blue" />-->
+            <!--</TableRow>-->
+            <!--<TableRow-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="fill_parent">-->
+                <!--<TextView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+                    <!--android:id="@+id/tv_bts_measure_gpse_lon"-->
+                    <!--android:layout_weight="0.1"-->
+                    <!--android:textColor="@color/medium_blue" />-->
+            <!--</TableRow>-->
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:id="@+id/tv_bts_measure_bb_power"
+                    android:layout_weight="0.1"
+                    android:textColor="@color/medium_blue" />
+            </TableRow>
+            <!--<TableRow-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="fill_parent">-->
+                <!--<TextView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+                    <!--android:id="@+id/tv_bts_measure_bb_rf_temp"-->
+                    <!--android:layout_weight="0.1"-->
+                    <!--android:textColor="@color/medium_blue" />-->
+            <!--</TableRow>-->
+            <!--<TableRow-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="fill_parent">-->
+                <!--<TextView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+                    <!--android:id="@+id/tv_bts_measure_tx_power"-->
+                    <!--android:layout_weight="0.1"-->
+                    <!--android:textColor="@color/medium_blue" />-->
+            <!--</TableRow>-->
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:id="@+id/tv_bts_measure_rx_signal"
+                    android:layout_weight="0.1"
+                    android:textColor="@color/medium_blue" />
+            </TableRow>
+            <!--<TableRow-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="fill_parent">-->
+                <!--<TextView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+                    <!--android:id="@+id/tv_bts_measure_rx_stype"-->
+                    <!--android:layout_weight="0.1"-->
+                    <!--android:textColor="@color/medium_blue" />-->
+            <!--</TableRow>-->
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:id="@+id/tv_bts_measure_rat"
+                    android:layout_weight="0.1"
+                    android:textColor="@color/medium_blue" />
+            </TableRow>
+            <!--<TableRow-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="fill_parent">-->
+                <!--<TextView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+                    <!--android:id="@+id/tv_bts_measure_BCCH"-->
+                    <!--android:layout_weight="0.1"-->
+                    <!--android:textColor="@color/medium_blue" />-->
+            <!--</TableRow>-->
+            <!--<TableRow-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="fill_parent">-->
+                <!--<TextView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+                    <!--android:id="@+id/tv_bts_measure_TMSI"-->
+                    <!--android:layout_weight="0.1"-->
+                    <!--android:textColor="@color/medium_blue" />-->
+            <!--</TableRow>-->
+            <!--<TableRow-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="fill_parent">-->
+                <!--<TextView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+                    <!--android:id="@+id/tv_bts_measure_TA"-->
+                    <!--android:layout_weight="0.1"-->
+                    <!--android:textColor="@color/medium_blue" />-->
+            <!--</TableRow>-->
+            <!--<TableRow-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="fill_parent">-->
+                <!--<TextView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+                    <!--android:id="@+id/tv_bts_measure_PD"-->
+                    <!--android:layout_weight="0.1"-->
+                    <!--android:textColor="@color/medium_blue" />-->
+            <!--</TableRow>-->
+            <!--<TableRow-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="fill_parent">-->
+                <!--<TextView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+                    <!--android:id="@+id/tv_bts_measure_BER"-->
+                    <!--android:layout_weight="0.1"-->
+                    <!--android:textColor="@color/medium_blue" />-->
+            <!--</TableRow>-->
+            <!--<TableRow-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="fill_parent">-->
+                <!--<TextView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+                    <!--android:id="@+id/tv_bts_measure_AvgEcNo"-->
+                    <!--android:layout_weight="0.1"-->
+                    <!--android:textColor="@color/medium_blue" />-->
+            <!--</TableRow>-->
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:id="@+id/tv_bts_measure_isSubmitted"
+                    android:layout_weight="0.1"
+                    android:textColor="@color/medium_blue" />
+            </TableRow>
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:id="@+id/tv_bts_measure_isNeighbour"
+                    android:layout_weight="0.1"
+                    android:textColor="@color/medium_blue" />
+            </TableRow>
+
         </TableLayout>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/tv_uniquebts_time_first"
-            android:textColor="@color/medium_blue" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/tv_uniquebts_time_last"
-            android:textColor="@color/medium_blue" />
 
     </LinearLayout>
 

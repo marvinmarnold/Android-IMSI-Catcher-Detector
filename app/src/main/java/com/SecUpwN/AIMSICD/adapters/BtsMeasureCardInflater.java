@@ -62,16 +62,28 @@ public class BtsMeasureCardInflater implements IAdapterViewInflater<BtsMeasureIt
         public ViewHolder(View rootView) {
             mRootView = rootView;
 
-            LAC =     (TextView) mRootView.findViewById(R.id.tv_uniquebts_lac);
-            CID =     (TextView) mRootView.findViewById(R.id.tv_uniquebts_cid);
-            MCC =          (TextView) mRootView.findViewById(R.id.tv_uniquebts_mcc);
-            MNC =          (TextView) mRootView.findViewById(R.id.tv_uniquebts_mnc);
-            PSC =    (TextView) mRootView.findViewById(R.id.tv_uniquebts_psc);
-            TIME_FIRST =      (TextView) mRootView.findViewById(R.id.tv_uniquebts_time_first);
-            TIME_LAST =     (TextView) mRootView.findViewById(R.id.tv_uniquebts_time_last);
-            LAT =      (TextView) mRootView.findViewById(R.id.tv_uniquebts_lat);
-            LON =     (TextView) mRootView.findViewById(R.id.tv_uniquebts_lon);
-
+            bts_id  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_bts_id);
+            nc_list  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_nc_list);
+            time  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_time);
+            gpsd_lat  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_gpsd_lat);
+            gpsd_lon  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_gpsd_lon);
+            gpsd_accu  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_gpsd_accu);
+//            gpse_lat  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_gpse_lat);
+//            gpse_lon  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_gpse_lon);
+            bb_power  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_bb_power);
+//            bb_rf_temp  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_bb_rf_temp);
+//            tx_power  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_tx_power);
+            rx_signal  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_rx_signal);
+//            rx_stype  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_rx_stype);
+            rat  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_rat);
+//            BCCH  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_BCCH);
+//            TMSI  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_TMSI);
+//            TA  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_TA);
+//            PD  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_PD);
+//            BER  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_BER);
+//            AvgEcNo  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_AvgEcNo);
+            isSubmitted  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_isSubmitted);
+            isNeighbour  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_isNeighbour);
 
             rootView.setTag(this);
         }
@@ -83,20 +95,20 @@ public class BtsMeasureCardInflater implements IAdapterViewInflater<BtsMeasureIt
             gpsd_lat.setText(item.getGpsd_lat());
             gpsd_lon.setText(item.getGpsd_lon());
             gpsd_accu.setText(item.getGpsd_accu());
-            gpse_lat.setText(item.getGpse_lat());
-            gpse_lon.setText(item.getGpse_lon());
+//            gpse_lat.setText(item.getGpse_lat());
+//            gpse_lon.setText(item.getGpse_lon());
             bb_power.setText(item.getBb_power());
-            bb_rf_temp.setText(item.getBb_rf_temp());
-            tx_power.setText(item.getTx_power());
+//            bb_rf_temp.setText(item.getBb_rf_temp());
+//            tx_power.setText(item.getTx_power());
             rx_signal.setText(item.getRx_signal());
-            rx_stype.setText(item.getRx_stype());
+//            rx_stype.setText(item.getRx_stype());
             rat.setText(item.getRat());
-            BCCH.setText(item.getBCCH());
-            TMSI.setText(item.getTMSI());
-            TA.setText(item.getTA());
-            PD.setText(item.getPD());
-            BER.setText(item.getBER());
-            AvgEcNo.setText(item.getAvgEcNo());
+//            BCCH.setText(item.getBCCH());
+//            TMSI.setText(item.getTMSI());
+//            TA.setText(item.getTA());
+//            PD.setText(item.getPD());
+//            BER.setText(item.getBER());
+//            AvgEcNo.setText(item.getAvgEcNo());
             isSubmitted.setText(item.getIsSubmitted());
             isNeighbour.setText(item.getIsNeighbour());
 
