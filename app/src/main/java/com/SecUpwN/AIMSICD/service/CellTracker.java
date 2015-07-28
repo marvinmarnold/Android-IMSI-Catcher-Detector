@@ -33,16 +33,12 @@ import com.SecUpwN.AIMSICD.R;
 import com.SecUpwN.AIMSICD.adapters.AIMSICDDbAdapter;
 import com.SecUpwN.AIMSICD.utils.Cell;
 import com.SecUpwN.AIMSICD.utils.Device;
-import com.SecUpwN.AIMSICD.utils.DeviceApi17;
+import com.SecUpwN.AIMSICD.utils.DeviceApi18;
 import com.SecUpwN.AIMSICD.utils.Helpers;
 import com.SecUpwN.AIMSICD.utils.Icon;
 import com.SecUpwN.AIMSICD.utils.MiscUtils;
-import com.SecUpwN.AIMSICD.utils.OCIDResponse;
 import com.SecUpwN.AIMSICD.utils.Status;
 import com.SecUpwN.AIMSICD.utils.TinyDB;
-
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +73,7 @@ import java.util.concurrent.TimeUnit;
  *  2015-03-02  E:V:A       Added TinyDB import for SharedPreferences alternative
  *  2015-03-03  E:V:A       Replaced getSystemProp with TinyDB Boolean "ocid_downloaded" in Runnable()
  *  2015-04-18  banjaxbanjo Removed timer that checked for neighbouring cells so it now checks onCellChange
- *
+ *  2015-07-23  E:V:A       Changed API from 16 to 17 and to use DeviceApi18.java instead of old.
  *
  */
 
@@ -144,9 +140,9 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
         dbHelper = new AIMSICDDbAdapter(context);
         if (!CELL_TABLE_CLEANSED) {
             //TODO Eva what and why is this used why remove all cells from Dbi_bts table?
-            //dbHelper.open();
+
             dbHelper.cleanseCellTable();
-            //dbHelper.close();
+
             SharedPreferences.Editor prefsEditor;
             prefsEditor = prefs.edit();
             prefsEditor.putBoolean(context.getString(R.string.pref_cell_table_cleansed), true);
@@ -328,64 +324,6 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
     }
 
     /**
-     * Description:     Get an API key for Open Cell ID. Do not call this from the UI/Main thread.
-     *                  For the various server responses, pleas refer to the OpenCellID API wiki:
-     *                  http://wiki.opencellid.org/wiki/API#Error_codes
-     *                  TODO: And the github issue #303:
-     *                  https://github.com/SecUpwN/Android-IMSI-Catcher-Detector/issues/303
-     *
-     *  TODO:   [ ] Add handlers for other HTTP request and OCID Server error codes
-     *
-     *
-     * @return null or newly generated key
-     *
-     */
-    public static String requestNewOCIDKey() throws Exception {
-        DefaultHttpClient httpclient = new DefaultHttpClient();
-        HttpGet httpGet = new HttpGet(context.getString(R.string.opencellid_api_get_key));
-        OCIDResponse result = new OCIDResponse(httpclient.execute(httpGet));
-
-        // TODO: remoe these and fix first type def in beginning of file
-        String TAG = "AIMSICD";
-        String mTAG = "CellTracker";
-
-        // For debugging response and codes
-        Log.d(TAG, mTAG + ": OCID Server Response: " + result.getResponseFromServer() + " Code=" + String.valueOf(result.getStatusCode()) );
-
-        if (result.getStatusCode() == 200) {
-            String responseFromServer = result.getResponseFromServer();
-            Log.d(TAG, mTAG + ": OCID Server Repsonse: " + responseFromServer );
-            return responseFromServer;
-
-        } else if (result.getStatusCode() == 503) {
-            // Check for HTTP error code 503 which is returned when user is trying to request
-            // a new API key within 24 hours of the last request. (See GH issue #267)
-            // Make toast message:  "Only one new API key request per 24 hours. Please try again later."
-
-            Helpers.msgLong(context, context.getString(R.string.only_one_key_per_day));
-            String responseFromServer = result.getResponseFromServer();
-            Log.d(TAG, mTAG + ": OCID Reached 24hr API key request limit: " + responseFromServer);
-            return responseFromServer;
-        } else {
-
-            // TODO add code here or elsewhere to check for NO network exceptions...
-            // See: https://github.com/SecUpwN/Android-IMSI-Catcher-Detector/issues/293
-
-            // TODO: Remove commented out stuff if app works without these NULLs
-            // See: https://github.com/SecUpwN/Android-IMSI-Catcher-Detector/pull/526
-            // PR: 4a68d00
-            //httpclient = null;
-            //httpGet = null;
-            //result = null;
-
-            Log.d(TAG, mTAG + ": OCID Returned " + result.getStatusCode() + " " + result.getReasonPhrase());
-            //throw new Exception("OCID Returned " + status.getStatusCode() + " " + status.getReasonPhrase());
-            return null;
-        }
-    }
-
-
-    /**
      *  Description:    Updates Neighbouring Cell details
      *
      *  TODO: add more details...
@@ -398,8 +336,9 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
         if(neighboringCellInfo == null)
             neighboringCellInfo = new ArrayList<>();
 
-        if (neighboringCellInfo != null &&
-                neighboringCellInfo.size() == 0) {
+        Boolean nclp = tinydb.getBoolean("nc_list_present"); // NC list present? (default is false)
+        //if nclp = true then check for neighboringCellInfo
+        if (neighboringCellInfo != null && neighboringCellInfo.size() == 0 && nclp) {
             // try to poll the neighboring cells for a few seconds
             neighboringCellBlockingQueue = new LinkedBlockingQueue<>(100);
             Log.i(TAG, mTAG + ": neighbouringCellInfo empty - start polling");
@@ -407,8 +346,8 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
 
             //LISTEN_CELL_INFO added in API 17
             // TODO: See issue #555 (DeviceApi17.java is using API 18 CellInfoWcdma calls.
-            if (Build.VERSION.SDK_INT > 16) {
-                DeviceApi17.startListening(tm, phoneStatelistener);
+            if (Build.VERSION.SDK_INT > 17) {
+                DeviceApi18.startListening(tm, phoneStatelistener);
             } else {
                 tm.listen(phoneStatelistener,
                         PhoneStateListener.LISTEN_CELL_LOCATION |
@@ -530,6 +469,15 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
 //            Log.i(TAG, mTAG + ": ALERT: No neighboring cells detected for CID: " + mDevice.mCell.getCID() );
             Log.i(TAG, mTAG+ ": ALERT: No neighboring cells detected for CID: " + mDevice.mCell.getCID() );
             //  TODO: ADD alert to EventLog table HERE !!
+            dbHelper.insertEventLog(MiscUtils.getCurrentTimeStamp(),
+                    mMonitorCell.getLAC(),
+                    mMonitorCell.getCID(),
+                    mMonitorCell.getPSC(),//This is giving weird values like 21478364... is this right?
+                    String.valueOf(mMonitorCell.getLat()),
+                    String.valueOf(mMonitorCell.getLon()),
+                    (int)mMonitorCell.getAccuracy(),
+                    4,
+                    "No neighboring cells detected");
 
         } else  {
             //if ( ncls == 0 && !nclp )
@@ -609,6 +557,16 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
                     boolean lacOK = dbHelper.checkLAC(mMonitorCell);
                     if (!lacOK) {
                         mChangedLAC = true;
+
+                        dbHelper.insertEventLog(MiscUtils.getCurrentTimeStamp(),
+                                mMonitorCell.getLAC(),
+                                mMonitorCell.getCID(),
+                                mMonitorCell.getPSC(),//This is giving weird values like 21478364... is this right?
+                                String.valueOf(mMonitorCell.getLat()),
+                                String.valueOf(mMonitorCell.getLon()),
+                                (int)mMonitorCell.getAccuracy(),
+                                1,
+                                "Changing LAC");
                         setNotification();
                     } else {
                         mChangedLAC = false;
@@ -617,7 +575,7 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
                     if ( tinydb.getBoolean("ocid_downloaded") ) {
                         if (!dbHelper.openCellExists(mMonitorCell.getCID())) {
                             Log.i(TAG, mTAG + ": ALERT: Connected to unknown CID not in DBe_import: " + mMonitorCell.getCID());
-                            //dbHelper.open();
+
                             dbHelper.insertEventLog(MiscUtils.getCurrentTimeStamp(),
                                     mMonitorCell.getLAC(),
                                     mMonitorCell.getCID(),
@@ -957,8 +915,8 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
     public void onLocationChanged(Location loc) {
         //Log.i(mTAG, "in onLocationChanged(Location loc)");
         // TODO: See issue #555 (DeviceApi17.java is using API 18 CellInfoWcdma calls.
-        if (Build.VERSION.SDK_INT > 16) {
-            DeviceApi17.loadCellInfo(tm, mDevice);
+        if (Build.VERSION.SDK_INT > 17) {
+            DeviceApi18.loadCellInfo(tm, mDevice);
         }
 
         if (!mDevice.mCell.isValid()) {
