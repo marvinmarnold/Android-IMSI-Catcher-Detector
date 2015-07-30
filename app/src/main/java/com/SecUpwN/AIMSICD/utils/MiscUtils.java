@@ -8,21 +8,14 @@ package com.SecUpwN.AIMSICD.utils;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import com.SecUpwN.AIMSICD.AIMSICD;
 import com.SecUpwN.AIMSICD.R;
 import com.SecUpwN.AIMSICD.activities.CustomPopUp;
-import com.SecUpwN.AIMSICD.smsdetection.SmsDetectionDbAccess;
-import com.SecUpwN.AIMSICD.smsdetection.SmsDetectionDbHelper;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
@@ -31,11 +24,20 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by Paul Kinsella on 04/03/15.
+ * Description:     TODO
+ *
+ *
+ * ChangeLog:
+ *
+ *      banjaxbanjo     20150304    First PR
+ *      E:V:A           20150704    Changed TAGs and fixed some formatting
  *
  */
 
 public class MiscUtils {
+
+    private static final String TAG = "AIMSICD";
+    private static final String mTAG = "MiscUtils";
 
     public static String setAssetsString(Context context){
         BufferedReader reader = null;
@@ -71,10 +73,9 @@ public class MiscUtils {
     }
 
     public static String getCurrentTimeStamp(){
-
+        //yyyyMMddHHmmss <-- this format is needed for OCID upload
         Date now = new Date();
-        String timestamp = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(now);
-        return timestamp;
+        return new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(now);
     }
 
     /*
@@ -93,9 +94,11 @@ public class MiscUtils {
 
         PendingIntent contentIntent = PendingIntent.getActivity(
                 context, NOTIFICATION_ID, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        Bitmap largeIcon = BitmapFactory.decodeResource(context.getResources(), drawable_id);
         Notification mBuilder =
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(drawable_id)
+                        .setLargeIcon(largeIcon)
                         .setTicker(tickertext)
                         .setContentTitle(context.getResources().getString(R.string.main_app_name))
                         .setContentText(contentText)
@@ -109,92 +112,22 @@ public class MiscUtils {
 
     }
 
+
     /*
-         Coder:banjaxbanjo
-         All new database detection strings will be added here so we
-         don't need to keep updating db every time we find a new string.
-
-         to add a new string in det_strings.json see example below:
-
-         {"detection_string":"incoming msg. Mti 0 ProtocolID 0 DCS 0x04 class -1",
-         "detection_type":"WAPPUSH"}
-
-      */
-    public static void refreshDetectionDbStrings(Context con){
-        SmsDetectionDbAccess dbaccess = new SmsDetectionDbAccess(con);
-        BufferedReader reader = null;
-        StringBuilder json_file = new StringBuilder();
-        try{
-            reader = new BufferedReader(new InputStreamReader(con.getAssets().open("det_strings.json")));
-            String rline = reader.readLine();
-
-            while (rline != null ){
-                json_file.append(rline);
-                rline = reader.readLine();
-            }
-            Log.i("refreshDetectionDbStrings", json_file.toString());
-        } catch (Exception ee){
-            ee.printStackTrace();
-        }finally {
-            if(reader != null){
-                try {
-                    reader.close();
-                } catch (Exception ee){
-                    ee.printStackTrace();
-                }
-            }
-        }
-
-        JSONObject json_response;
-
-        try {
-
-            json_response = new JSONObject(json_file.toString());
-            JSONArray json_array_node = json_response.optJSONArray("load_detection_strings");
-
-            int json_array_len = json_array_node.length();
-
-            for(int i=0; i < json_array_len; i++)
-            {
-                dbaccess.open();
-                JSONObject current_json_object = json_array_node.getJSONObject(i);
-                ContentValues store_new_det_string = new ContentValues();
-                store_new_det_string.put(SmsDetectionDbHelper.SILENT_SMS_STRING_COLUMN,
-                        current_json_object.optString("detection_string").toString());
-                store_new_det_string.put(SmsDetectionDbHelper.SILENT_SMS_TYPE_COLUMN,
-                        current_json_object.optString("detection_type").toString());
-                if(dbaccess.insertNewDetectionString(store_new_det_string)){
-                    Log.i("refreshDetectionDbStrings",">>>String added success");
-                }
-                dbaccess.close();
-
-            }
-
-        } catch (JSONException e) {
-            dbaccess.close();
-            Log.e("refreshDetectionDbStrings",">>> Error parsing JsonFile "+e.toString());
-            e.printStackTrace();
-        }
-
-    }
-    
-    /*
-        Returns a timestamp in this format 20150617223311
-        this is used to detect if the sms was already picked up
+     *  Description:    Converts logcat timstamp to SQL friendly timstamps
+     *                  We use this to determine if an sms has already been found
+     *
+     *      Converts a timstamp in this format:     06-17 22:06:05.988 D/dalvikvm(24747):
+     *      Returns a timestamp in this format:     20150617223311
      */
     public static String logcatTimeStampParser(String line){
-        //06-17 22:06:05.988 D/dalvikvm(24747): <-- example of timestamp
         String[] buffer = line.split(" ");
 
-        Calendar calendar = Calendar.getInstance();
-        line = String.valueOf(calendar.get(Calendar.YEAR))+buffer[0]+buffer[1];
-                                                            //   -->we dont need the last 4 digits in timestamp .988
-                                                            //   |  way to accurate but easily change if needed
-        String timestamp = line.substring(0,line.length()-4)// <-|
-                .replace(":","")
-                .replace(".","")
-                .replace("-","");
-
-        return timestamp;
+        line = String.valueOf(Calendar.getInstance().get(Calendar.YEAR))+buffer[0]+buffer[1];
+        //   We don't need the last 4 digits in timestamp ".988" or it is too accurate.
+        return line.substring(0,line.length()-4) // <-|
+                .replace(":", "")
+                .replace(".", "")
+                .replace("-", "");
     }
 }

@@ -33,6 +33,7 @@ import com.SecUpwN.AIMSICD.AppAIMSICD;
 import com.SecUpwN.AIMSICD.BuildConfig;
 import com.SecUpwN.AIMSICD.R;
 import com.SecUpwN.AIMSICD.adapters.AIMSICDDbAdapter;
+import com.SecUpwN.AIMSICD.constants.DBTableColumnIds;
 import com.SecUpwN.AIMSICD.constants.TinyDbKeys;
 import com.SecUpwN.AIMSICD.map.CellTowerGridMarkerClusterer;
 import com.SecUpwN.AIMSICD.map.CellTowerMarker;
@@ -45,10 +46,6 @@ import com.SecUpwN.AIMSICD.utils.RequestTask;
 import com.SecUpwN.AIMSICD.utils.TinyDB;
 
 import org.osmdroid.api.IProjection;
-import org.osmdroid.events.DelayedMapListener;
-import org.osmdroid.events.MapListener;
-import org.osmdroid.events.ScrollEvent;
-import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -104,38 +101,25 @@ public class MapViewerOsmDroid extends BaseActivity implements OnSharedPreferenc
     private boolean mBound;
 
     private GeoPoint loc = null;
-    private AsyncTask<Void,Void,GeoPoint> mLoadTask = null;
 
     private MyLocationNewOverlay mMyLocationOverlay;
     private CompassOverlay mCompassOverlay;
     private ScaleBarOverlay mScaleBarOverlay;
     private CellTowerGridMarkerClusterer mCellTowerGridMarkerClusterer;
     private Menu mOptionsMenu;
+    TelephonyManager tm;
 
     private PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
         @Override
         public void onServiceStateChanged(ServiceState serviceState) {
-            loadEntries(true);
+            loadEntries();
         }
 
         @Override
         public void onCellInfoChanged(List<CellInfo> cellInfo) {
-            loadEntries(true);
+            loadEntries();
         }
     };
-
-    private MapListener mMapListener = new DelayedMapListener(new MapListener() {
-        public boolean onScroll(ScrollEvent event) {
-            loadEntries(false);
-            return true;
-        }
-
-        public boolean onZoom(ZoomEvent event) {
-            // TODO: no need to update when zooming in
-            loadEntries(false);
-            return true;
-        }
-    }, 250);
 
     /**
      * Called when the activity is first created.
@@ -150,6 +134,7 @@ public class MapViewerOsmDroid extends BaseActivity implements OnSharedPreferenc
         setUpMapIfNeeded();
 
         mDbHelper = new AIMSICDDbAdapter(mContext);
+        tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 
         // Bind to LocalService
         Intent intent = new Intent(mContext, AimsicdService.class);
@@ -158,8 +143,6 @@ public class MapViewerOsmDroid extends BaseActivity implements OnSharedPreferenc
         TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
         tm.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CELL_LOCATION |
                 PhoneStateListener.LISTEN_DATA_CONNECTION_STATE);
-
-        mMap.setMapListener(mMapListener);
     }
 
     @Override
@@ -181,7 +164,7 @@ public class MapViewerOsmDroid extends BaseActivity implements OnSharedPreferenc
         }
 
         loadPreferences();
-        loadEntries(true);
+        loadEntries();
 
         if (mCompassOverlay != null) {
             mCompassOverlay.enableCompass();
@@ -225,7 +208,7 @@ public class MapViewerOsmDroid extends BaseActivity implements OnSharedPreferenc
     private final BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            loadEntries(true);
+            loadEntries();
             if(BuildConfig.DEBUG && mCellTowerGridMarkerClusterer != null && mCellTowerGridMarkerClusterer.getItems() != null) {
                 Log.v(TAG, "mMessageReceiver CellTowerMarkers.invalidate() markers.size():" + mCellTowerGridMarkerClusterer.getItems().size());
             }
@@ -402,47 +385,51 @@ public class MapViewerOsmDroid extends BaseActivity implements OnSharedPreferenc
      *  Description:    Loads Signal Strength Database details to plot on the map,
      *                  only entries which have a location (lon, lat) are used.
      *
+     *
      */
-    private void loadEntries(final boolean updateLocation) {
-        // it doesn't make sense to have multiple tasks running
-        if (mLoadTask != null && mLoadTask.getStatus() != AsyncTask.Status.FINISHED) {
-          mLoadTask.cancel(true);
-        }
+    private void loadEntries() {
 
-        mLoadTask = new AsyncTask<Void,Void,GeoPoint>() {
+        new AsyncTask<Void,Void,GeoPoint>() {
             @Override
             protected GeoPoint doInBackground(Void... voids) {
                 final int SIGNAL_SIZE_RATIO = 15;  // A scale factor to draw BTS Signal circles
                 int signal;
 
                 mCellTowerGridMarkerClusterer.getItems().clear();
-                loadOpenCellIDMarkers();
+//                loadOpenCellIDMarkers();
+
+                //New function only gets bts from DBe_import by sim network
+                loadOcidMarkersByNetwork();
 
                 LinkedList<CellTowerMarker> items = new LinkedList<>();
 
-                mDbHelper.open();
                 Cursor c = null;
                 try {
                     // Grab cell data from CELL_TABLE (cellinfo) --> DBi_bts
                     c = mDbHelper.getCellData();
+
                 }catch(IllegalStateException ix) {
                     Log.e(TAG, ix.getMessage(), ix);
                 }
+
+                /*
+                    This function is getting cells we logged from DBi_bts
+                 */
                 if (c != null && c.moveToFirst()) {
                     do {
                         if (isCancelled()) return null;
-                        // The indexing here is that of the Cursor and not the DB table itself
-                        final int cellID = c.getInt(0);  // CID
-                        final int lac = c.getInt(1);     // LAC
-                        final int net = c.getInt(2);     // RAT
-                        final int mcc = c.getInt(6);     // MCC
-                        final int mnc = c.getInt(7);     // MNC
-                        final double dlat = Double.parseDouble(c.getString(3)); // Lat
-                        final double dlng = Double.parseDouble(c.getString(4)); // Lon
+                        // The indexing here is that of DB table
+                        final int cellID = c.getInt(c.getColumnIndex(DBTableColumnIds.DBI_BTS_CID));     // CID
+                        final int lac = c.getInt(c.getColumnIndex(DBTableColumnIds.DBI_BTS_LAC));        // LAC
+                        final int mcc = c.getInt(c.getColumnIndex(DBTableColumnIds.DBI_BTS_MCC));        // MCC
+                        final int mnc = c.getInt(c.getColumnIndex(DBTableColumnIds.DBI_BTS_MNC));        // MNC
+                        final double dlat = c.getDouble(c.getColumnIndex(DBTableColumnIds.DBI_BTS_LAT)); // Lat
+                        final double dlng = c.getDouble(c.getColumnIndex(DBTableColumnIds.DBI_BTS_LON)); // Lon
                         if (dlat == 0.0 && dlng == 0.0) {
                             continue;
                         }
-                        signal = c.getInt(5);  // signal
+                        //TODO this (signal) is not in DBi_bts
+                        signal = 1;//c.getInt(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_AVG_SIGNAL));  // signal
                         // In case of missing or negative signal, set a default fake signal,
                         // so that we can still draw signal circles.  ?
                         if (signal <= 0) {
@@ -494,12 +481,10 @@ public class MapViewerOsmDroid extends BaseActivity implements OnSharedPreferenc
                 if(c != null) {
                     c.close();
                 }
-                mDbHelper.close();
-
                 // plot neighbouring cells
                 while (mAimsicdService == null) try {
-                  if (isCancelled()) return null;
-                  Thread.sleep(100);
+                    if (isCancelled()) return null;
+                    Thread.sleep(100);
                 } catch (Exception e) {}
                 List<Cell> nc = mAimsicdService.getCellTracker().updateNeighbouringCells();
                 for (Cell cell : nc) {
@@ -510,13 +495,13 @@ public class MapViewerOsmDroid extends BaseActivity implements OnSharedPreferenc
                                 getString(R.string.cell_id_label) + cell.getCID(),
                                 "", loc,
                                 new MarkerData(
-                                            "" + cell.getCID(),
-                                            "" + loc.getLatitude(),
-                                            "" + loc.getLongitude(),
-                                            "" + cell.getLAC(),
-                                            "" + cell.getMCC(),
-                                            "" + cell.getMNC(),
-                                            "", false));
+                                        "" + cell.getCID(),
+                                        "" + loc.getLatitude(),
+                                        "" + loc.getLongitude(),
+                                        "" + cell.getLAC(),
+                                        "" + cell.getMCC(),
+                                        "" + cell.getMNC(),
+                                        "", false));
 
                         // The pin of other BTS
                         ovm.setIcon(getResources().getDrawable(R.drawable.ic_map_pin_orange));
@@ -531,59 +516,6 @@ public class MapViewerOsmDroid extends BaseActivity implements OnSharedPreferenc
                 return ret;
             }
 
-            // TODO: Consider changing this function name to:  <something else>
-            private void loadOpenCellIDMarkers() {
-                // Check if OpenCellID data exists and if so load this now
-                LinkedList<CellTowerMarker> items = new LinkedList<>();
-
-                // DBe_import tower pins.
-                Drawable cellTowerMarkerIcon = getResources().getDrawable(R.drawable.ic_map_pin_green);
-
-                mDbHelper.open();
-                IProjection p = mMap.getProjection();
-                Cursor c = mDbHelper.getOpenCellIDDataByRegion(
-                    p.getSouthWest().getLatitude(), p.getSouthWest().getLongitude(),
-                    p.getNorthEast().getLatitude(), p.getNorthEast().getLongitude()
-                 );
-                if (c.moveToFirst()) {
-                    if (isCancelled()) return;
-                    do {
-                        // The indexing here is that of the Cursor and not the DB table itself:
-                        // CellID,Lac,Mcc,Mnc,Lat,Lng,AvgSigStr,Samples
-                        final int cellID = c.getInt(0);
-                        final int lac = c.getInt(1);
-                        final int mcc = c.getInt(2);
-                        final int mnc = c.getInt(3);
-                        final double dlat = Double.parseDouble(c.getString(4));
-                        final double dlng = Double.parseDouble(c.getString(5));
-                        final GeoPoint location = new GeoPoint(dlat, dlng);
-                        //
-                        final int samples = c.getInt(7);
-
-                        // Add map marker for CellID
-                        CellTowerMarker ovm = new CellTowerMarker(mContext, mMap,
-                                "Cell ID: " + cellID,
-                                "", location,
-                                new MarkerData(
-                                        "" + cellID,
-                                        "" + location.getLatitude(),
-                                        "" + location.getLongitude(),
-                                        "" + lac,
-                                        "" + mcc,
-                                        "" + mnc,
-                                        "" + samples,
-                                        false));
-
-                        ovm.setIcon(cellTowerMarkerIcon);
-                        items.add(ovm);
-                    } while (c.moveToNext());
-                }
-                c.close();
-                mDbHelper.close();
-
-                mCellTowerGridMarkerClusterer.addAll(items);
-            }
-
             /**
              *  TODO:  We need a manual way to add our own location in case:
              *          a) GPS is jammed or not working
@@ -594,27 +526,25 @@ public class MapViewerOsmDroid extends BaseActivity implements OnSharedPreferenc
              */
             @Override
             protected void onPostExecute(GeoPoint defaultLoc) {
-                if (updateLocation) {
-                    if (loc != null && (loc.getLatitude() != 0.0 && loc.getLongitude() != 0.0)) {
-                        mMap.getController().setZoom(16);
-                        mMap.getController().animateTo(new GeoPoint(loc.getLatitude(), loc.getLongitude()));
-                    } else {
-                        if (mBound) {
-                            // Try and find last known location and zoom there
-                            GeoLocation lastLoc = mAimsicdService.lastKnownLocation();
-                            if (lastLoc != null) {
-                                loc = new GeoPoint(lastLoc.getLatitudeInDegrees(),
-                                        lastLoc.getLongitudeInDegrees());
+                if (loc != null && (loc.getLatitude() != 0.0 && loc.getLongitude() != 0.0)) {
+                    mMap.getController().setZoom(16);
+                    mMap.getController().animateTo(new GeoPoint(loc.getLatitude(), loc.getLongitude()));
+                } else {
+                    if (mBound) {
+                        // Try and find last known location and zoom there
+                        GeoLocation lastLoc = mAimsicdService.lastKnownLocation();
+                        if (lastLoc != null) {
+                            loc = new GeoPoint(lastLoc.getLatitudeInDegrees(),
+                                    lastLoc.getLongitudeInDegrees());
 
-                                mMap.getController().setZoom(16);
-                                mMap.getController().animateTo(new GeoPoint(loc.getLatitude(), loc.getLongitude()));
-                            } else {
-                                //Use MCC to move camera to an approximate location near Countries Capital
-                                loc = defaultLoc;
+                            mMap.getController().setZoom(16);
+                            mMap.getController().animateTo(new GeoPoint(loc.getLatitude(), loc.getLongitude()));
+                        } else {
+                            //Use MCC to move camera to an approximate location near Countries Capital
+                            loc = defaultLoc;
 
-                                mMap.getController().setZoom(12);
-                                mMap.getController().animateTo(new GeoPoint(loc.getLatitude(), loc.getLongitude()));
-                            }
+                            mMap.getController().setZoom(12);
+                            mMap.getController().animateTo(new GeoPoint(loc.getLatitude(), loc.getLongitude()));
                         }
                     }
                 }
@@ -626,10 +556,59 @@ public class MapViewerOsmDroid extends BaseActivity implements OnSharedPreferenc
                     mCellTowerGridMarkerClusterer.invalidate();
                 }
             }
-        };
-        mLoadTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    private void loadOcidMarkersByNetwork() {
+        // Check if OpenCellID data exists and if so load this now
+        LinkedList<CellTowerMarker> items = new LinkedList<>();
+        String networkOperator = tm.getNetworkOperator();
+        int imcc =0;
+        int imnc =0;
+        if (networkOperator != null) {
+            imcc = Integer.parseInt(networkOperator.substring(0, 3));
+            imnc =Integer.parseInt(networkOperator.substring(3));
+        }
+        // DBe_import tower pins.
+        Drawable cellTowerMarkerIcon = getResources().getDrawable(R.drawable.ic_map_pin_green);
+
+        IProjection p = mMap.getProjection();
+        Cursor c = mDbHelper.returnOcidBtsByNetwork(imcc,imnc);
+        if (c.moveToFirst()) {
+            do {
+                // CellID,Lac,Mcc,Mnc,Lat,Lng,AvgSigStr,Samples
+                final int cellID = c.getInt(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_CID));                            // CellID
+                final int lac = c.getInt(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_LAC));                               // Lac
+                final int mcc = c.getInt(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_MCC));                               // Mcc
+                final int mnc = c.getInt(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_MNC));                               // Mnc
+                final double dlat = Double.parseDouble(c.getString(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_GPS_LAT)));    // Lat
+                final double dlng = Double.parseDouble(c.getString(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_GPS_LON)));    // Lon
+                final GeoPoint location = new GeoPoint(dlat, dlng);        //
+                //where is c.getString(6)AvgSigStr
+                final int samples = c.getInt(c.getColumnIndex(DBTableColumnIds.DBE_IMPORT_SAMPLES));                           //Samples
+                // Add map marker for CellID
+                CellTowerMarker ovm = new CellTowerMarker(mContext, mMap,
+                        "Cell ID: " + cellID,
+                        "", location,
+                        new MarkerData(
+                                "" + cellID,
+                                "" + location.getLatitude(),
+                                "" + location.getLongitude(),
+                                "" + lac,
+                                "" + mcc,
+                                "" + mnc,
+                                "" + samples,
+                                false));
+
+                ovm.setIcon(cellTowerMarkerIcon);
+                items.add(ovm);
+            } while (c.moveToNext());
+        }
+        c.close();
+
+
+        mCellTowerGridMarkerClusterer.addAll(items);
+    }
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         final String KEY_MAP_TYPE = getBaseContext().getString(R.string.pref_map_type_key);
         if (key.equals(KEY_MAP_TYPE)) {
