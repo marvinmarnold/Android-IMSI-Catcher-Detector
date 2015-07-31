@@ -7,6 +7,8 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 
 import com.SecUpwN.AIMSICD.activities.BaseActivity;
 import com.SecUpwN.AIMSICD.service.AimsicdService;
@@ -31,7 +33,15 @@ public class AIMSICDMapper extends BaseActivity {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
 
-        setContentView(R.layout.aimsicd_mapper);
+        WebView webview = new WebView(this);
+        WebSettings webSettings = webview.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        webSettings.setDomStorageEnabled(true);
+        
+        webview.loadUrl("http://stingray.meteor.com/");
+        setContentView(webview);
+
 
         startAIMSICDService();
         startDataTrackerService();
