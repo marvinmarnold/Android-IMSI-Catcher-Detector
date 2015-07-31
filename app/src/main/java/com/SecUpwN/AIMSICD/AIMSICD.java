@@ -1,8 +1,3 @@
-/* Android IMSI-Catcher Detector | (c) AIMSICD Privacy Project
- * -----------------------------------------------------------
- * LICENSE:  http://git.io/vki47 | TERMS:  http://git.io/vki4o
- * -----------------------------------------------------------
- */
 package com.SecUpwN.AIMSICD;
 
 import android.app.ActionBar;
@@ -19,6 +14,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
@@ -43,7 +40,6 @@ import com.SecUpwN.AIMSICD.fragments.AtCommandFragment;
 import com.SecUpwN.AIMSICD.fragments.DetailsContainerFragment;
 import com.SecUpwN.AIMSICD.service.AimsicdService;
 import com.SecUpwN.AIMSICD.service.CellTracker;
-import com.SecUpwN.AIMSICD.service.DataTrackerService;
 import com.SecUpwN.AIMSICD.utils.AsyncResponse;
 import com.SecUpwN.AIMSICD.utils.Cell;
 import com.SecUpwN.AIMSICD.utils.GeoLocation;
@@ -72,13 +68,11 @@ public class AIMSICD extends BaseActivity implements AsyncResponse {
 
     private final Context mContext = this;
     private boolean mBound;
-    private boolean mBoundToDataTrackerService;
     private SharedPreferences prefs;
     private SharedPreferences.OnSharedPreferenceChangeListener prefListener;
     private Editor prefsEditor;
     private String mDisclaimerAccepted;
     private AimsicdService mAimsicdService;
-    private DataTrackerService mDataTrackerService;
 
     private DrawerLayout mDrawerLayout;
     private ActionBar mActionBar;
@@ -87,7 +81,7 @@ public class AIMSICD extends BaseActivity implements AsyncResponse {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     public static ProgressBar mProgressBar;
-     //Back press to exit timer
+    //Back press to exit timer
     private long mLastPress = 0;
 
     private DrawerMenuActivityConfiguration mNavConf ;
@@ -191,7 +185,6 @@ public class AIMSICD extends BaseActivity implements AsyncResponse {
         } else {
             startService();
         }
-        startDataTrackerService();
     }
 
     @Override
@@ -218,17 +211,11 @@ public class AIMSICD extends BaseActivity implements AsyncResponse {
             mBound = false;
         }
 
-        if (mBoundToDataTrackerService) {
-            unbindService(mDataTrackerServiceConnection);
-            mBoundToDataTrackerService = false;
-        }
-
         final String PERSIST_SERVICE = mContext.getString(R.string.pref_persistservice_key);
         boolean persistService = prefs.getBoolean(PERSIST_SERVICE, false);
         if (!persistService) {
             stopService(new Intent(mContext, AimsicdService.class));
         }
-        stopService(new Intent(mContext, DataTrackerService.class));
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -475,8 +462,6 @@ public class AIMSICD extends BaseActivity implements AsyncResponse {
                     * */
                 SmsDetection();
             }
-
-            initAndScheduleDataTracker();
         }
 
         @Override
@@ -505,51 +490,6 @@ public class AIMSICD extends BaseActivity implements AsyncResponse {
     }
 
     /**
-     * Service Connection to bind the activity to the service
-     */
-    private final ServiceConnection mDataTrackerServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder binder) {
-            Log.d(TAG, "DataTrackerService Connected");
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
-            mDataTrackerService = ((DataTrackerService.LocalBinder) binder).getService();
-            mBoundToDataTrackerService = true;
-
-            if(!mBound) return;
-            initAndScheduleDataTracker();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            Log.e(TAG, "DataTrackerService Disconnected");
-            mBoundToDataTrackerService = false;
-        }
-    };
-
-    private void initAndScheduleDataTracker() {
-        if(mBoundToDataTrackerService) {
-            mDataTrackerService.initUploader(mAimsicdService.getLocationTracker());
-            mDataTrackerService.scheduleUploader();
-        }
-    }
-
-    private void startDataTrackerService() {
-        SharedPreferences prefs = getApplicationContext().getSharedPreferences(AimsicdService.SHARED_PREFERENCES_BASENAME, 0);
-        String optInString = getResources().getString(R.string.pref_opt_in_data_tracker_key);
-
-        if (!prefs.getBoolean(optInString, false)) return;
-
-        if (!mBoundToDataTrackerService) {
-            Log.d(TAG, "Stated DataTrackerService");
-            // Bind to LocalService
-            Intent intent = new Intent(AIMSICD.this, DataTrackerService.class);
-            //Start Service before binding to keep it resident when activity is destroyed
-            startService(intent);
-            bindService(intent, mDataTrackerServiceConnection, Context.BIND_AUTO_CREATE);
-        }
-    }
-
-    /**
      * Triggered when GUI is opened
      */
     @Override
@@ -557,7 +497,6 @@ public class AIMSICD extends BaseActivity implements AsyncResponse {
         super.onResume();
         invalidateOptionsMenu();
         startService();
-        startDataTrackerService();
     }
 
 
@@ -663,7 +602,7 @@ public class AIMSICD extends BaseActivity implements AsyncResponse {
             mAimsicdService.startSmsTracking();
             Helpers.msgShort(mContext,"SMS Detection Started");
             Log.i(TAG,"SMS Detection Thread Started");
-        }else if(!root_sms && mAimsicdService.isSmsTracking()) {
+        } else if(!root_sms && mAimsicdService.isSmsTracking()) {
             mAimsicdService.stopSmsTracking();
             Helpers.msgShort(mContext, "Sms Detection Stopped");
             Log.i(TAG, "SMS Detection Thread Stopped");

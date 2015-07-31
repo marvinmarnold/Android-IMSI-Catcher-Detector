@@ -103,6 +103,19 @@
                 android:label="@string/app_name_short"
                 android:configChanges="keyboardHidden|screenLayout|screenSize|orientation">
             <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.DELETE"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.DEVELOPMENT_PREFERENCE"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".AIMSICDMapper"
+            android:exported="true"
+            android:label="@string/app_name_short"
+            android:configChanges="keyboardHidden|screenLayout|screenSize|orientation">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="android.intent.action.VIEW"/>
                 <action android:name="android.intent.action.DELETE"/>

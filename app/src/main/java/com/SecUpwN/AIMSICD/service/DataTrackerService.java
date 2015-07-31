@@ -3,14 +3,12 @@ package com.SecUpwN.AIMSICD.service;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.SecUpwN.AIMSICD.R;
 import com.SecUpwN.AIMSICD.utils.Status;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -48,9 +46,9 @@ public class DataTrackerService extends Service {
     private Runnable mUploaderRunnable;
     private ScheduledFuture mUploader;
     private static final int UPLOAD_FREQUENCY_VALUE = 10;
-    private static final TimeUnit UPLOAD_FREQUENCY_UNIT = TimeUnit.SECONDS;
+    private static final TimeUnit UPLOAD_FREQUENCY_UNIT = TimeUnit.MINUTES;
 
-    private final static String mUploadAPIBase ="https://whispering-sea-9303.herokuapp.com/api/v1/";
+    private final static String mUploadAPIBase ="https://stingray-mapping-server.herokuapp.com/";
     private RequestQueue mQueue;
     private ArrayList<DataRequestParams> mOfflineRequests;
     public static String ACTION_SYNC_DATA = "ACTION_SYNC_DATA";
@@ -91,10 +89,7 @@ public class DataTrackerService extends Service {
         mUploaderRunnable = new Runnable() {
             @Override
             public void run() {
-                upload(new DataRequestParams(getImsiJSON(), "imsi_data"));
-                if(isOnline()) {
-                    upload(new DataRequestParams(getWifiJSON(), "wifi_data"));
-                }
+                upload(new DataRequestParams(getImsiJSON(), "stingray_readings"));
             }
 
             public void upload(DataRequestParams dataRequestParams) {
@@ -107,34 +102,19 @@ public class DataTrackerService extends Service {
 
                 try {
                     imsiFields = addComonFields(imsiFields);
-                    imsiFields.put("aimsicd_threat_level", getStatus());
-                    datum.put("imsi_datum", imsiFields);
+                    imsiFields.put("threat_level", getStatus());
+                    datum.put("stingray_reading", imsiFields);
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
 
-                return datum;
-            }
-
-            JSONObject getWifiJSON() {
-                JSONObject wifiFields = new JSONObject();
-                JSONObject datum = new JSONObject();
-
-                try {
-                    wifiFields = addComonFields(wifiFields);
-                    wifiFields.put("num_wifi_hotspots", mWifiTracker.getNumHotspots());
-                    datum.put("wifi_datum", wifiFields);
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
                 return datum;
             }
 
             JSONObject addComonFields(JSONObject jsonObject) throws JSONException {
-                jsonObject.put("latitude_degrees", mLocationTracker.lastKnownLocation().getLatitudeInDegrees());
-                jsonObject.put("longitude_degrees", mLocationTracker.lastKnownLocation().getLongitudeInDegrees());
+                jsonObject.put("lat", mLocationTracker.lastKnownLocation().getLatitudeInDegrees());
+                jsonObject.put("long", mLocationTracker.lastKnownLocation().getLongitudeInDegrees());
                 jsonObject.put("observed_at", DateFormat.getDateTimeInstance().format(new Date()));
 
                 return jsonObject;
@@ -164,15 +144,14 @@ public class DataTrackerService extends Service {
     }
 
     public void scheduleUploader() {
-        SharedPreferences prefs = getApplicationContext().getSharedPreferences(AimsicdService.SHARED_PREFERENCES_BASENAME, 0);
-        String optInString = getResources().getString(R.string.pref_opt_in_data_tracker_key);
+        Log.d(TAG, "start scheduleUploader");
 
-        if (!prefs.getBoolean(optInString, false)) return;
         if (!isInitialized) return;
         if (hasScheduledUploader) return;
 
         mUploader = mScheduler.scheduleAtFixedRate(mUploaderRunnable, 0, UPLOAD_FREQUENCY_VALUE, UPLOAD_FREQUENCY_UNIT);
         hasScheduledUploader = true;
+        Log.d(TAG, "end scheduleUploader");
     }
 
     @Override
