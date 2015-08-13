@@ -38,7 +38,7 @@ public class AIMSICDMapper extends BaseActivity {
         webSettings.setJavaScriptEnabled(true);
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         webSettings.setDomStorageEnabled(true);
-        
+
         webview.loadUrl("http://stingray.meteor.com/");
         setContentView(webview);
 
