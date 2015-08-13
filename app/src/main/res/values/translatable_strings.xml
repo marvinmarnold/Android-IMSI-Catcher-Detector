@@ -395,4 +395,10 @@
         <item>@string/timeout_spinner_10_min</item>
     </string-array>
 
+    <!-- Mapping project -->
+    <string name="mapper_safe_title">No threats detected</string>
+    <string name="mapper_safe_description">there have been no stingray detected near you recently</string>
+    <string name="mapper_safe_teaser">Did you know that there are some really interesting facts we can share with you?</string>
+    <string name="mapper_safe_learn_more_button">Learn More</string>
+    <string name="mapper_safe_settings_button">Settings</string>
 </resources>
