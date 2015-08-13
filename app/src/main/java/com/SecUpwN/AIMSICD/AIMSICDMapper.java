@@ -6,17 +6,16 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.SecUpwN.AIMSICD.activities.BaseActivity;
 import com.SecUpwN.AIMSICD.service.AimsicdService;
 import com.SecUpwN.AIMSICD.service.DataTrackerService;
-
 /**
  * Modified from AIMSICD.java
  */
-public class AIMSICDMapper extends BaseActivity {
+public class AIMSICDMapper extends AppCompatActivity {
     private final static String TAG = "AIMSICDMapper";
 
     private final Context mContext = this;

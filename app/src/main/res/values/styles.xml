@@ -10,4 +10,19 @@
         <item name="android:background">@color/action_bar_color</item>
     </style>
 
+    <style name="Theme.StingrayMapping" parent="Base.Theme.StingrayMapping">
+
+    </style>
+
+    <style name="Base.Theme.StingrayMapping" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="colorAccent">@color/color_accent</item>
+        <item name="android:windowBackground">@color/window_background</item>
+        <!--If you are using revision 22.1 please use just windowNoTitle. Without android:-->
+        <item name="windowNoTitle">true</item>
+        <!--We will be using the toolbar so no need to show ActionBar-->
+        <item name="windowActionBar">false</item>
+    </style>
+
 </resources>

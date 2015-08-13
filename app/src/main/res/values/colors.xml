@@ -9,8 +9,13 @@
     <color name="medium_blue">#ff33B5E5</color>
     <color name="standard_yellow">#ffea59</color>
     <color name="standard_grey">#dddddd</color>
-    
+
     <color name="red_text">#a00000</color>          <!-- deep red -->
     <color name="bright_red_text">#ffff0000</color>          <!-- bright red -->
 
+    <!-- Mappinp Project -->
+    <color name="window_background">#ff0d0d0d</color>
+    <color name="color_primary">#000B17</color>
+    <color name="color_primary_dark">#000B17</color>
+    <color name="color_accent">#C6A876</color>
 </resources>
