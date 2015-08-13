@@ -396,9 +396,16 @@
     </string-array>
 
     <!-- Mapping project -->
+    <!-- Mapper Safe -->
     <string name="mapper_safe_title">No threats detected</string>
     <string name="mapper_safe_description">there have been no stingray detected near you recently</string>
     <string name="mapper_safe_teaser">Did you know that there are some really interesting facts we can share with you?</string>
     <string name="mapper_safe_learn_more_button">Learn More</string>
     <string name="mapper_safe_settings_button">Settings</string>
+
+    <!-- Mapper Danger -->
+    <string name="mapper_danger_title">Threat detected</string>
+    <string name="mapper_danger_description">a Stingray may be within 110m of you</string>
+    <string name="mapper_danger_airplane_button">Airplane Mode</string>
+    <string name="mapper_danger_warn_button">Warn others</string>
 </resources>

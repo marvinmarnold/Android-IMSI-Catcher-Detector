@@ -31,9 +31,11 @@ public class AIMSICDMapper extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
-        setContentView(R.layout.activity_mapper_safe);
+//        setContentView(R.layout.activity_mapper_safe);
+//        ImageView iv = (ImageView)findViewById(R.id.mapper_safe_logo); iv.setImageResource(R.drawable.logo_safe);
 
-        ImageView iv = (ImageView)findViewById(R.id.mapper_safe_logo); iv.setImageResource(R.drawable.logo_safe);
+        setContentView(R.layout.activity_mapper_danger);
+        ImageView iv = (ImageView)findViewById(R.id.mapper_danger_logo); iv.setImageResource(R.drawable.logo_danger);
 
         startAIMSICDService();
         startDataTrackerService();
