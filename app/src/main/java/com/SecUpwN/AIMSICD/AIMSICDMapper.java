@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -19,6 +20,7 @@ public class AIMSICDMapper extends AppCompatActivity {
     private final static String TAG = "AIMSICDMapper";
 
     private final Context mContext = this;
+    private Toolbar mToolbar;
 
     private boolean mBoundToAIMSICD;
     private AimsicdService mAimsicdService;
@@ -34,6 +36,10 @@ public class AIMSICDMapper extends AppCompatActivity {
 //        ImageView iv = (ImageView)findViewById(R.id.mapper_safe_logo); iv.setImageResource(R.drawable.logo_safe);
 
         setContentView(R.layout.activity_mapper_danger);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("Stingray Mapping Project");
+
         ImageView iv = (ImageView)findViewById(R.id.mapper_danger_logo); iv.setImageResource(R.drawable.logo_danger);
 
         startAIMSICDService();
