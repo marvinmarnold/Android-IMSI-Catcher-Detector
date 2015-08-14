@@ -23,6 +23,7 @@
         <item name="windowNoTitle">true</item>
         <!--We will be using the toolbar so no need to show ActionBar-->
         <item name="windowActionBar">false</item>
+
     </style>
 
 </resources>

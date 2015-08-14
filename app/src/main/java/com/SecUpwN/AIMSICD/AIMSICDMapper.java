@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.widget.ImageView;
 
 import com.SecUpwN.AIMSICD.service.AimsicdService;
@@ -48,6 +49,7 @@ public class AIMSICDMapper extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Threat Detected");
 
+
         mActionToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping_action);
         mActionToolbar.setTitle("Take Action");
         mActionToolbar.inflateMenu(R.menu.activity_stingray_mapping_danger);
@@ -76,6 +78,13 @@ public class AIMSICDMapper extends AppCompatActivity {
             startService(intent);
             bindService(intent, mAIMSICDServiceConnection, Context.BIND_AUTO_CREATE);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.stingray_mapping_toolbar, menu);
+        return true;
     }
 
     /**
