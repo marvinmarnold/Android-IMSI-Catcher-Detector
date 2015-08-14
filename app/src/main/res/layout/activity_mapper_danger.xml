@@ -1,60 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
+    <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_stingray_mapping"
-        layout="@layout/toolbar_stingray_mapping" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/mapper_danger_title"
-        android:id="@+id/mapper_danger_title"
-        android:layout_gravity="center_horizontal" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:id="@+id/mapper_danger_logo"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp" />
-
-    <TextView
-        android:layout_width="290dp"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/mapper_danger_description"
-        android:id="@+id/mapper_danger_description"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"/>
-
-    <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="25dp"
-        android:layout_marginTop="25dp">
+        android:minHeight="?attr/actionBarSize"
+        android:background="?attr/colorPrimary" />
 
-        <Button
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_stingray_mapping_action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?android:attr/actionBarSize"
+        android:background="?attr/colorAccent"
+        android:textColor="?attr/colorPrimaryDark"
+        android:layout_alignParentBottom="true" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/toolbar_stingray_mapping_action"
+        android:layout_below="@id/toolbar_stingray_mapping"
+        android:background="#fff">
+
+        <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/mapper_danger_airplane_button"
-            android:id="@+id/mapper_danger_airplane_button" />
+            android:layout_height="100dp"
+            android:id="@+id/mapper_danger_logo"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp" />
 
-        <Button
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="290dp"
             android:layout_height="wrap_content"
-            android:text="@string/mapper_danger_warn_button"
-            android:id="@+id/mapper_danger_warn_button" />
-    </LinearLayout>
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/mapper_danger_description"
+            android:id="@+id/mapper_danger_description"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="25dp"
+            android:textColor="#000" />
 
-    <org.osmdroid.views.MapView
-        android:id="@+id/mapview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
-</LinearLayout>
+        <org.osmdroid.views.MapView
+            android:id="@+id/stingray_mapping_danger_map"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"/>
+        </LinearLayout>
+</RelativeLayout>

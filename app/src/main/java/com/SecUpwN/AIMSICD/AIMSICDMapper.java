@@ -13,6 +13,10 @@ import android.widget.ImageView;
 
 import com.SecUpwN.AIMSICD.service.AimsicdService;
 import com.SecUpwN.AIMSICD.service.DataTrackerService;
+
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+
 /**
  * Modified from AIMSICD.java
  */
@@ -21,12 +25,15 @@ public class AIMSICDMapper extends AppCompatActivity {
 
     private final Context mContext = this;
     private Toolbar mToolbar;
+    private Toolbar mActionToolbar;
 
     private boolean mBoundToAIMSICD;
     private AimsicdService mAimsicdService;
 
     private boolean mBoundToDataTrackerService;
     private DataTrackerService mDataTrackerService;
+
+    private MapView mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +43,26 @@ public class AIMSICDMapper extends AppCompatActivity {
 //        ImageView iv = (ImageView)findViewById(R.id.mapper_safe_logo); iv.setImageResource(R.drawable.logo_safe);
 
         setContentView(R.layout.activity_mapper_danger);
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Stingray Mapping Project");
+        getSupportActionBar().setTitle("Threat Detected");
 
-        ImageView iv = (ImageView)findViewById(R.id.mapper_danger_logo); iv.setImageResource(R.drawable.logo_danger);
+        mActionToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping_action);
+        mActionToolbar.setTitle("Take Action");
+        mActionToolbar.inflateMenu(R.menu.activity_stingray_mapping_danger);
+
+        ImageView iv = (ImageView)findViewById(R.id.mapper_danger_logo);
+        iv.setImageResource(R.drawable.logo_danger);
+
+        mMap = (MapView) findViewById(R.id.stingray_mapping_danger_map);
+        mMap.getController().setZoom(16);
+        mMap.setBuiltInZoomControls(true);
+        mMap.setMultiTouchControls(true);
+        mMap.setMinZoomLevel(3);
+        mMap.setMaxZoomLevel(19);
+
+        mMap.getController().animateTo(new GeoPoint(38.731407, -96.386617));
 
         startAIMSICDService();
         startDataTrackerService();
