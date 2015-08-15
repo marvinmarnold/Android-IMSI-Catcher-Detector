@@ -405,7 +405,7 @@
 
     <!-- Mapper Danger -->
     <string name="mapper_danger_title">Threat detected</string>
-    <string name="mapper_danger_description">a Stingray may be within 110m of you</string>
+    <string name="mapper_danger_description">a Stingray may be nearby</string>
     <string name="mapper_danger_airplane_button">Airplane Mode</string>
     <string name="mapper_danger_warn_button">Warn others</string>
 </resources>

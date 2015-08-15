@@ -9,24 +9,20 @@ import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.widget.ImageView;
 
 import com.SecUpwN.AIMSICD.service.AimsicdService;
 import com.SecUpwN.AIMSICD.service.DataTrackerService;
 
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
-
 /**
  * Modified from AIMSICD.java
  */
-public class AIMSICDMapper extends AppCompatActivity {
-    private final static String TAG = "AIMSICDMapper";
+public class MappingActivitySafe extends AppCompatActivity {
+    private final static String TAG = "MappingActivitySafe";
+
+    private Toolbar mToolbar;
 
     private final Context mContext = this;
-    private Toolbar mToolbar;
-    private Toolbar mActionToolbar;
 
     private boolean mBoundToAIMSICD;
     private AimsicdService mAimsicdService;
@@ -34,37 +30,19 @@ public class AIMSICDMapper extends AppCompatActivity {
     private boolean mBoundToDataTrackerService;
     private DataTrackerService mDataTrackerService;
 
-    private MapView mMap;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
-//        setContentView(R.layout.activity_mapper_safe);
-//        ImageView iv = (ImageView)findViewById(R.id.mapper_safe_logo); iv.setImageResource(R.drawable.logo_safe);
 
-        setContentView(R.layout.activity_mapper_danger);
+        setContentView(R.layout.activity_mapper_safe);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Threat Detected");
+        mToolbar.setTitle("No threats detected");
 
-
-        mActionToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping_action);
-        mActionToolbar.setTitle("Take Action");
-        mActionToolbar.inflateMenu(R.menu.activity_stingray_mapping_danger);
-
-        ImageView iv = (ImageView)findViewById(R.id.mapper_danger_logo);
-        iv.setImageResource(R.drawable.logo_danger);
-
-        mMap = (MapView) findViewById(R.id.stingray_mapping_danger_map);
-        mMap.getController().setZoom(16);
-        mMap.setBuiltInZoomControls(true);
-        mMap.setMultiTouchControls(true);
-        mMap.setMinZoomLevel(3);
-        mMap.setMaxZoomLevel(19);
-
-        mMap.getController().animateTo(new GeoPoint(38.731407, -96.386617));
+        ImageView iv = (ImageView)findViewById(R.id.mapper_safe_logo); 
+        iv.setImageResource(R.drawable.logo_safe);
 
         startAIMSICDService();
         startDataTrackerService();
@@ -73,18 +51,11 @@ public class AIMSICDMapper extends AppCompatActivity {
     private void startAIMSICDService() {
         if (!mBoundToAIMSICD) {
             // Bind to LocalService
-            Intent intent = new Intent(AIMSICDMapper.this, AimsicdService.class);
+            Intent intent = new Intent(MappingActivitySafe.this, AimsicdService.class);
             //Start Service before binding to keep it resident when activity is destroyed
             startService(intent);
             bindService(intent, mAIMSICDServiceConnection, Context.BIND_AUTO_CREATE);
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.stingray_mapping_toolbar, menu);
-        return true;
     }
 
     /**
@@ -142,7 +113,7 @@ public class AIMSICDMapper extends AppCompatActivity {
         if (!mBoundToDataTrackerService) {
             Log.d(TAG, "Stated DataTrackerService");
             // Bind to LocalService
-            Intent intent = new Intent(AIMSICDMapper.this, DataTrackerService.class);
+            Intent intent = new Intent(MappingActivitySafe.this, DataTrackerService.class);
             //Start Service before binding to keep it resident when activity is destroyed
             startService(intent);
             bindService(intent, mDataTrackerServiceConnection, Context.BIND_AUTO_CREATE);

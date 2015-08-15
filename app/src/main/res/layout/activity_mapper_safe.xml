@@ -1,75 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/mapper_safe_title"
-        android:id="@+id/mapper_safe_title"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="25dp" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="125dp"
-        android:id="@+id/mapper_safe_logo"
-        android:layout_gravity="center" />
-
-    <TextView
-        android:layout_width="286dp"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/mapper_safe_description"
-        android:id="@+id/mapper_safe_description"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_marginTop="25dp" />
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:background="#ffffff"
-        android:layout_marginTop="30dp" />
-
-    <TextView
-        android:layout_width="286dp"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/mapper_safe_teaser"
-        android:id="@+id/mapper_safe_teaser"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/square_border"
-        android:textColor="#000000" />
-
-    <LinearLayout
-        android:orientation="horizontal"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_stingray_mapping"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="50dp"
-        android:weightSum="1">
+        android:minHeight="?attr/actionBarSize"
+        android:background="?attr/colorPrimary" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/mapper_safe_learn_more_button"
-            android:id="@+id/mapper_safe_learn_more_button"
-            android:layout_marginRight="25dp"
-            android:layout_weight="0.71"
-            android:layout_marginLeft="25dp" />
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_stingray_mapping_safe_action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?android:attr/actionBarSize"
+        android:background="?attr/colorAccent"
+        android:textColor="?attr/colorPrimaryDark"
+        android:layout_alignParentBottom="true" />
 
-        <Button
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/toolbar_stingray_mapping_safe_action"
+        android:layout_below="@id/toolbar_stingray_mapping"
+        android:background="#fff">
+
+        <ImageView
             android:layout_width="wrap_content"
+            android:layout_height="125dp"
+            android:id="@+id/mapper_safe_logo"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:layout_width="286dp"
             android:layout_height="wrap_content"
-            android:text="@string/mapper_safe_settings_button"
-            android:id="@+id/mapper_safe_settings_button" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/mapper_safe_description"
+            android:id="@+id/mapper_safe_description"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginTop="25dp"
+            android:textColor="#000000" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:background="#ffffff"
+            android:layout_marginTop="30dp"
+            android:textColor="#000000" />
+
+        <TextView
+            android:layout_width="286dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/mapper_safe_teaser"
+            android:id="@+id/mapper_safe_teaser"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/square_border"
+            android:textColor="#000000" />
+
     </LinearLayout>
 
-
-
-</LinearLayout>
+</RelativeLayout>
