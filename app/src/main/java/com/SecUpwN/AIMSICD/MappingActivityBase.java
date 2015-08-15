@@ -21,6 +21,7 @@ public class MappingActivityBase extends AppCompatActivity {
     private final static String TAG = "MappingActivityBase";
 
     protected Toolbar mToolbar;
+    protected Toolbar mActionToolbar;
 
     private final Context mContext = this;
 

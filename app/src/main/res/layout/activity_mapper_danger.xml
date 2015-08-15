@@ -11,7 +11,7 @@
         android:background="?attr/colorPrimary" />
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_stingray_mapping_action"
+        android:id="@+id/toolbar_stingray_mapping_danger_action"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?android:attr/actionBarSize"
@@ -23,7 +23,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/toolbar_stingray_mapping_action"
+        android:layout_above="@id/toolbar_stingray_mapping_danger_action"
         android:layout_below="@id/toolbar_stingray_mapping"
         android:background="#fff">
 

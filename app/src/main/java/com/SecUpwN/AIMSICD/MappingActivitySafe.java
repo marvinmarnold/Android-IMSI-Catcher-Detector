@@ -22,6 +22,10 @@ public class MappingActivitySafe extends MappingActivityBase {
         setSupportActionBar(mToolbar);
         mToolbar.setTitle("No threats detected");
 
+        mActionToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping_safe_action);
+        mActionToolbar.setTitle("Learn More:");
+        mActionToolbar.inflateMenu(R.menu.activity_stingray_mapping_safe);
+
         ImageView iv = (ImageView)findViewById(R.id.mapper_safe_logo); 
         iv.setImageResource(R.drawable.logo_safe);
     }

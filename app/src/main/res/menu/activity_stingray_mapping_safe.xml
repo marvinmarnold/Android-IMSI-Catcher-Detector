@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/menu_activity_stingray_mapping_danger_airplane"
+        android:icon="@drawable/learn"
+        app:showAsAction="always"
+        android:title="Learn more"
+        android:paddingRight="40dp"/>
+</menu>

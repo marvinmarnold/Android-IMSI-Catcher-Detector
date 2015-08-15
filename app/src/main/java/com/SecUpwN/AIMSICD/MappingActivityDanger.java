@@ -14,7 +14,6 @@ import org.osmdroid.views.MapView;
 public class MappingActivityDanger extends MappingActivityBase {
     private final static String TAG = "MappingActivityDanger";
 
-    private Toolbar mActionToolbar;
     private MapView mMap;
 
     @Override
@@ -28,8 +27,8 @@ public class MappingActivityDanger extends MappingActivityBase {
         setSupportActionBar(mToolbar);
         mToolbar.setTitle("Threat detected");
 
-        mActionToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping_action);
-        mActionToolbar.setTitle("Take Action");
+        mActionToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping_danger_action);
+        mActionToolbar.setTitle("Take Action:");
         mActionToolbar.inflateMenu(R.menu.activity_stingray_mapping_danger);
 
         ImageView iv = (ImageView)findViewById(R.id.mapper_danger_logo);
