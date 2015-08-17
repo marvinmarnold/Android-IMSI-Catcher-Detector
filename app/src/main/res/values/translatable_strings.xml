@@ -449,4 +449,8 @@ Please print a copy of this document for your records.
     <string name="mapper_danger_description">a Stingray may be nearby</string>
     <string name="mapper_danger_airplane_button">Airplane Mode</string>
     <string name="mapper_danger_warn_button">Warn others</string>
+
+    <!-- Preferences -->
+    <string name="mapping_pref_expert_summ">Enables developer mode, displaying lots of technical details.</string>
+    <string name="mapping_pref_expert_title">Expert mode</string>
 </resources>

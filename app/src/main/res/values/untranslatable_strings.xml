@@ -75,4 +75,6 @@
         <item>@string/FLASH</item>
         <item>@string/WAPPUSH</item>
     </string-array>
+
+    <string name="mapping_pref_expert_key" translatable="false">mapping_pref_expert_key</string>
 </resources>
