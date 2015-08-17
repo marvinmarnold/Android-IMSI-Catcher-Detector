@@ -21,7 +21,7 @@ public class MappingActivityDanger extends MappingActivityBase {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
 
-        setContentView(R.layout.activity_mapper_danger);
+        setContentView(R.layout.activity_mapping_danger);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping);
         setSupportActionBar(mToolbar);

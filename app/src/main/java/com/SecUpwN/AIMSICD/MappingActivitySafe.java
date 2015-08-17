@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ImageView;
 
 /**
@@ -20,7 +21,7 @@ public class MappingActivitySafe extends MappingActivityBase {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
 
-        setContentView(R.layout.activity_mapper_safe);
+        setContentView(R.layout.activity_mapping_safe);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping);
         setSupportActionBar(mToolbar);
@@ -29,6 +30,20 @@ public class MappingActivitySafe extends MappingActivityBase {
         mActionToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping_safe_action);
         mActionToolbar.setTitle("Learn More:");
         mActionToolbar.inflateMenu(R.menu.activity_stingray_mapping_safe);
+        mActionToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch(item.getItemId()) {
+                    case R.id.menu_activity_stingray_mapping_safe_learn:
+                        String url = "http://www.stingray.meteor.com";
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(url));
+                        startActivity(i);
+                        break;
+                }
+                return true;
+            }
+        });
 
         ImageView iv = (ImageView)findViewById(R.id.mapper_safe_logo); 
         iv.setImageResource(R.drawable.logo_safe);
