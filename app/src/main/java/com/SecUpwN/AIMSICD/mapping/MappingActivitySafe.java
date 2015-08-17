@@ -116,7 +116,7 @@ public class MappingActivitySafe extends MappingActivityBase {
 
             if(usingPreloadedFactoids()) mFactoidText.setText(MappingFactoid.createPreloadedFactoid(getApplicationContext(), currentFactoid).getText());
             else mFactoidText.setText(mFactoids.get(currentFactoid).getText());
-            
+
             mFactoidSwitcherHandler.postDelayed(mFactoidSwitcher, MILISECS_BETWEEN_FACTOIDS);
         }
     };

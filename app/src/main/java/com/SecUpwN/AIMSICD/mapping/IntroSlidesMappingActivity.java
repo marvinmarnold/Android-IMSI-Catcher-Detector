@@ -59,7 +59,7 @@ public class IntroSlidesMappingActivity extends FragmentActivity {
                 // TODO Auto-generated method stub
                 if( mPageEnd && arg0 == selectedIndex && !callHappened)
                 {
-                    Intent i = new Intent(IntroSlidesMappingActivity.this, MappingActivitySafe.class);
+                    Intent i = new Intent(IntroSlidesMappingActivity.this, MappingActivityDanger.class);
                     startActivity(i);
                     mPageEnd = false;//To avoid multiple calls.
                     callHappened = true;

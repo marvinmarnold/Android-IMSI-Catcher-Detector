@@ -46,6 +46,11 @@
             android:layout_marginBottom="25dp"
             android:textColor="#000" />
 
+        <com.twitter.sdk.android.core.identity.TwitterLoginButton
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <org.osmdroid.views.MapView
             android:id="@+id/stingray_mapping_danger_map"
             android:layout_width="fill_parent"

@@ -17,10 +17,18 @@ import com.SecUpwN.AIMSICD.utils.TinyDB;
 // DO NOT REMOVE BELOW COMMENTED-OUT CODE BEFORE ASKING!
 //import com.squareup.leakcanary.LeakCanary;
 
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AppAIMSICD extends Application {
+
+    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
+    private static final String TWITTER_KEY = "6iOIyy2Cs70rq7QQbjam9ZtIG";
+    private static final String TWITTER_SECRET = "GJQrufmB2C6fqZRTzVAemy1k6eJgkwVQWiIYE1ZqfKB1lL0Fqx";
+
     final static String TAG = "AIMSICD";
     final static String mTAG = "AppAIMSICD";
 
@@ -37,6 +45,8 @@ public class AppAIMSICD extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new Twitter(authConfig));
         // DO NOT REMOVE BELOW COMMENTED-OUT CODE BEFORE ASKING!
         //LeakCanary.install(this);
         TinyDB.getInstance().init(getApplicationContext());

@@ -9,9 +9,20 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.SecUpwN.AIMSICD.R;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterAuthToken;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Marvin Arnold on 14/08/15.
@@ -20,6 +31,24 @@ public class MappingActivityDanger extends MappingActivityBase {
     private final static String TAG = "MappingActivityDanger";
 
     private MapView mMap;
+    TwitterLoginButton mTwitterLoginButton;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Pass the activity result to the login button.
+        mTwitterLoginButton.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void postToTwitter(String consumerKey, String consumerSecret) {
+        TwitterAuthConfig authConfig =  new TwitterAuthConfig(consumerKey, consumerSecret);
+        Fabric.with(this, new TwitterCore(authConfig), new TweetComposer());
+
+        TweetComposer.Builder builder = new TweetComposer.Builder(this)
+                .text("down with stingrays");
+        builder.show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +57,30 @@ public class MappingActivityDanger extends MappingActivityBase {
 
         setContentView(R.layout.activity_mapping_danger);
 
+        mTwitterLoginButton = (TwitterLoginButton) findViewById(R.id.login_button);
+        mTwitterLoginButton.setCallback(new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+                TwitterSession session = result.data;
+                TwitterAuthToken authToken = session.getAuthToken();
+                String consumerKey = authToken.token;
+                String consumerSecret = authToken.secret;
+
+                postToTwitter(consumerKey, consumerSecret);
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                // Do something on failure
+            }
+        });
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping);
         setSupportActionBar(mToolbar);
         mToolbar.setTitle("Threat detected");
+
+        TwitterAuthConfig authConfig =  new TwitterAuthConfig("consumerKey", "consumerSecret");
+        Fabric.with(this, new TwitterCore(authConfig), new TweetComposer());
 
         mActionToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping_danger_action);
         mActionToolbar.setTitle("Take Action:");
