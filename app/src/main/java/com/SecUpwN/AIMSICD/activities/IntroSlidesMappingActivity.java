@@ -64,7 +64,7 @@ public class IntroSlidesMappingActivity extends FragmentActivity {
                 {
                     Intent i = new Intent(IntroSlidesMappingActivity.this, MappingActivitySafe.class);
                     startActivity(i);
-                    
+
                     Log.d(getClass().getName(), "Okay");
                     mPageEnd = false;//To avoid multiple calls.
                     callHappened = true;

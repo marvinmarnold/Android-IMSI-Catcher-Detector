@@ -1,5 +1,9 @@
 package com.SecUpwN.AIMSICD;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -28,5 +32,26 @@ public class MappingActivitySafe extends MappingActivityBase {
 
         ImageView iv = (ImageView)findViewById(R.id.mapper_safe_logo); 
         iv.setImageResource(R.drawable.logo_safe);
+
+        final AlertDialog.Builder disclaimer = new AlertDialog.Builder(this)
+                .setTitle(R.string.mapping_disclaimer_title)
+                .setMessage(R.string.mapping_disclaimer)
+                .setPositiveButton(R.string.text_agree, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .setNegativeButton(R.string.text_disagree, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Uri packageUri = Uri.parse("package:com.SecUpwN.AIMSICD");
+                        Intent uninstallIntent =
+                                new Intent(Intent.ACTION_DELETE, packageUri);
+                        startActivity(uninstallIntent);
+                        finish();
+//                        if (mAimsicdService != null) mAimsicdService.onDestroy();
+                    }
+                });
+
+        AlertDialog disclaimerAlert = disclaimer.create();
+        disclaimerAlert.show();
     }
 }

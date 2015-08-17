@@ -396,6 +396,41 @@
     </string-array>
 
     <!-- Mapping project -->
+    <!-- DISCLAIMER -->
+    <string name="mapping_disclaimer_title">Consent to Participave</string>
+    <string name="mapping_disclaimer">
+       You are invited to download this free app to participate in a research study on police use of
+Stingray technology. Stingrays are used to track or collect information from individuals’ cell
+phones. To read more about them, click here. If you decide to download and run the app, it
+will send information every ten minutes to a public website [link here]. The information it
+sends won’t be in any way traceable back to you or your phone. It will only allow the site to
+map a colored dot representing the Stingray threat level at your GPS coordinates at that
+day and time, allowing the website to show when and where police are using Stingray
+technology. The data we collect will all be available on the website for the duration of this
+project, with GPS coordinates replaced by a broader Census tract ID, and we will also write
+about any patterns we see. You must be at least 18 years old to participate.
+
+The app takes under a minute to download, and none of your time will be required after
+that. There are no known risks associated with participating, and you won’t be either paid
+or charged for doing so. We won’t know who you are, so we’ll never be able to contact you.
+You can stop running the app or delete it at any time.
+
+The researchers behind this are Marvin Arnold (marvin AT unplugged.im) and Mary
+Ellen Stitt (mstitt AT utexas.edu). You can feel free to contact either of us at any point with
+questions about the study.
+
+This research plan has been reviewed by The University of Texas at Austin Institutional
+Review Board and the study number is [STUDY NUMBER]. If you have questions or
+concerns about the study at any time, you can contact (anonymously if you prefer) the
+Institutional Review Board by phone at (512) 471-8871 or email at orsc@uts.cc.utexas.edu.
+
+If you agree to participate, click on the following link to download the app.
+
+Thank you.   
+
+Please print a copy of this document for your records.
+    </string>
+
     <!-- Intro Slides -->
     <string name="mapping_slide_1_title">Police violence is out of control and the police are fucked up.</string>
     <string name="mapping_slide_2_title">This app lets you fight back against a specific kind of police tactics called Stingrays.</string>
