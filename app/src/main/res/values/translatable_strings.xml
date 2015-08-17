@@ -396,6 +396,12 @@
     </string-array>
 
     <!-- Mapping project -->
+    <!-- Intro Slides -->
+    <string name="mapping_slide_1_title">Police violence is out of control and the police are fucked up.</string>
+    <string name="mapping_slide_2_title">This app lets you fight back against a specific kind of police tactics called Stingrays.</string>
+    <string name="mapping_slide_3_title">Stingrays are mobile devices that simulate cell phone towers and they have been used to spy on thousands of people.</string>
+    <string name="mapping_slide_4_title">Use this app to know if you are at risk, warn your friends if you are, activate airplane mode, and learn more.</string>
+
     <!-- Mapper Safe -->
     <string name="mapper_safe_title">No threats detected</string>
     <string name="mapper_safe_description">there have been no stingray detected near you recently</string>

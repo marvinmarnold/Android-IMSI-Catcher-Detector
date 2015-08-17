@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/instructions"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="layout" >
+
+    <ImageView
+        android:id="@+id/fragment_mapping_slide_intro_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/fight"
+        android:scaleType="centerCrop" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fragment_mapping_slide_intro"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fadingEdge="none">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/mapping_slide_1_title"
+            android:id="@+id/fragment_mapping_slide_intro_title"
+            android:maxWidth="200dp"
+            android:gravity="center"
+            android:paddingLeft="25dp"
+            android:paddingTop="50dp"
+            android:textColor="#000"
+            android:textSize="25dp" />
+    </ScrollView>
+</FrameLayout>
