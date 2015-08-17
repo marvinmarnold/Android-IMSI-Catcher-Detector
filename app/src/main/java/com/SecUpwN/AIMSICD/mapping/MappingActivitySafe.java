@@ -25,6 +25,7 @@ public class MappingActivitySafe extends MappingActivityBase {
 
     private List<MappingFactoid> mFactoids;
     private TextView mFactoidText;
+    private int currentFactoid = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +58,6 @@ public class MappingActivitySafe extends MappingActivityBase {
             }
         });
 
-
-
         ImageView iv = (ImageView)findViewById(R.id.mapper_safe_logo); 
         iv.setImageResource(R.drawable.logo_safe);
 
@@ -90,39 +89,45 @@ public class MappingActivitySafe extends MappingActivityBase {
         disclaimerAlert.show();
     }
 
-    FactoidSwitcherRunnable factoidSwitcher;
+    Handler mFactoidSwitcherHandler;
+    public static final int MILISECS_BETWEEN_FACTOIDS = 4 * 1000;
     private void loadFactoids() {
         mFactoidText = (TextView) findViewById(R.id.activity_mapping_safe_factoid);
         mFactoids = new ArrayList<>();
-        for(int i = 1; i <= MappingFactoid.NUM_PRELOADED_FACTOIDS; i++) {
-            MappingFactoid factoid = MappingFactoid.createPreloadedFactoid(getApplicationContext(), i);
-            mFactoids.add(factoid);
+//        for(int i = 1; i <= MappingFactoid.NUM_PRELOADED_FACTOIDS; i++) {
+//            MappingFactoid factoid = MappingFactoid.createPreloadedFactoid(getApplicationContext(), i);
+//            mFactoids.add(factoid);
+//        }
 
-            factoidSwitcher = new FactoidSwitcherRunnable(new Handler(), i, factoid.getText()) {
-                @Override
-                public void run() {
-                    mFactoidText.setText(text);
-                    handler.postDelayed(factoidSwitcher, (offset-1) * MappingFactoid.MILISECS_BETWEEN_FACTOIDS);
-                }
-            };
-            factoidSwitcher.run();
-        }
+        mFactoidSwitcherHandler = new Handler();
+        mFactoidSwitcher.run();
     }
 
-    public class FactoidSwitcherRunnable implements Runnable {
-        Handler handler;
-        int offset;
-        String text;
-
-        public FactoidSwitcherRunnable(Handler handler, int offset, String text) {
-            this.handler = handler;
-            this.offset = offset;
-            this.text = text;
-        }
-
+    Runnable mFactoidSwitcher = new Runnable() {
         @Override
         public void run() {
+            currentFactoid++;
+            int numFactoids;
+
+            if(usingPreloadedFactoids()) numFactoids = MappingFactoid.NUM_PRELOADED_FACTOIDS;
+            else numFactoids = mFactoids.size();
+
+            if(currentFactoid >= numFactoids) currentFactoid = 0;
+
+            if(usingPreloadedFactoids()) mFactoidText.setText(MappingFactoid.createPreloadedFactoid(getApplicationContext(), currentFactoid).getText());
+            else mFactoidText.setText(mFactoids.get(currentFactoid).getText());
+            
+            mFactoidSwitcherHandler.postDelayed(mFactoidSwitcher, MILISECS_BETWEEN_FACTOIDS);
         }
+    };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mFactoidSwitcherHandler.removeCallbacks(mFactoidSwitcher);
     }
 
+    private boolean usingPreloadedFactoids() {
+        return mFactoids.size() == 0;
+    }
 }
