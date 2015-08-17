@@ -1,5 +1,6 @@
 package com.SecUpwN.AIMSICD.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -7,7 +8,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 
+import com.SecUpwN.AIMSICD.MappingActivitySafe;
 import com.SecUpwN.AIMSICD.R;
 import com.SecUpwN.AIMSICD.fragments.IntroSlideMappingFragment;
 
@@ -31,6 +34,8 @@ public class IntroSlidesMappingActivity extends FragmentActivity {
      */
     private PagerAdapter mPagerAdapter;
 
+    private ViewPager.OnPageChangeListener mListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +45,46 @@ public class IntroSlidesMappingActivity extends FragmentActivity {
         mPager = (ViewPager) findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
+
+        mListener = new ViewPager.OnPageChangeListener() {
+            int selectedIndex;
+            boolean mPageEnd;
+
+            @Override
+            public void onPageSelected(int arg0) {
+                // TODO Auto-generated method stub
+                selectedIndex = arg0;
+
+            }
+            boolean callHappened;
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+                // TODO Auto-generated method stub
+                if( mPageEnd && arg0 == selectedIndex && !callHappened)
+                {
+                    Intent i = new Intent(IntroSlidesMappingActivity.this, MappingActivitySafe.class);
+                    startActivity(i);
+                    
+                    Log.d(getClass().getName(), "Okay");
+                    mPageEnd = false;//To avoid multiple calls.
+                    callHappened = true;
+                }else
+                {
+                    mPageEnd = false;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+                // TODO Auto-generated method stub
+                if(selectedIndex == mPagerAdapter.getCount() - 1)
+                {
+                    mPageEnd = true;
+                }
+            }
+        };
+
+        mPager.addOnPageChangeListener(mListener);
     }
 
     @Override
@@ -53,6 +98,7 @@ public class IntroSlidesMappingActivity extends FragmentActivity {
             mPager.setCurrentItem(mPager.getCurrentItem() - 1);
         }
     }
+
 
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
