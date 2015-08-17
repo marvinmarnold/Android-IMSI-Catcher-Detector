@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/mapper_safe_teaser"
-            android:id="@+id/mapper_safe_teaser"
+            android:id="@+id/activity_mapping_safe_factoid"
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_marginTop="30dp"

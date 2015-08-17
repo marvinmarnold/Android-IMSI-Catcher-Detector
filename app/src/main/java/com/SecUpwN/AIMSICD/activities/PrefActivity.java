@@ -22,7 +22,7 @@ import com.SecUpwN.AIMSICD.service.AimsicdService;
 public class PrefActivity extends BaseActivity {
     private final Context mContext = this;
     private SharedPreferences prefs;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

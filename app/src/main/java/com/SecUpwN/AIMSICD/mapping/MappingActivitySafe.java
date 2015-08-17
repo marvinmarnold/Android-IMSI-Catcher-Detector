@@ -5,12 +5,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.SecUpwN.AIMSICD.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Modified from AIMSICD.java
@@ -18,12 +23,17 @@ import com.SecUpwN.AIMSICD.R;
 public class MappingActivitySafe extends MappingActivityBase {
     private final static String TAG = "MappingActivitySafe";
 
+    private List<MappingFactoid> mFactoids;
+    private TextView mFactoidText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
 
         setContentView(R.layout.activity_mapping_safe);
+
+        loadFactoids();
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping);
         setSupportActionBar(mToolbar);
@@ -79,4 +89,40 @@ public class MappingActivitySafe extends MappingActivityBase {
         AlertDialog disclaimerAlert = disclaimer.create();
         disclaimerAlert.show();
     }
+
+    FactoidSwitcherRunnable factoidSwitcher;
+    private void loadFactoids() {
+        mFactoidText = (TextView) findViewById(R.id.activity_mapping_safe_factoid);
+        mFactoids = new ArrayList<>();
+        for(int i = 1; i <= MappingFactoid.NUM_PRELOADED_FACTOIDS; i++) {
+            MappingFactoid factoid = MappingFactoid.createPreloadedFactoid(getApplicationContext(), i);
+            mFactoids.add(factoid);
+
+            factoidSwitcher = new FactoidSwitcherRunnable(new Handler(), i, factoid.getText()) {
+                @Override
+                public void run() {
+                    mFactoidText.setText(text);
+                    handler.postDelayed(factoidSwitcher, (offset-1) * MappingFactoid.MILISECS_BETWEEN_FACTOIDS);
+                }
+            };
+            factoidSwitcher.run();
+        }
+    }
+
+    public class FactoidSwitcherRunnable implements Runnable {
+        Handler handler;
+        int offset;
+        String text;
+
+        public FactoidSwitcherRunnable(Handler handler, int offset, String text) {
+            this.handler = handler;
+            this.offset = offset;
+            this.text = text;
+        }
+
+        @Override
+        public void run() {
+        }
+    }
+
 }

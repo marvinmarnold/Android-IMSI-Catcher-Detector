@@ -5,8 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.SecUpwN.AIMSICD.service.AimsicdService;
-import com.SecUpwN.AIMSICD.service.DataTrackerService;
+import com.SecUpwN.AIMSICD.mapping.MappingDataTrackerService;
 
 /**
  * Created by Marvin Arnold on 15/06/15.
@@ -21,8 +20,8 @@ public class ConnectivityReceiver extends BroadcastReceiver {
         if(action.equals("android.net.conn.CONNECTIVITY_CHANGE")){
             Log.d(TAG, "Connectivity Change");
             // inform service of updated connection state
-            Intent syncDataIntent = new Intent(context, DataTrackerService.class);
-            syncDataIntent.setAction(DataTrackerService.ACTION_SYNC_DATA);
+            Intent syncDataIntent = new Intent(context, MappingDataTrackerService.class);
+            syncDataIntent.setAction(MappingDataTrackerService.ACTION_SYNC_DATA);
             context.startService(syncDataIntent);
         }
     }

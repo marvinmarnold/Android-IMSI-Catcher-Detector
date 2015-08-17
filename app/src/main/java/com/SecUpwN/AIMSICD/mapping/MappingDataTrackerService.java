@@ -1,4 +1,4 @@
-package com.SecUpwN.AIMSICD.service;
+package com.SecUpwN.AIMSICD.mapping;
 
 import android.app.Service;
 import android.content.Context;
@@ -9,6 +9,8 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.SecUpwN.AIMSICD.service.LocationTracker;
+import com.SecUpwN.AIMSICD.service.WifiTracker;
 import com.SecUpwN.AIMSICD.utils.Status;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -31,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Marvin Arnold on 15/06/15.
  */
-public class DataTrackerService extends Service {
+public class MappingDataTrackerService extends Service {
     private static final String TAG = "DataTrackerService";
     private final IBinder mBinder = new LocalBinder();
 
@@ -54,8 +56,8 @@ public class DataTrackerService extends Service {
     public static String ACTION_SYNC_DATA = "ACTION_SYNC_DATA";
 
     public class LocalBinder extends Binder {
-        public DataTrackerService getService() {
-            return DataTrackerService.this;
+        public MappingDataTrackerService getService() {
+            return MappingDataTrackerService.this;
         }
     }
 

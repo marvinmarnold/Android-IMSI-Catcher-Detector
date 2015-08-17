@@ -453,4 +453,11 @@ Please print a copy of this document for your records.
     <!-- Preferences -->
     <string name="mapping_pref_expert_summ">Enables developer mode, displaying lots of technical details.</string>
     <string name="mapping_pref_expert_title">Expert mode</string>
+
+    <!-- Factoids -->
+    <string name="mapping_factoids_1">Something 1</string>
+    <string name="mapping_factoids_2">Something 2</string>
+    <string name="mapping_factoids_3">Something 3</string>
+    <string name="mapping_factoids_4">Something 4</string>
+    <string name="mapping_factoids_5">Something 5</string>
 </resources>

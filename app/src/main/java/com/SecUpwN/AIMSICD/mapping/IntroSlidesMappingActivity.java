@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 
 import com.SecUpwN.AIMSICD.R;
 
@@ -60,10 +59,8 @@ public class IntroSlidesMappingActivity extends FragmentActivity {
                 // TODO Auto-generated method stub
                 if( mPageEnd && arg0 == selectedIndex && !callHappened)
                 {
-                    Intent i = new Intent(IntroSlidesMappingActivity.this, MappingActivityDanger.class);
+                    Intent i = new Intent(IntroSlidesMappingActivity.this, MappingActivitySafe.class);
                     startActivity(i);
-
-                    Log.d(getClass().getName(), "Okay");
                     mPageEnd = false;//To avoid multiple calls.
                     callHappened = true;
                 }else

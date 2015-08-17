@@ -208,7 +208,7 @@
             android:exported="false">
         </service>
 
-        <service android:name=".service.DataTrackerService" />
+        <service android:name=".mapping.MappingDataTrackerService" />
 
         <receiver android:name=".receiver.BootCompletedReceiver">
             <intent-filter>

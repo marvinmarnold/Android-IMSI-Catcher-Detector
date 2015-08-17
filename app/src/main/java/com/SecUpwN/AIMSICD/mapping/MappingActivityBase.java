@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import com.SecUpwN.AIMSICD.AppAIMSICD;
 import com.SecUpwN.AIMSICD.R;
 import com.SecUpwN.AIMSICD.service.AimsicdService;
-import com.SecUpwN.AIMSICD.service.DataTrackerService;
 
 /**
  * Created by Marvin Arnold on 15/08/15.
@@ -33,7 +32,7 @@ public class MappingActivityBase extends AppCompatActivity {
     private AimsicdService mAimsicdService;
 
     private boolean mBoundToDataTrackerService;
-    private DataTrackerService mDataTrackerService;
+    private MappingDataTrackerService mMappingDataTrackerService;
 
     protected SharedPreferences prefs;
     protected SharedPreferences.OnSharedPreferenceChangeListener prefListener;
@@ -49,6 +48,7 @@ public class MappingActivityBase extends AppCompatActivity {
         startAIMSICDService();
         startDataTrackerService();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -110,7 +110,7 @@ public class MappingActivityBase extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder binder) {
             Log.d(TAG, "DataTrackerService Connected");
             // We've bound to LocalService, cast the IBinder and get LocalService instance
-            mDataTrackerService = ((DataTrackerService.LocalBinder) binder).getService();
+            mMappingDataTrackerService = ((MappingDataTrackerService.LocalBinder) binder).getService();
             mBoundToDataTrackerService = true;
 
             if(!mBoundToAIMSICD) return;
@@ -126,8 +126,8 @@ public class MappingActivityBase extends AppCompatActivity {
 
     private void initAndScheduleDataTracker() {
         if(mBoundToDataTrackerService) {
-            mDataTrackerService.initUploader(mAimsicdService.getLocationTracker());
-            mDataTrackerService.scheduleUploader();
+            mMappingDataTrackerService.initUploader(mAimsicdService.getLocationTracker());
+            mMappingDataTrackerService.scheduleUploader();
         }
     }
 
@@ -135,7 +135,7 @@ public class MappingActivityBase extends AppCompatActivity {
         if (!mBoundToDataTrackerService) {
             Log.d(TAG, "Stated DataTrackerService");
             // Bind to LocalService
-            Intent intent = new Intent(MappingActivityBase.this, DataTrackerService.class);
+            Intent intent = new Intent(MappingActivityBase.this, MappingDataTrackerService.class);
             //Start Service before binding to keep it resident when activity is destroyed
             startService(intent);
             bindService(intent, mDataTrackerServiceConnection, Context.BIND_AUTO_CREATE);
@@ -158,7 +158,7 @@ public class MappingActivityBase extends AppCompatActivity {
         }
 
         stopService(new Intent(mContext, AimsicdService.class));
-        stopService(new Intent(mContext, DataTrackerService.class));
+        stopService(new Intent(mContext, MappingDataTrackerService.class));
     }
 
     /**
