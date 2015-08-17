@@ -1,4 +1,4 @@
-package com.SecUpwN.AIMSICD.activities;
+package com.SecUpwN.AIMSICD.mapping;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,9 +10,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 
-import com.SecUpwN.AIMSICD.MappingActivitySafe;
 import com.SecUpwN.AIMSICD.R;
-import com.SecUpwN.AIMSICD.fragments.IntroSlideMappingFragment;
 
 /**
  * Created by Marvin Arnold on 16/08/15.
@@ -62,7 +60,7 @@ public class IntroSlidesMappingActivity extends FragmentActivity {
                 // TODO Auto-generated method stub
                 if( mPageEnd && arg0 == selectedIndex && !callHappened)
                 {
-                    Intent i = new Intent(IntroSlidesMappingActivity.this, MappingActivitySafe.class);
+                    Intent i = new Intent(IntroSlidesMappingActivity.this, MappingActivityDanger.class);
                     startActivity(i);
 
                     Log.d(getClass().getName(), "Okay");

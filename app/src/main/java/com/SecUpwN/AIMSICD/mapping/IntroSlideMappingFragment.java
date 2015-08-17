@@ -1,4 +1,4 @@
-package com.SecUpwN.AIMSICD.fragments;
+package com.SecUpwN.AIMSICD.mapping;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;

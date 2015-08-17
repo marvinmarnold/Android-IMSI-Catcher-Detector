@@ -28,7 +28,6 @@ public class BaseActivity extends FragmentActivity {
     private static final String TAG = "AIMSICD";
     private static final String mTAG = "BaseActivity";
 
-
     /**
      * Triggered when GUI is opened
      */

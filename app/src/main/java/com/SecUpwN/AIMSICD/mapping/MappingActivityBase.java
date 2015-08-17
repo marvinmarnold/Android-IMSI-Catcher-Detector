@@ -1,9 +1,10 @@
-package com.SecUpwN.AIMSICD;
+package com.SecUpwN.AIMSICD.mapping;
 
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 
+import com.SecUpwN.AIMSICD.AppAIMSICD;
+import com.SecUpwN.AIMSICD.R;
 import com.SecUpwN.AIMSICD.service.AimsicdService;
 import com.SecUpwN.AIMSICD.service.DataTrackerService;
 
@@ -31,10 +34,16 @@ public class MappingActivityBase extends AppCompatActivity {
     private boolean mBoundToDataTrackerService;
     private DataTrackerService mDataTrackerService;
 
+    protected SharedPreferences prefs;
+    protected SharedPreferences.OnSharedPreferenceChangeListener prefListener;
+    protected SharedPreferences.Editor prefsEditor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
+
+        prefs = mContext.getSharedPreferences( AimsicdService.SHARED_PREFERENCES_BASENAME, 0);
 
         startAIMSICDService();
         startDataTrackerService();

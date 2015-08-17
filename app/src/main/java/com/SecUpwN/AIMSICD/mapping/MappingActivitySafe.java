@@ -1,4 +1,4 @@
-package com.SecUpwN.AIMSICD;
+package com.SecUpwN.AIMSICD.mapping;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -9,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
+
+import com.SecUpwN.AIMSICD.R;
 
 /**
  * Modified from AIMSICD.java
@@ -33,7 +35,7 @@ public class MappingActivitySafe extends MappingActivityBase {
         mActionToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch(item.getItemId()) {
+                switch (item.getItemId()) {
                     case R.id.menu_activity_stingray_mapping_safe_learn:
                         String url = "http://www.stingray.meteor.com";
                         Intent i = new Intent(Intent.ACTION_VIEW);
@@ -45,6 +47,8 @@ public class MappingActivitySafe extends MappingActivityBase {
             }
         });
 
+
+
         ImageView iv = (ImageView)findViewById(R.id.mapper_safe_logo); 
         iv.setImageResource(R.drawable.logo_safe);
 
@@ -53,10 +57,16 @@ public class MappingActivitySafe extends MappingActivityBase {
                 .setMessage(R.string.mapping_disclaimer)
                 .setPositiveButton(R.string.text_agree, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        prefsEditor = prefs.edit();
+                        prefsEditor.putBoolean("mapping_terms_accepted", true);
+                        prefsEditor.apply();
                     }
                 })
                 .setNegativeButton(R.string.text_disagree, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        prefsEditor = prefs.edit();
+                        prefsEditor.putBoolean("mapping_terms_accepted", false);
+                        prefsEditor.apply();
                         Uri packageUri = Uri.parse("package:com.SecUpwN.AIMSICD");
                         Intent uninstallIntent =
                                 new Intent(Intent.ACTION_DELETE, packageUri);
