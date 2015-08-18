@@ -116,10 +116,6 @@
             android:label="@string/app_name_short"
             android:configChanges="screenSize|orientation"
             android:theme="@style/Theme.StingrayMapping">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
 
         <activity
@@ -128,6 +124,7 @@
             android:label="@string/app_name_short"
             android:configChanges="screenSize|orientation"
             android:theme="@style/Theme.StingrayMapping">
+
         </activity>
 
         <activity
@@ -136,6 +133,10 @@
             android:label="@string/app_name_short"
             android:configChanges="screenSize|orientation"
             android:theme="@style/Theme.StingrayMapping">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
 
         <activity

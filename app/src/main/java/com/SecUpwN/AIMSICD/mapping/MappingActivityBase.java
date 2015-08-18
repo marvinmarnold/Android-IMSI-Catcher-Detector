@@ -35,7 +35,6 @@ public class MappingActivityBase extends AppCompatActivity {
     private MappingDataTrackerService mMappingDataTrackerService;
 
     protected SharedPreferences prefs;
-    protected SharedPreferences.OnSharedPreferenceChangeListener prefListener;
     protected SharedPreferences.Editor prefsEditor;
 
     @Override

@@ -77,4 +77,7 @@
     </string-array>
 
     <string name="mapping_pref_expert_key" translatable="false">mapping_pref_expert_key</string>
+    <string name="mapping_pref_terms_accepted" translatable="false">mapping_pref_terms_accepted</string>
+    <string name="mapping_pref_setup_complete" translatable="false">mapping_pref_setup_complete</string>
+    <string name="mapping_pref_ocid_key_set" translatable="false">mapping_pref_ocid_key_set</string>
 </resources>

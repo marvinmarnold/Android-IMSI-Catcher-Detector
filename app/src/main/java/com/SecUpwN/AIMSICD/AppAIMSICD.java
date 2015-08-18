@@ -14,14 +14,16 @@ import android.util.SparseArray;
 import com.SecUpwN.AIMSICD.constants.TinyDbKeys;
 import com.SecUpwN.AIMSICD.utils.BaseAsyncTask;
 import com.SecUpwN.AIMSICD.utils.TinyDB;
-// DO NOT REMOVE BELOW COMMENTED-OUT CODE BEFORE ASKING!
-//import com.squareup.leakcanary.LeakCanary;
-
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
-import io.fabric.sdk.android.Fabric;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import io.fabric.sdk.android.Fabric;
+
+// DO NOT REMOVE BELOW COMMENTED-OUT CODE BEFORE ASKING!
+//import com.squareup.leakcanary.LeakCanary;
 
 public class AppAIMSICD extends Application {
 

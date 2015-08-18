@@ -1,6 +1,8 @@
 package com.SecUpwN.AIMSICD.mapping;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -10,6 +12,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.SecUpwN.AIMSICD.R;
+import com.SecUpwN.AIMSICD.service.AimsicdService;
 
 /**
  * Created by Marvin Arnold on 16/08/15.
@@ -33,10 +36,16 @@ public class IntroSlidesMappingActivity extends FragmentActivity {
 
     private ViewPager.OnPageChangeListener mListener;
 
+    protected SharedPreferences prefs;
+    private final Context mContext = this;
+    protected SharedPreferences.Editor prefsEditor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapping_slides_intro);
+
+        prefs = mContext.getSharedPreferences( AimsicdService.SHARED_PREFERENCES_BASENAME, 0);
 
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.pager);
@@ -59,7 +68,10 @@ public class IntroSlidesMappingActivity extends FragmentActivity {
                 // TODO Auto-generated method stub
                 if( mPageEnd && arg0 == selectedIndex && !callHappened)
                 {
-                    Intent i = new Intent(IntroSlidesMappingActivity.this, MappingActivityDanger.class);
+                    prefsEditor = prefs.edit();
+                    prefsEditor.putBoolean(getResources().getString(R.string.mapping_pref_setup_complete), true);
+                    prefsEditor.apply();
+                    Intent i = new Intent(IntroSlidesMappingActivity.this, MappingActivitySafe.class);
                     startActivity(i);
                     mPageEnd = false;//To avoid multiple calls.
                     callHappened = true;

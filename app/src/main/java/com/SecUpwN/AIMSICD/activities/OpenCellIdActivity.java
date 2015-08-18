@@ -102,6 +102,9 @@ public class OpenCellIdActivity extends BaseActivity {
 
             // Check key validity (is done on foreign server)
             if (isKeyValid(s)) {
+                String ocidKeySetPref = getResources().getString(R.string.mapping_pref_terms_accepted);
+                prefs.edit().putBoolean(ocidKeySetPref, true).commit();
+
                 String opcidKey = getString(R.string.pref_ocid_key);
                 prefs.edit().putString(opcidKey, s).commit();
                 CellTracker.OCID_API_KEY = s;
