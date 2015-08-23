@@ -125,8 +125,8 @@ public class MappingActivityBase extends AppCompatActivity {
 
     private void initAndScheduleDataTracker() {
         if(mBoundToDataTrackerService) {
-            mMappingDataTrackerService.initUploader(mAimsicdService.getLocationTracker());
-            mMappingDataTrackerService.scheduleUploader();
+            mMappingDataTrackerService.initDataTrackerService(mAimsicdService.getLocationTracker());
+            mMappingDataTrackerService.scheduleAll();
         }
     }
 
