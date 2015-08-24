@@ -123,6 +123,7 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
     Runnable mFactoidSwitcher = new Runnable() {
         @Override
         public void run() {
+            loadFactoids();
             if(++currentFactoid >= mFactoids.size()) currentFactoid = 0;
             mFactoidText.setText(mFactoids.get(currentFactoid).getFact());
 
