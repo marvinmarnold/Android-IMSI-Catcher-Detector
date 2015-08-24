@@ -1,7 +1,6 @@
 package com.SecUpwN.AIMSICD.mapping;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -26,7 +25,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,11 +33,8 @@ import java.util.List;
 public class MappingActivitySafe extends MappingActivityBase implements AsyncResponse {
     private final static String TAG = "AIMSICD";
     private final static String mTAG = "MappingActivitySafe";
-    private final Context mContext = this;
 
-    private List<MappingFactoid> mFactoids;
     private TextView mFactoidText;
-    private int currentFactoid = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +47,6 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
         }
 
         setContentView(R.layout.activity_mapping_safe);
-
-        loadFactoids();
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping);
         setSupportActionBar(mToolbar);
@@ -111,6 +104,11 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
             disclaimerAlert.show();
         }
 
+        mFactoidText = (TextView) findViewById(R.id.activity_mapping_safe_factoid);
+        loadFactoids();
+        mFactoidSwitcherHandler = new Handler();
+        mFactoidSwitcher.run();
+
         final String ocidKeySetPref = getResources().getString(R.string.mapping_pref_terms_accepted);
         if (!prefs.getBoolean(ocidKeySetPref, false)) {
 //            OpenCellIdKeyDownloaderTask ocikd = new OpenCellIdKeyDownloaderTask();
@@ -118,33 +116,15 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
         }
     }
 
+    private int currentFactoid = 0;
     Handler mFactoidSwitcherHandler;
     public static final int MILISECS_BETWEEN_FACTOIDS = 4 * 1000;
-    private void loadFactoids() {
-        mFactoidText = (TextView) findViewById(R.id.activity_mapping_safe_factoid);
-        mFactoids = new ArrayList<>();
-//        for(int i = 1; i <= MappingFactoid.NUM_PRELOADED_FACTOIDS; i++) {
-//            MappingFactoid factoid = MappingFactoid.createPreloadedFactoid(getApplicationContext(), i);
-//            mFactoids.add(factoid);
-//        }
-
-        mFactoidSwitcherHandler = new Handler();
-        mFactoidSwitcher.run();
-    }
 
     Runnable mFactoidSwitcher = new Runnable() {
         @Override
         public void run() {
-            currentFactoid++;
-            int numFactoids;
-
-            if(usingPreloadedFactoids()) numFactoids = MappingFactoid.NUM_PRELOADED_FACTOIDS;
-            else numFactoids = mFactoids.size();
-
-            if(currentFactoid >= numFactoids) currentFactoid = 0;
-
-            if(usingPreloadedFactoids()) mFactoidText.setText(MappingFactoid.createPreloadedFactoid(getApplicationContext(), currentFactoid).getText());
-            else mFactoidText.setText(mFactoids.get(currentFactoid).getText());
+            if(++currentFactoid >= mFactoids.size()) currentFactoid = 0;
+            mFactoidText.setText(mFactoids.get(currentFactoid).getFact());
 
             mFactoidSwitcherHandler.postDelayed(mFactoidSwitcher, MILISECS_BETWEEN_FACTOIDS);
         }
@@ -154,10 +134,6 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
     public void onDestroy() {
         super.onDestroy();
         mFactoidSwitcherHandler.removeCallbacks(mFactoidSwitcher);
-    }
-
-    private boolean usingPreloadedFactoids() {
-        return mFactoids.size() == 0;
     }
 
     /**
@@ -228,7 +204,6 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
         private boolean isKeyValid(String key) {
             return key.startsWith("dev-");
         }
-
 
         /**
          *

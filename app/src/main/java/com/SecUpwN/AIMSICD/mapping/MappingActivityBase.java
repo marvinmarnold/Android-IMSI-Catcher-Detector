@@ -7,7 +7,6 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -16,12 +15,32 @@ import android.view.MenuItem;
 import com.SecUpwN.AIMSICD.AppAIMSICD;
 import com.SecUpwN.AIMSICD.R;
 import com.SecUpwN.AIMSICD.service.AimsicdService;
+import com.android.volley.VolleyError;
+
+import org.stingraymappingproject.api.clientandroid.RecurringRequest;
+import org.stingraymappingproject.api.clientandroid.activities.BaseStingrayActivity;
+import org.stingraymappingproject.api.clientandroid.models.Factoid;
+import org.stingraymappingproject.api.clientandroid.requesters.FactoidsRequester;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Marvin Arnold on 15/08/15.
  */
-public class MappingActivityBase extends AppCompatActivity {
+public class MappingActivityBase extends BaseStingrayActivity {
     private final static String TAG = "MappingActivityBase";
+    private static final int UPLOAD_FREQUENCY_VALUE = 20;
+    private static final TimeUnit UPLOAD_FREQUENCY_UNIT = TimeUnit.SECONDS;
+
+    private static final int FACTOIDS_FREQUENCY_VALUE = 10;
+    private static final TimeUnit FACTOIDS_FREQUENCY_UNIT = TimeUnit.SECONDS;
+    protected static final int NUM_PRELOADED_FACTOIDS = 5;
+
+    private static final int NEARBY_FREQUENCY_VALUE = 30;
+    private static final TimeUnit NEARBY_FREQUENCY_UNIT = TimeUnit.MINUTES;
 
     protected Toolbar mToolbar;
     protected Toolbar mActionToolbar;
@@ -31,11 +50,10 @@ public class MappingActivityBase extends AppCompatActivity {
     private boolean mBoundToAIMSICD;
     private AimsicdService mAimsicdService;
 
-    private boolean mBoundToDataTrackerService;
-    private MappingDataTrackerService mMappingDataTrackerService;
-
     protected SharedPreferences prefs;
     protected SharedPreferences.Editor prefsEditor;
+
+    protected List<Factoid> mFactoids;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +63,7 @@ public class MappingActivityBase extends AppCompatActivity {
         prefs = mContext.getSharedPreferences( AimsicdService.SHARED_PREFERENCES_BASENAME, 0);
 
         startAIMSICDService();
-        startDataTrackerService();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -93,8 +109,6 @@ public class MappingActivityBase extends AppCompatActivity {
             if (mAimsicdService.isTrackingCell()) {
                 mAimsicdService.checkLocationServices();
             }
-
-            initAndScheduleDataTracker();
         }
 
         @Override
@@ -104,43 +118,6 @@ public class MappingActivityBase extends AppCompatActivity {
         }
     };
 
-    private final ServiceConnection mDataTrackerServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder binder) {
-            Log.d(TAG, "DataTrackerService Connected");
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
-            mMappingDataTrackerService = ((MappingDataTrackerService.LocalBinder) binder).getService();
-            mBoundToDataTrackerService = true;
-
-            if(!mBoundToAIMSICD) return;
-            initAndScheduleDataTracker();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            Log.e(TAG, "DataTrackerService Disconnected");
-            mBoundToDataTrackerService = false;
-        }
-    };
-
-    private void initAndScheduleDataTracker() {
-        if(mBoundToDataTrackerService) {
-            mMappingDataTrackerService.initDataTrackerService(mAimsicdService.getLocationTracker());
-            mMappingDataTrackerService.scheduleAll();
-        }
-    }
-
-    private void startDataTrackerService() {
-        if (!mBoundToDataTrackerService) {
-            Log.d(TAG, "Stated DataTrackerService");
-            // Bind to LocalService
-            Intent intent = new Intent(MappingActivityBase.this, MappingDataTrackerService.class);
-            //Start Service before binding to keep it resident when activity is destroyed
-            startService(intent);
-            bindService(intent, mDataTrackerServiceConnection, Context.BIND_AUTO_CREATE);
-        }
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -149,15 +126,7 @@ public class MappingActivityBase extends AppCompatActivity {
             unbindService(mAIMSICDServiceConnection);
             mBoundToAIMSICD = false;
         }
-
-        // Unbind from the DataTracker service
-        if (mBoundToDataTrackerService) {
-            unbindService(mDataTrackerServiceConnection);
-            mBoundToDataTrackerService = false;
-        }
-
         stopService(new Intent(mContext, AimsicdService.class));
-        stopService(new Intent(mContext, MappingDataTrackerService.class));
     }
 
     /**
@@ -167,7 +136,6 @@ public class MappingActivityBase extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         startAIMSICDService();
-        startDataTrackerService();
     }
 
     public void onStop() {
@@ -179,5 +147,54 @@ public class MappingActivityBase extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         ((AppAIMSICD) getApplication()).attach(this);
+    }
+
+    @Override
+    protected void scheduleRequesters() {
+
+    }
+
+    public void scheduleFactoidsRequester() {
+        FactoidsRequester factoidsRequester = new FactoidsRequester(mStingrayAPIService) {
+            @Override
+            public void onResponse(Factoid[] response) {
+                Log.d(TAG, "onResponse");
+                mFactoids = Arrays.asList(response);
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "onErrorResponse");
+            }
+        };
+        RecurringRequest recurringRequest = new RecurringRequest(FACTOIDS_FREQUENCY_VALUE, FACTOIDS_FREQUENCY_UNIT, factoidsRequester);
+        mStingrayAPIService.addRecurringRequest(recurringRequest);
+    }
+
+    public static Factoid createPreloadedFactoid(Context context, int n) {
+        if(n < 0 || n >= NUM_PRELOADED_FACTOIDS) return null;
+        switch(n) {
+            case 0:
+                return new Factoid(context.getString(R.string.mapping_factoids_1));
+            case 1:
+                return new Factoid(context.getString(R.string.mapping_factoids_2));
+            case 2:
+                return new Factoid(context.getString(R.string.mapping_factoids_3));
+            case 3:
+                return new Factoid(context.getString(R.string.mapping_factoids_4));
+            case 4:
+                return new Factoid(context.getString(R.string.mapping_factoids_5));
+        }
+        return null;
+    }
+
+    protected void loadFactoids() {
+        if(mFactoids == null) mFactoids = new ArrayList<Factoid>();
+        if(mFactoids.isEmpty()) {
+            for (int i = 1; i <= NUM_PRELOADED_FACTOIDS; i++) {
+                Factoid factoid = createPreloadedFactoid(getApplicationContext(), i);
+                mFactoids.add(factoid);
+            }
+        }
     }
 }
