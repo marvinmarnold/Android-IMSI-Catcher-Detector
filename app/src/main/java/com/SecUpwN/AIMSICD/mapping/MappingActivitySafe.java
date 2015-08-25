@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,6 +40,7 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
     public static final int MILISECS_BETWEEN_FACTOIDS = 8 * 1000;
 
     private TextView mFactoidText;
+    private Button mLearnMoreButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,23 +58,16 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
         setSupportActionBar(mToolbar);
         mToolbar.setTitle("No threats detected");
 
-//        mActionToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping_safe_action);
-//        mActionToolbar.setTitle("Learn More:");
-//        mActionToolbar.inflateMenu(R.menu.activity_stingray_mapping_safe);
-//        mActionToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                switch (item.getItemId()) {
-//                    case R.id.menu_activity_stingray_mapping_safe_learn:
-//                        String url = "https://stingraymappingproject.org";
-//                        Intent i = new Intent(Intent.ACTION_VIEW);
-//                        i.setData(Uri.parse(url));
-//                        startActivity(i);
-//                        break;
-//                }
-//                return true;
-//            }
-//        });
+        mLearnMoreButton = (Button) findViewById(R.id.activity_mapping_safe_learn_more_button);
+        mLearnMoreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = getString(R.string.mapping_information_url);
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
 
         ImageView iv = (ImageView)findViewById(R.id.mapper_safe_logo); 
         iv.setImageResource(R.drawable.logo_safe);
@@ -99,7 +95,6 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
                                     new Intent(Intent.ACTION_DELETE, packageUri);
                             startActivity(uninstallIntent);
                             finish();
-//                        if (mAimsicdService != null) mAimsicdService.onDestroy();
                         }
                     });
 
