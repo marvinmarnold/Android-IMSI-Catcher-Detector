@@ -439,15 +439,16 @@ Please print a copy of this document for your records.
 
     <!-- Mapper Safe -->
     <string name="activity_mapping_safe_title">No threats detected</string>
-    <string name="activity_mapping_safe_hint">Please keep this running in the background so it can continue to warn you throughout the day.</string>
-    <string name="activity_mapping_safe_description">there have been no stingray detected near you recently</string>
+    <string name="activity_mapping_safe_hint">Please keep [app name] running in the background so it can continue to warn you throughout the day.</string>
+    <string name="activity_mapping_safe_description">There have been no Stingrays detected near you recently</string>
     <string name="activity_mapping_safe_teaser">Did you know that there are some really interesting facts we can share with you?</string>
     <string name="activity_mapping_safe_learn_more_button">Learn More</string>
     <string name="activity_mapping_safe_settings_button">Settings</string>
 
     <!-- Mapper Danger -->
     <string name="activity_mapping_danger_title">Threat detected</string>
-    <string name="activity_mapping_danger_description">a Stingray may be nearby</string>
+    <string name="activity_mapping_danger_description">A Stingray has been detected nearby</string>
+    <string name="activity_mapping_danger_hint">Consider putting your phone in airplane mode and letting your friends know about the threat.</string>
     <string name="activity_mapping_danger_airplane_button">Airplane Mode</string>
     <string name="activity_mapping_danger_warn_button">Warn others</string>
 
