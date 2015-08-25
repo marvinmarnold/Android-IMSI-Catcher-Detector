@@ -1,5 +1,6 @@
 package com.SecUpwN.AIMSICD.mapping;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -9,18 +10,23 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.SecUpwN.AIMSICD.R;
-import com.twitter.sdk.android.core.Callback;
+import com.SecUpwN.AIMSICD.utils.GeoLocation;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
-import com.twitter.sdk.android.core.TwitterAuthToken;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.ScaleBarOverlay;
+import org.osmdroid.views.overlay.compass.CompassOverlay;
+import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -32,6 +38,13 @@ public class MappingActivityDanger extends MappingActivityBase {
 
     private MapView mMap;
     TwitterLoginButton mTwitterLoginButton;
+    TwitterAuthClient mTwitterAuthClient;
+    private MyLocationNewOverlay mMyLocationOverlay;
+    private CompassOverlay mCompassOverlay;
+    private ScaleBarOverlay mScaleBarOverlay;
+
+    private final static double DEFAULT_MAP_LAT = 29.951287;
+    private final static double DEFAULT_MAP_LONG = -90.081102;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -54,37 +67,63 @@ public class MappingActivityDanger extends MappingActivityBase {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
-
         setContentView(R.layout.activity_mapping_danger);
-
-        mTwitterLoginButton = (TwitterLoginButton) findViewById(R.id.login_button);
-        mTwitterLoginButton.setCallback(new Callback<TwitterSession>() {
-            @Override
-            public void success(Result<TwitterSession> result) {
-                TwitterSession session = result.data;
-                TwitterAuthToken authToken = session.getAuthToken();
-                String consumerKey = authToken.token;
-                String consumerSecret = authToken.secret;
-
-                postToTwitter(consumerKey, consumerSecret);
-            }
-
-            @Override
-            public void failure(TwitterException exception) {
-                // Do something on failure
-            }
-        });
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping);
         setSupportActionBar(mToolbar);
         mToolbar.setTitle("Threat detected");
 
+        setupActionBar();
+        setupMap();
+    }
+
+    private void setupMap() {
+        mMap = (MapView) findViewById(R.id.stingray_mapping_danger_map);
+
+        mMap.setBuiltInZoomControls(true);
+        mMap.setMultiTouchControls(true);
+        mMap.setMinZoomLevel(3);
+        mMap.setMaxZoomLevel(19); // Latest OSM can go to 21!
+        mMap.getTileProvider().createTileCache();
+        mCompassOverlay = new CompassOverlay(this, new InternalCompassOrientationProvider(this), mMap);
+
+        mScaleBarOverlay = new ScaleBarOverlay(this);
+        mScaleBarOverlay.setScaleBarOffset(getResources().getDisplayMetrics().widthPixels / 2, 10);
+        mScaleBarOverlay.setCentred(true);
+
+        GpsMyLocationProvider imlp = new GpsMyLocationProvider(MappingActivityDanger.this.getBaseContext());
+        imlp.setLocationUpdateMinDistance(100); // [m]  // Set the minimum distance for location updates
+        imlp.setLocationUpdateMinTime(10000);   // [ms] // Set the minimum time interval for location updates
+        mMyLocationOverlay = new MyLocationNewOverlay(MappingActivityDanger.this.getBaseContext(), imlp, mMap);
+        mMyLocationOverlay.setDrawAccuracyEnabled(true);
+
+        mMap.getOverlays().add(mMyLocationOverlay);
+        mMap.getOverlays().add(mCompassOverlay);
+        mMap.getOverlays().add(mScaleBarOverlay);
+
+
+        double lastLat = DEFAULT_MAP_LAT;
+        double lastLong = DEFAULT_MAP_LONG;
+
+        if(mBoundToAIMSICD && mAimsicdService != null && mAimsicdService.lastKnownLocation() != null) {
+            GeoLocation lastLoc = mAimsicdService.lastKnownLocation();
+            lastLat = lastLoc.getLatitudeInDegrees();
+            lastLong =lastLoc.getLongitudeInDegrees();
+        }
+
+        mMap.getController().setZoom(12);
+        mMap.getController().animateTo(new GeoPoint(lastLat, lastLong));
+    }
+
+    private void setupActionBar() {
+        mTwitterAuthClient = new TwitterAuthClient();
         TwitterAuthConfig authConfig =  new TwitterAuthConfig("consumerKey", "consumerSecret");
         Fabric.with(this, new TwitterCore(authConfig), new TweetComposer());
 
         mActionToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping_danger_action);
         mActionToolbar.setTitle("Take Action:");
         mActionToolbar.inflateMenu(R.menu.activity_stingray_mapping_danger);
+        final Activity that = this;
         mActionToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -106,7 +145,23 @@ public class MappingActivityDanger extends MappingActivityBase {
                         sendBroadcast(intent);
                         break;
                     case R.id.menu_activity_stingray_mapping_danger_twitter:
+                        mTwitterAuthClient.authorize(that, new com.twitter.sdk.android.core.Callback<TwitterSession>() {
 
+                            @Override
+                            public void success(Result<TwitterSession> result) {
+                                TwitterSession session = result.data;
+//                TwitterAuthToken authToken = session.getAuthToken();
+//                String consumerKey = authToken.token;
+//                String consumerSecret = authToken.secret;
+//
+//                postToTwitter(consumerKey, consumerSecret);
+                            }
+
+                            @Override
+                            public void failure(TwitterException e) {
+                                e.printStackTrace();
+                            }
+                        });
                         break;
                 }
                 return true;
@@ -115,15 +170,5 @@ public class MappingActivityDanger extends MappingActivityBase {
 
         ImageView iv = (ImageView)findViewById(R.id.mapper_danger_logo);
         iv.setImageResource(R.drawable.logo_danger);
-
-        mMap = (MapView) findViewById(R.id.stingray_mapping_danger_map);
-        mMap.getController().setZoom(16);
-        mMap.setBuiltInZoomControls(true);
-        mMap.setMultiTouchControls(true);
-        mMap.setMinZoomLevel(3);
-        mMap.setMaxZoomLevel(19);
-
-        mMap.getController().animateTo(new GeoPoint(38.731407, -96.386617));
-
     }
 }

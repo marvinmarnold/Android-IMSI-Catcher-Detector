@@ -47,8 +47,8 @@ public class MappingActivityBase extends BaseStingrayActivity {
 
     private final Context mContext = this;
 
-    private boolean mBoundToAIMSICD;
-    private AimsicdService mAimsicdService;
+    protected boolean mBoundToAIMSICD;
+    protected AimsicdService mAimsicdService;
 
     protected SharedPreferences prefs;
     protected SharedPreferences.Editor prefsEditor;
