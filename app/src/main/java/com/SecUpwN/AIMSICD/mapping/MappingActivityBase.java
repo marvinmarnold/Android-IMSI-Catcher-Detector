@@ -159,8 +159,10 @@ public class MappingActivityBase extends BaseStingrayActivity {
             @Override
             public void onResponse(Factoid[] response) {
                 Log.d(TAG, "onResponse");
-                mFactoids = new ArrayList<>();
-                mFactoids = Arrays.asList(response);
+                if(response.length > 0) {
+                    mFactoids = new ArrayList<>();
+                    mFactoids = Arrays.asList(response);
+                }
             }
 
             @Override
@@ -190,10 +192,10 @@ public class MappingActivityBase extends BaseStingrayActivity {
     }
 
     protected void loadFactoids() {
-        if(mFactoids == null) mFactoids = new ArrayList<>();
+        if(mFactoids == null || mFactoids.isEmpty()) mFactoids = new ArrayList<Factoid>();
         if(mFactoids.isEmpty()) {
-            for (int i = 1; i <= NUM_PRELOADED_FACTOIDS; i++) {
-                Factoid factoid = createPreloadedFactoid(getApplicationContext(), i);
+            for (int i = 0; i < NUM_PRELOADED_FACTOIDS; i++) {
+                Factoid factoid = createPreloadedFactoid(mContext, i);
                 mFactoids.add(factoid);
             }
         }

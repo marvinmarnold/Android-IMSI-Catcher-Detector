@@ -10,22 +10,24 @@
         android:minHeight="?attr/actionBarSize"
         android:background="?attr/colorPrimary" />
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_stingray_mapping_safe_action"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?android:attr/actionBarSize"
-        android:background="?attr/colorAccent"
-        android:textColor="?attr/colorPrimaryDark"
-        android:layout_alignParentBottom="true" />
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/toolbar_stingray_mapping_safe_action"
+        android:layout_height="match_parent"
         android:layout_below="@id/toolbar_stingray_mapping"
         android:background="#fff">
+
+        <TextView
+            android:layout_width="600dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/activity_mapping_safe_description"
+            android:id="@+id/mapper_safe_description"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginTop="25dp"
+            android:textColor="#000000"
+            android:textSize="30dp" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -34,15 +36,16 @@
             android:layout_gravity="center" />
 
         <TextView
-            android:layout_width="286dp"
+            android:layout_width="600dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/mapper_safe_description"
-            android:id="@+id/mapper_safe_description"
+            android:text="@string/activity_mapping_safe_hint"
+            android:id="@+id/mapper_safe_hint"
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_marginTop="25dp"
-            android:textColor="#000000" />
+            android:textColor="#000000"
+            android:textSize="20dp" />
 
         <View
             android:layout_width="fill_parent"
@@ -51,17 +54,51 @@
             android:layout_marginTop="30dp"
             android:textColor="#000000" />
 
-        <TextView
-            android:layout_width="286dp"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/mapper_safe_teaser"
-            android:id="@+id/activity_mapping_safe_factoid"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/square_border"
-            android:textColor="#000000" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/activity_mapping_safe_factoid_image"
+                android:layout_width="match_parent"
+                android:contentDescription="Fight the militarization of police"
+                android:layout_height="match_parent"
+                android:src="@drawable/banner_safe"
+                android:scaleType="centerCrop" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="400dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/activity_mapping_safe_teaser"
+                    android:id="@+id/activity_mapping_safe_factoid"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:background="@drawable/square_border"
+                    android:textColor="#000000"
+                    android:textSize="20dp" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activity_mapping_safe_learn_more_button"
+                    android:id="@+id/activity_mapping_safe_learn_more_button"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20dp"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp"
+                    android:paddingRight="40dp"
+                    android:paddingLeft="40dp" />
+            </LinearLayout>
+
+        </FrameLayout>
 
     </LinearLayout>
 

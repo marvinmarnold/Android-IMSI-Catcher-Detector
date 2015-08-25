@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,6 +33,10 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
     private final static String TAG = "AIMSICD";
     private final static String mTAG = "MappingActivitySafe";
 
+    private int currentFactoid = 0;
+    Handler mFactoidSwitcherHandler;
+    public static final int MILISECS_BETWEEN_FACTOIDS = 8 * 1000;
+
     private TextView mFactoidText;
 
     @Override
@@ -52,23 +55,23 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
         setSupportActionBar(mToolbar);
         mToolbar.setTitle("No threats detected");
 
-        mActionToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping_safe_action);
-        mActionToolbar.setTitle("Learn More:");
-        mActionToolbar.inflateMenu(R.menu.activity_stingray_mapping_safe);
-        mActionToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.menu_activity_stingray_mapping_safe_learn:
-                        String url = "https://stingraymappingproject.org";
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(url));
-                        startActivity(i);
-                        break;
-                }
-                return true;
-            }
-        });
+//        mActionToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping_safe_action);
+//        mActionToolbar.setTitle("Learn More:");
+//        mActionToolbar.inflateMenu(R.menu.activity_stingray_mapping_safe);
+//        mActionToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                switch (item.getItemId()) {
+//                    case R.id.menu_activity_stingray_mapping_safe_learn:
+//                        String url = "https://stingraymappingproject.org";
+//                        Intent i = new Intent(Intent.ACTION_VIEW);
+//                        i.setData(Uri.parse(url));
+//                        startActivity(i);
+//                        break;
+//                }
+//                return true;
+//            }
+//        });
 
         ImageView iv = (ImageView)findViewById(R.id.mapper_safe_logo); 
         iv.setImageResource(R.drawable.logo_safe);
@@ -115,10 +118,6 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
 //            ocikd.execute(); //starts background thread
         }
     }
-
-    private int currentFactoid = 0;
-    Handler mFactoidSwitcherHandler;
-    public static final int MILISECS_BETWEEN_FACTOIDS = 4 * 1000;
 
     Runnable mFactoidSwitcher = new Runnable() {
         @Override
