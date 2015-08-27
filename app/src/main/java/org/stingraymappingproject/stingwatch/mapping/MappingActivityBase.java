@@ -14,11 +14,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.stingraymappingproject.stingwatch.AppAIMSICD;
-import org.stingraymappingproject.stingwatch.R;
-import org.stingraymappingproject.stingwatch.service.AimsicdService;
-import org.stingraymappingproject.stingwatch.utils.GeoLocation;
-import org.stingraymappingproject.stingwatch.utils.Status;
 import com.android.volley.VolleyError;
 
 import org.json.JSONException;
@@ -30,6 +25,11 @@ import org.stingraymappingproject.api.clientandroid.models.StingrayReading;
 import org.stingraymappingproject.api.clientandroid.requesters.FactoidsRequester;
 import org.stingraymappingproject.api.clientandroid.requesters.NearbyRequester;
 import org.stingraymappingproject.api.clientandroid.requesters.PostStingrayReadingRequester;
+import org.stingraymappingproject.stingwatch.AppAIMSICD;
+import org.stingraymappingproject.stingwatch.R;
+import org.stingraymappingproject.stingwatch.service.AimsicdService;
+import org.stingraymappingproject.stingwatch.utils.GeoLocation;
+import org.stingraymappingproject.stingwatch.utils.Status;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,11 +42,11 @@ import java.util.concurrent.TimeUnit;
  */
 public class MappingActivityBase extends BaseStingrayActivity {
     private final static String TAG = "MappingActivityBase";
-    private static final int UPLOAD_FREQUENCY_VALUE = 20;
-    private static final TimeUnit UPLOAD_FREQUENCY_UNIT = TimeUnit.SECONDS;
+    private static final int UPLOAD_FREQUENCY_VALUE = 10;
+    private static final TimeUnit UPLOAD_FREQUENCY_UNIT = TimeUnit.MINUTES;
 
     private static final int FACTOIDS_FREQUENCY_VALUE = 15;
-    private static final TimeUnit FACTOIDS_FREQUENCY_UNIT = TimeUnit.SECONDS;
+    private static final TimeUnit FACTOIDS_FREQUENCY_UNIT = TimeUnit.MINUTES;
     protected static final int NUM_PRELOADED_FACTOIDS = 5;
 
     private static final int NEARBY_FREQUENCY_VALUE = 60;
