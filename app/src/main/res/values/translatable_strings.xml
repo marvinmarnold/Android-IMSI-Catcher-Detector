@@ -403,7 +403,7 @@
     </string>
 
     <!-- Intro Slides -->
-    <string name="mapping_slide_0_title">Thank you for downloading StingWatch. Swipe left to learn more or swipe right to skip the intro.</string>
+    <string name="mapping_slide_0_title">Thank you for downloading StingWatch. Please swipe through the following screens in order to learn more how to use this app.</string>
     <string name="mapping_slide_1_title">Police have been listening to our calls and listening to our text messages with little oversight and even less public scrutiny.</string>
     <string name="mapping_slide_2_title">Stingrays are mobile devices that simulate cell phone towers, forcing nearby phones to connect to them.</string>
     <string name="mapping_slide_3_title">Stingrays can capture information from all cell phones within range, including identity, location, SMS, call logs, and call content.</string>
