@@ -120,7 +120,7 @@ public class LocationTracker {
                     try {
                         Cell cell = context.getCell();
                         if (cell != null) {
-                            Log.d("location", "Looking up MCC " + cell.getMCC());
+//                            Log.d("location", "Looking up MCC " + cell.getMCC());
 
                             double[] defLoc = mDbHelper.getDefaultLocation(cell.getMCC());
 
@@ -133,7 +133,7 @@ public class LocationTracker {
             }
         }
 
-        if (loc != null) Log.i("location", "Last known location " + loc.toString());
+//        if (loc != null) Log.i("location", "Last known location " + loc.toString());
         return loc;
     }
 

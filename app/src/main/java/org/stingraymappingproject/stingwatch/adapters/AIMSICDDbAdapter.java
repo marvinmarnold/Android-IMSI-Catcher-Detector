@@ -536,7 +536,7 @@ public class AIMSICDDbAdapter extends SQLiteOpenHelper {
                     csvWrite.writeNext("mcc,mnc,lac,cellid,lon,lat,signal,measured_at,rating");
 
                     int size = c.getCount();
-                    Log.d(TAG, mTAG+" OCID UPLOAD: row count = "+size);
+//                    Log.d(TAG, mTAG+" OCID UPLOAD: row count = "+size);
                     int startcount = 0;
                     //AIMSICD.mProgressBar.setProgress(startcount);
                     //AIMSICD.mProgressBar.setMax(size);
@@ -658,7 +658,7 @@ public class AIMSICDDbAdapter extends SQLiteOpenHelper {
 
                 if (!csvCellID.isEmpty()) {
                     int lines = csvCellID.size();
-                    Log.i(TAG, mTAG + ":updateOpenCellID: OCID CSV size (lines): " + lines );
+//                    Log.i(TAG, mTAG + ":updateOpenCellID: OCID CSV size (lines): " + lines );
 
                     // TODO: WHAT IS THIS DOING?? (Why is it needed?)
                     // This counts how many CIDs we have in DBe_import
@@ -734,7 +734,7 @@ public class AIMSICDDbAdapter extends SQLiteOpenHelper {
                         );
                     }
                     AIMSICD.mProgressBar.setProgress(4);
-                    Log.d(TAG, mTAG + ":populateDBeImport(): inserted " + i + " cells.");
+//                    Log.d(TAG, mTAG + ":populateDBeImport(): inserted " + i + " cells.");
                 }
             } else {
                 Log.e(TAG, mTAG + ": opencellid.csv file does not exist!");
@@ -979,7 +979,7 @@ public class AIMSICDDbAdapter extends SQLiteOpenHelper {
                     }
                 }
             }
-            Log.i(TAG, mTAG + ": restoreDB() Finished ");
+//            Log.i(TAG, mTAG + ": restoreDB() Finished ");
             return true;
         } catch (Exception e) {
             Log.e(TAG, mTAG + ": restoreDB() Error:\n" + e.toString());

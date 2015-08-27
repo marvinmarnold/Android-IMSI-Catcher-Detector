@@ -1,5 +1,6 @@
 package org.stingraymappingproject.stingwatch.mapping;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -185,6 +186,35 @@ public class MappingActivityBase extends BaseStingrayActivity {
             return lastLoc.getLongitudeInDegrees();
         }
         throw new Exception("Pervious longitude available is not available.");
+    }
+
+    protected void startActivityForThreatLevel(Activity activity) {
+        switch(Status.getStatus().name()) {
+            case("IDLE"):
+                startSafe(activity);
+            case("NORMAL"):
+                startSafe(activity);
+            case("MEDIUM"):
+                startSafe(activity);
+            case("ALARM"):
+                startDanger(activity);
+            default:
+                startSafe(activity);
+        }
+    }
+
+    private void startSafe(Activity activity) {
+        if(!activity.getClass().equals(MappingActivitySafe.class)) {
+            Intent i = new Intent(getApplicationContext(), MappingActivitySafe.class);
+            startActivity(i);
+        }
+    }
+
+    private void startDanger(Activity activity) {
+        if(!activity.getClass().equals(MappingActivityDanger.class)) {
+            Intent i = new Intent(getApplicationContext(), MappingActivityDanger.class);
+            startActivity(i);
+        }
     }
 
     protected Date now() {

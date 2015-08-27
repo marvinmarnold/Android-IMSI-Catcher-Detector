@@ -42,9 +42,15 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
     private TextView mFactoidText;
     private Button mLearnMoreButton;
 
+    private String termsPref;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        termsPref = getResources().getString(R.string.mapping_pref_terms_accepted);
+
         Log.d(TAG, "onCreate");
 
         if (!prefs.getBoolean(getResources().getString(R.string.mapping_pref_setup_complete), false)) {
@@ -99,11 +105,14 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
     public void onResume() {
         super.onResume();
         displayTerms();
+        if (prefs.getBoolean(termsPref, false)) {
+            startActivityForThreatLevel(MappingActivitySafe.this);
+        }
     }
 
     private void displayTerms() {
         // Accept terms
-        final String termsPref = getResources().getString(R.string.mapping_pref_terms_accepted);
+
         if (!prefs.getBoolean(termsPref, false)) {
             final AlertDialog.Builder disclaimer = new AlertDialog.Builder(this)
                     .setTitle(R.string.mapping_disclaimer_title)
@@ -113,6 +122,7 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
                             prefsEditor = prefs.edit();
                             prefsEditor.putBoolean(termsPref, true);
                             prefsEditor.apply();
+                            startActivityForThreatLevel(MappingActivitySafe.this);
                         }
                     })
                     .setNegativeButton(R.string.text_disagree, new DialogInterface.OnClickListener() {

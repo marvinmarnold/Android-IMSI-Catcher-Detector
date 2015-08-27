@@ -80,6 +80,7 @@
     <string name="mapping_pref_terms_accepted" translatable="false">mapping_pref_terms_accepted</string>
     <string name="mapping_pref_setup_complete" translatable="false">mapping_pref_setup_complete</string>
     <string name="mapping_pref_ocid_key_set" translatable="false">mapping_pref_ocid_key_set</string>
+    <string name="mapping_currently_going_crazy" translatable="false">mapping_currently_going_crazy</string>
 
     <string name="mapping_information_url" translatable="false">https://stingraymappingproject.org</string>
     <string name="mapping_api_url" translatable="false">https://api.stingraymappingproject.org</string>
