@@ -187,17 +187,25 @@ public class MappingActivityBase extends BaseStingrayActivity {
         Log.d(TAG, "startActivityForThreatLevel: " + Status.getStatus().name());
         switch(Status.getStatus().name()) {
             case("IDLE"):
+                Log.d(TAG, "startActivityForThreatLevel:IDLE");
                 startSafe(activity);
+                break;
             case("NORMAL"):
+                Log.d(TAG, "startActivityForThreatLevel:NORMAL");
                 startSafe(activity);
+                break;
             case("MEDIUM"):
+                Log.d(TAG, "startActivityForThreatLevel:MEDIUM");
                 startSafe(activity);
+                break;
             case("ALARM"):
-                startSafe(activity);
-
-//                startDanger(activity);
+                Log.d(TAG, "startActivityForThreatLevel:ALARM");
+                startDanger(activity);
+                break;
             default:
+                Log.d(TAG, "startActivityForThreatLevel:default");
                 startSafe(activity);
+                break;
         }
     }
 
@@ -403,7 +411,6 @@ public class MappingActivityBase extends BaseStingrayActivity {
     protected void loadFactoids() {
         Log.d(TAG, "loadFactoids");
         if(mBoundToStingrayAPIService) {
-            Log.d(TAG, "loadFactoids:mBoundToStingrayAPIService");
             List<Factoid> factoids = mStingrayAPIService.getFactoids();
             if (factoids.isEmpty()) {
                 for (int i = 0; i < NUM_PRELOADED_FACTOIDS; i++) {
