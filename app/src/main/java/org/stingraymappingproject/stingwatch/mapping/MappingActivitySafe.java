@@ -119,9 +119,16 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
     public void onResume() {
         super.onResume();
         displayTerms();
+        // THEY HAVENT AGREED TO TERMS
         if (prefs.getBoolean(termsPref, false)) {
-            startActivityForThreatLevel(MappingActivitySafe.this);
+            displayTerms();
         }
+        //if going_crazy then )
+        // send to danger activity
+//        final String isGoingCrazy = getResources().getString(R.string.mapping_currently_going_crazy);
+//        if(prefs.getBoolean(isGoingCrazy, false)) {
+//
+//        }
     }
 
     private void displayTerms() {

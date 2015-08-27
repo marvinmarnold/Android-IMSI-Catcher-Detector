@@ -121,8 +121,9 @@ public class MappingActivityDanger extends MappingActivityBase {
         if(Status.getStatus().name().equals("ALARM"))
             addMarkerToMap();
 
+        mScaleBarOverlay.setCentred(true);
         mMap.getController().setZoom(12);
-        mMap.getController().animateTo(new GeoPoint(lastLat, lastLong));
+        mMap.getController().animateTo(new GeoPoint(lastLat + 0.0001, lastLong));
         mMap.invalidate();
     }
 
@@ -218,7 +219,7 @@ public class MappingActivityDanger extends MappingActivityBase {
     @Override
     public void onResume() {
         super.onResume();
-        startActivityForThreatLevel(MappingActivityDanger.this);
+//        startActivityForThreatLevel(MappingActivityDanger.this);
         setupMap();
     }
 }

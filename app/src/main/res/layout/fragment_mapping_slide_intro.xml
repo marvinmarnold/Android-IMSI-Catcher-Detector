@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/fragment_mapping_slide_intro_title"
-            android:maxWidth="@dimen/mapping_slide_intro_text_width"
+            android:width="@dimen/mapping_slide_intro_text_width"
             android:gravity="left"
             android:paddingLeft="25dp"
             android:paddingTop="50dp"

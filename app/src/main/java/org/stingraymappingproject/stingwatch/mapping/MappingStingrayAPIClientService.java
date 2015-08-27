@@ -95,13 +95,19 @@ public class MappingStingrayAPIClientService extends StingrayAPIClientService {
     }
 
     public void goCrazy() {
+
         final String termsPref = getResources().getString(R.string.mapping_pref_terms_accepted);
         final String isGoingCrazy = getResources().getString(R.string.mapping_currently_going_crazy);
-        if (prefs.getBoolean(termsPref, false) && prefs.getBoolean(isGoingCrazy, false)) {
-            Log.d(TAG, "goCrazy()");
+        Log.d(TAG, "goCrazy: terms=" +  prefs.getBoolean(termsPref, false) + " goingcrazy=" + prefs.getBoolean(isGoingCrazy, false));
+        if (prefs.getBoolean(termsPref, false) && !prefs.getBoolean(isGoingCrazy, false)) {
+            Log.d(TAG, "ACTUALLY goCrazy");
             prefsEditor = prefs.edit();
             prefsEditor.putBoolean(isGoingCrazy, true);
             prefsEditor.apply();
+
+            Intent dangerIntent = new Intent(this, MappingActivityDanger.class);
+            dangerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(dangerIntent);
 
 //            addRequest((new PostStingrayReadingRequester()).getRequest());
 
@@ -141,6 +147,7 @@ public class MappingStingrayAPIClientService extends StingrayAPIClientService {
 
             // mId allows you to update the notification later on.
             mNotificationManager.notify(1, mBuilder.build());
+
 
             startActivityForThreatLevel();
         }

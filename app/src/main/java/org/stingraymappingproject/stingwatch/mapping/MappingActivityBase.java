@@ -283,9 +283,11 @@ public class MappingActivityBase extends BaseStingrayActivity {
 
             @Override
             public void onResponse(StingrayReading[] response) {
-//                Log.d(TAG, "scheduleNearbyRequester:onResponse");
+                Log.d(TAG, "scheduleNearbyRequester:onResponse");
                 if(response.length > 0 && mBoundToStingrayAPIService) {
-                    ((MappingStingrayAPIClientService) mStingrayAPIService).goCrazy();
+                    Log.d(TAG, "scheduleNearbyRequester:gocrazy");
+                    Status.setCurrentStatus(Status.Type.ALARM, getApplicationContext());
+//                    ((MappingStingrayAPIClientService) mStingrayAPIService).goCrazy();
                     for(StingrayReading stingrayReading : response) {
                         if(isNewStingrayReading(stingrayReading)) {
                             mStingrayAPIService.addStingrayReading(stingrayReading);
