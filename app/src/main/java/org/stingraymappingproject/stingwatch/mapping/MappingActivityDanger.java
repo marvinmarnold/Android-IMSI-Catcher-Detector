@@ -2,6 +2,7 @@ package org.stingraymappingproject.stingwatch.mapping;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +20,7 @@ import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
+import org.osmdroid.bonuspack.overlays.Polygon;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
@@ -28,6 +30,7 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import org.stingraymappingproject.stingwatch.R;
 import org.stingraymappingproject.stingwatch.utils.GeoLocation;
+import org.stingraymappingproject.stingwatch.utils.Status;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -117,10 +120,34 @@ public class MappingActivityDanger extends MappingActivityBase {
         }
 
         // use lat, long coordinates
+        if(Status.getStatus().name().equals("ALARM"))
+            addMarkerToMap();
 
         mMap.getController().setZoom(12);
         mMap.getController().animateTo(new GeoPoint(lastLat, lastLong));
+        mMap.invalidate();
     }
+
+    private void addMarkerToMap() {
+        double lastLat = DEFAULT_MAP_LAT;
+        double lastLong = DEFAULT_MAP_LONG;
+        if(mBoundToAIMSICD && mAimsicdService.lastKnownLocation() != null) {
+            Log.d(TAG, "addMarkerToMap");
+            GeoLocation lastLoc = mAimsicdService.lastKnownLocation();
+            lastLat = lastLoc.getLatitudeInDegrees();
+            lastLong = lastLoc.getLongitudeInDegrees();
+        }
+
+        Polygon circle = new Polygon(this);
+        circle.setPoints(Polygon.pointsAsCircle(new GeoPoint(lastLat, lastLong), 550.0)); // radius = 550
+
+        circle.setFillColor(Color.RED);
+        circle.setStrokeColor(Color.RED);
+        circle.setStrokeWidth(2);
+
+        mMap.getOverlays().add(circle);
+    }
+
 
     private void setupActionBar() {
         mTwitterAuthClient = new TwitterAuthClient();
@@ -194,5 +221,6 @@ public class MappingActivityDanger extends MappingActivityBase {
     public void onResume() {
         super.onResume();
         startActivityForThreatLevel(MappingActivityDanger.this);
+        setupMap();
     }
 }
