@@ -7,7 +7,7 @@ package com.SecUpwN.AIMSICD.test;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.SecUpwN.AIMSICD.AIMSICD;
+import org.stingraymappingproject.stingwatch.AIMSICD;
 
 /**
  * Created by toby on 2014/12/07.

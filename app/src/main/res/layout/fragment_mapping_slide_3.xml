@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/instructions"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="layout" >
+
+    <ImageView
+        android:id="@+id/fragment_mapping_slide_intro_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fragment_mapping_slide_intro"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fadingEdge="none">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/fragment_mapping_slide_intro_title"
+            android:maxWidth="@dimen/mapping_slide_3_text_width"
+            android:gravity="center"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="25dp"
+            android:textColor="#000"
+            android:background="@drawable/square_border"
+            android:textSize="@dimen/mapping_slide_3_text_size"/>
+    </ScrollView>
+</FrameLayout>

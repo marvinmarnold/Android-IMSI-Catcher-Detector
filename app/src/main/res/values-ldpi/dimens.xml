@@ -1,0 +1,9 @@
+<resources>
+    <dimen name="mapping_logo_size">40dp</dimen>
+    <dimen name="mapping_page_title">20sp</dimen>
+    <dimen name="mapping_slide_intro_text_width">150dp</dimen>
+    <dimen name="mapping_slide_intro_text_size">20sp</dimen>
+    <dimen name="mapping_slide_3_text_width">150dp</dimen>
+    <dimen name="mapping_slide_3_text_size">20sp</dimen>
+
+</resources>

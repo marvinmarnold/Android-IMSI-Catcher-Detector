@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.SecUpwN.AIMSICD.activities.CreditsRollActivity"
+    tools:context="org.stingraymappingproject.stingwatch.activities.CreditsRollActivity"
     android:background="#000000">
 
-    <com.SecUpwN.AIMSICD.fragments.CreditsRollView
+    <org.stingraymappingproject.stingwatch.fragments.CreditsRollView
         android:id="@+id/creditsroll"
         android:layout_width="match_parent"
         android:layout_height="0dp"

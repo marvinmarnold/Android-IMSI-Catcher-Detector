@@ -8,7 +8,7 @@ package com.SecUpwN.AIMSICD.test;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 
-import com.SecUpwN.AIMSICD.activities.DebugLogs;
+import org.stingraymappingproject.stingwatch.activities.DebugLogs;
 
 import java.io.IOException;
 

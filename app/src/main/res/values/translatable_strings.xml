@@ -399,47 +399,19 @@
     <!-- DISCLAIMER -->
     <string name="mapping_disclaimer_title">Consent to Participave</string>
     <string name="mapping_disclaimer">
-       You are invited to download this free app to participate in a research study on police use of
-Stingray technology. Stingrays are used to track or collect information from individuals’ cell
-phones. To read more about them, click here. If you decide to download and run the app, it
-will send information every ten minutes to a public website [link here]. The information it
-sends won’t be in any way traceable back to you or your phone. It will only allow the site to
-map a colored dot representing the Stingray threat level at your GPS coordinates at that
-day and time, allowing the website to show when and where police are using Stingray
-technology. The data we collect will all be available on the website for the duration of this
-project, with GPS coordinates replaced by a broader Census tract ID, and we will also write
-about any patterns we see. You must be at least 18 years old to participate.
-
-The app takes under a minute to download, and none of your time will be required after
-that. There are no known risks associated with participating, and you won’t be either paid
-or charged for doing so. We won’t know who you are, so we’ll never be able to contact you.
-You can stop running the app or delete it at any time.
-
-The researchers behind this are Marvin Arnold (marvin AT unplugged.im) and Mary
-Ellen Stitt (mstitt AT utexas.edu). You can feel free to contact either of us at any point with
-questions about the study.
-
-This research plan has been reviewed by The University of Texas at Austin Institutional
-Review Board and the study number is [STUDY NUMBER]. If you have questions or
-concerns about the study at any time, you can contact (anonymously if you prefer) the
-Institutional Review Board by phone at (512) 471-8871 or email at orsc@uts.cc.utexas.edu.
-
-If you agree to participate, click on the following link to download the app.
-
-Thank you.   
-
-Please print a copy of this document for your records.
+       By using AIMSICD you have understood and agree that AIMSICD is an experimental and informative Android application that can fail to detect surveillance and tracking for many reasons. You also understand that it can be circumvented or defeated by other means, not yet understood to the developers. Thus you also agree and understand that its developers cannot be held responsible for any results or outcome related to use of this application.
     </string>
 
     <!-- Intro Slides -->
-    <string name="mapping_slide_1_title">Police violence is out of control and the police are fucked up.</string>
-    <string name="mapping_slide_2_title">This app lets you fight back against a specific kind of police tactics called Stingrays.</string>
-    <string name="mapping_slide_3_title">Stingrays are mobile devices that simulate cell phone towers and they have been used to spy on thousands of people.</string>
-    <string name="mapping_slide_4_title">Use this app to know if you are at risk, warn your friends if you are, activate airplane mode, and learn more.</string>
+    <string name="mapping_slide_0_title">Thank you for downloading StingWatch. Swipe left to learn more or swipe right to skip the intro.</string>
+    <string name="mapping_slide_1_title">Police have been listening to our calls and listening to our text messages with little oversight and even less public scrutiny.</string>
+    <string name="mapping_slide_2_title">Stingrays are mobile devices that simulate cell phone towers, forcing nearby phones to connect to them.</string>
+    <string name="mapping_slide_3_title">Stingrays can capture information from all cell phones within range, including identity, location, SMS, call logs, and call content.</string>
+    <string name="mapping_slide_4_title">Use StingWatch to know when you’re at risk, warn your friends if you are, and map Stingray threats to expose police use of this unconstitutional technology.</string>
 
     <!-- Mapper Safe -->
     <string name="activity_mapping_safe_title">No threats detected</string>
-    <string name="activity_mapping_safe_hint">Please keep [app name] running in the background so it can continue to warn you throughout the day.</string>
+    <string name="activity_mapping_safe_hint">Please keep StingWatch running in the background so it can continue to warn you throughout the day.</string>
     <string name="activity_mapping_safe_description">There have been no Stingrays detected near you recently</string>
     <string name="activity_mapping_safe_teaser">Did you know that there are some really interesting facts we can share with you?</string>
     <string name="activity_mapping_safe_learn_more_button">Learn More</string>
@@ -457,9 +429,14 @@ Please print a copy of this document for your records.
     <string name="mapping_pref_expert_title">Expert mode</string>
 
     <!-- Factoids -->
-    <string name="mapping_factoids_1">Something 1</string>
-    <string name="mapping_factoids_2">Something 2</string>
-    <string name="mapping_factoids_3">Something 3</string>
-    <string name="mapping_factoids_4">Something 4</string>
-    <string name="mapping_factoids_5">Something 5</string>
+    <string name="mapping_factoids_1">Baltimore police testified that they have used Stingray technology 4300 times since 2007.
+</string>
+    <string name="mapping_factoids_2">Police have believed themselves unable to comply with subpoenas to produce Stingray devices in court, due to nondisclosure agreements with the FBI.
+</string>
+    <string name="mapping_factoids_3">If a Stingray is used against a Verizon customer, identifying information from every Verizon phone in the area will be swept up.
+</string>
+    <string name="mapping_factoids_4">Civilians recently filed a lawsuit against the Chicago Police Department based on evidence that police had been eavesdropping on protesters’ cell phones.
+</string>
+    <string name="mapping_factoids_5">At least 53 agencies in 21 states and the District of Columbia own Stingrays. Many more continue to hide their purchase and use of the technology.
+</string>
 </resources>

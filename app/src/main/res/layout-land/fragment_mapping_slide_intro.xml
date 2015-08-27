@@ -10,7 +10,7 @@
         android:id="@+id/fragment_mapping_slide_intro_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/fight"
+        android:src="@drawable/stingwatch"
         android:scaleType="centerCrop" />
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"

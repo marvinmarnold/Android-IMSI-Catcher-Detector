@@ -7,8 +7,7 @@ package com.SecUpwN.AIMSICD.test;
 
 import android.test.AndroidTestCase;
 
-import com.SecUpwN.AIMSICD.adapters.AIMSICDDbAdapter;
-import com.SecUpwN.AIMSICD.utils.Cell;
+import org.stingraymappingproject.stingwatch.adapters.AIMSICDDbAdapter;
 
 /**
  * Test detection 1: Changing LAC

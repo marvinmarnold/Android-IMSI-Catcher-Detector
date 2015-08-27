@@ -3,8 +3,8 @@
 
     <string name="empty" translatable="false"></string>
 
-    <string name="app_name_short" translatable="false">AIMSICD</string>
-    <string name="main_app_name" translatable="false">Android IMSI-Catcher Detector</string>
+    <string name="app_name_short" translatable="false">StingWatch</string>
+    <string name="main_app_name" translatable="false">StingWatch</string>
 
 
     <string name="aimsicd_about_info" translatable="false">Android IMSI-Catcher Detector (AIMSICD)</string>

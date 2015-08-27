@@ -19,6 +19,7 @@
         android:textColor="?attr/colorPrimaryDark"
         android:layout_alignParentBottom="true" />
 
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -26,6 +27,7 @@
         android:layout_above="@id/toolbar_stingray_mapping_danger_action"
         android:layout_below="@id/toolbar_stingray_mapping"
         android:background="#fff">
+
 
         <TextView
             android:layout_width="match_parent"
@@ -63,6 +65,8 @@
         <org.osmdroid.views.MapView
             android:id="@+id/stingray_mapping_danger_map"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"/>
-        </LinearLayout>
+            android:layout_height="fill_parent" />
+
+
+    </LinearLayout>
 </RelativeLayout>
