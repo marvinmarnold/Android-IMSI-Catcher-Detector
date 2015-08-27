@@ -57,10 +57,14 @@ public class MappingStingrayAPIClientService extends StingrayAPIClientService {
                     break;
                 case("ALARM"):
                     goCrazy();
-                    break;
+                    return;
                 default:
                     break;
             }
+            final String isGoingCrazy = getResources().getString(R.string.mapping_currently_going_crazy);
+            prefsEditor = prefs.edit();
+            prefsEditor.putBoolean(isGoingCrazy, false);
+            prefsEditor.apply();
             startActivityForThreatLevel();
         }
     };
@@ -91,10 +95,16 @@ public class MappingStingrayAPIClientService extends StingrayAPIClientService {
     }
 
     public void goCrazy() {
-        Log.d(TAG, "goCrazy()");
         final String termsPref = getResources().getString(R.string.mapping_pref_terms_accepted);
         final String isGoingCrazy = getResources().getString(R.string.mapping_currently_going_crazy);
-        if (prefs.getBoolean(termsPref, false) && prefs.getBoolean(termsPref, false)) {
+        if (prefs.getBoolean(termsPref, false) && prefs.getBoolean(isGoingCrazy, false)) {
+            Log.d(TAG, "goCrazy()");
+            prefsEditor = prefs.edit();
+            prefsEditor.putBoolean(isGoingCrazy, true);
+            prefsEditor.apply();
+
+//            addRequest((new PostStingrayReadingRequester()).getRequest());
+
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                     .setSmallIcon(R.drawable.stingwatch_danger)
                     .setContentTitle("Stingray Detected")
@@ -132,9 +142,7 @@ public class MappingStingrayAPIClientService extends StingrayAPIClientService {
             // mId allows you to update the notification later on.
             mNotificationManager.notify(1, mBuilder.build());
 
-            prefsEditor = prefs.edit();
-            prefsEditor.putBoolean(isGoingCrazy, true);
-            prefsEditor.apply();
+            startActivityForThreatLevel();
         }
     }
 }

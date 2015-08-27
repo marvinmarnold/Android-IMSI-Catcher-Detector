@@ -46,8 +46,6 @@ public class MappingActivityDanger extends MappingActivityBase {
     private CompassOverlay mCompassOverlay;
     private ScaleBarOverlay mScaleBarOverlay;
 
-    private final static double DEFAULT_MAP_LAT = 29.951287;
-    private final static double DEFAULT_MAP_LONG = -90.081102;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

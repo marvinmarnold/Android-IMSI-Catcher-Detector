@@ -41,14 +41,18 @@ import java.util.concurrent.TimeUnit;
  */
 public class MappingActivityBase extends BaseStingrayActivity {
     private final static String TAG = "MappingActivityBase";
-    private static final int UPLOAD_FREQUENCY_VALUE = 10;
+    protected final static double DEFAULT_MAP_LAT = 29.951287;
+    protected final static double DEFAULT_MAP_LONG = -90.081102;
+
+
+    private static final int UPLOAD_FREQUENCY_VALUE = 1;
     private static final TimeUnit UPLOAD_FREQUENCY_UNIT = TimeUnit.MINUTES;
 
     private static final int FACTOIDS_FREQUENCY_VALUE = 15;
     private static final TimeUnit FACTOIDS_FREQUENCY_UNIT = TimeUnit.MINUTES;
     protected static final int NUM_PRELOADED_FACTOIDS = 5;
 
-    private static final int NEARBY_FREQUENCY_VALUE = 10;
+    private static final int NEARBY_FREQUENCY_VALUE = 60;
     private static final TimeUnit NEARBY_FREQUENCY_UNIT = TimeUnit.SECONDS;
     private static final int DEFAULT_NEARBY_EXPIRATION_VALUE = 3;
     private static final TimeUnit DEFAULT_NEARBY_EXPIRATION_UNIT = TimeUnit.HOURS;
@@ -281,10 +285,10 @@ public class MappingActivityBase extends BaseStingrayActivity {
             public void onResponse(StingrayReading[] response) {
 //                Log.d(TAG, "scheduleNearbyRequester:onResponse");
                 if(response.length > 0 && mBoundToStingrayAPIService) {
+                    ((MappingStingrayAPIClientService) mStingrayAPIService).goCrazy();
                     for(StingrayReading stingrayReading : response) {
                         if(isNewStingrayReading(stingrayReading)) {
                             mStingrayAPIService.addStingrayReading(stingrayReading);
-                            ((MappingStingrayAPIClientService) mStingrayAPIService).goCrazy();
                         }
                     }
                 }
@@ -369,11 +373,16 @@ public class MappingActivityBase extends BaseStingrayActivity {
     private String getReqParamsAndAddNewReading() {
         JSONObject attributeFields = new JSONObject();
         JSONObject stingrayJSON = new JSONObject();
-
+        double _lat = DEFAULT_MAP_LAT;
+        double _long = DEFAULT_MAP_LONG;
+        if(mBoundToAIMSICD && mAimsicdService.lastKnownLocation() != null) {
+            Log.d(TAG, "addMarkerToMap");
+            GeoLocation lastLoc = mAimsicdService.lastKnownLocation();
+            _lat = lastLoc.getLatitudeInDegrees();
+            _long = lastLoc.getLongitudeInDegrees();
+        }
         Date _observed_at = new Date();
         int _threat_level = getStatus();
-        double _lat = 1.1;
-        double _long = 2.2;
         String _version = getVersion();
         StingrayReading stingrayReading = new StingrayReading(_threat_level, _observed_at, _lat, _long, null, _version);
         if(mBoundToStingrayAPIService)
