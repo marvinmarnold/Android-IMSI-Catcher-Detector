@@ -90,7 +90,7 @@ public class MappingStingrayAPIClientService extends StingrayAPIClientService {
         Log.i(TAG, "#onDestroy");
     }
 
-    private void goCrazy() {
+    public void goCrazy() {
         Log.d(TAG, "goCrazy()");
         final String termsPref = getResources().getString(R.string.mapping_pref_terms_accepted);
         final String isGoingCrazy = getResources().getString(R.string.mapping_currently_going_crazy);

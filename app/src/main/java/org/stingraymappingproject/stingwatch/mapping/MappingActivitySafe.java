@@ -89,13 +89,13 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
 //            OpenCellIdKeyDownloaderTask ocikd = new OpenCellIdKeyDownloaderTask();
 //            ocikd.execute(); //starts background thread
         }
-        new Handler().postDelayed(mSetOff, 10 * 1000);
+//        new Handler().postDelayed(mSetOff, 10 * 1000);
     }
 
     Runnable mFactoidSwitcher = new Runnable() {
         @Override
         public void run() {
-            Log.d(TAG, "FactoidSwitcher#run");
+//            Log.d(TAG, "FactoidSwitcher#run");
             loadFactoids();
             if(mBoundToStingrayAPIService) {
                 List<Factoid> factoids = mStingrayAPIService.getFactoids();

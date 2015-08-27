@@ -48,10 +48,10 @@ public class MappingActivityBase extends BaseStingrayActivity {
     private static final TimeUnit FACTOIDS_FREQUENCY_UNIT = TimeUnit.MINUTES;
     protected static final int NUM_PRELOADED_FACTOIDS = 5;
 
-    private static final int NEARBY_FREQUENCY_VALUE = 60;
+    private static final int NEARBY_FREQUENCY_VALUE = 10;
     private static final TimeUnit NEARBY_FREQUENCY_UNIT = TimeUnit.SECONDS;
-    private static final int DEFAULT_NEARBY_EXPIRATION_VALUE = 30;
-    private static final TimeUnit DEFAULT_NEARBY_EXPIRATION_UNIT = TimeUnit.DAYS;
+    private static final int DEFAULT_NEARBY_EXPIRATION_VALUE = 3;
+    private static final TimeUnit DEFAULT_NEARBY_EXPIRATION_UNIT = TimeUnit.HOURS;
     private int mNearbyExpirationValue = DEFAULT_NEARBY_EXPIRATION_VALUE;
     private TimeUnit mNearbyExpirationUnit = DEFAULT_NEARBY_EXPIRATION_UNIT;
 
@@ -279,11 +279,13 @@ public class MappingActivityBase extends BaseStingrayActivity {
 
             @Override
             public void onResponse(StingrayReading[] response) {
-                Log.d(TAG, "scheduleNearbyRequester:onResponse");
+//                Log.d(TAG, "scheduleNearbyRequester:onResponse");
                 if(response.length > 0 && mBoundToStingrayAPIService) {
                     for(StingrayReading stingrayReading : response) {
-                        if(isNewStingrayReading(stingrayReading))
+                        if(isNewStingrayReading(stingrayReading)) {
                             mStingrayAPIService.addStingrayReading(stingrayReading);
+                            ((MappingStingrayAPIClientService) mStingrayAPIService).goCrazy();
+                        }
                     }
                 }
             }
@@ -303,7 +305,7 @@ public class MappingActivityBase extends BaseStingrayActivity {
         FactoidsRequester factoidsRequester = new FactoidsRequester(mStingrayAPIService) {
             @Override
             public void onResponse(Factoid[] response) {
-                Log.d(TAG, "scheduleFactoidsRequester:onResponse");
+//                Log.d(TAG, "scheduleFactoidsRequester:onResponse");
                 if(response.length > 0 && mBoundToStingrayAPIService) {
                     mStingrayAPIService.setFactoids(response);
                 }
@@ -339,7 +341,7 @@ public class MappingActivityBase extends BaseStingrayActivity {
      *
      */
     private void schedulePostStingrayReadingRequester() {
-        Log.d(TAG, "schedulePostStingrayReadingRequester");
+//        Log.d(TAG, "schedulePostStingrayReadingRequester");
         PostStingrayReadingRequester postStingrayReadingRequester = new PostStingrayReadingRequester(mStingrayAPIService) {
             @Override
             protected String getRequestParams() {
@@ -409,7 +411,6 @@ public class MappingActivityBase extends BaseStingrayActivity {
     }
 
     protected void loadFactoids() {
-        Log.d(TAG, "loadFactoids");
         if(mBoundToStingrayAPIService) {
             List<Factoid> factoids = mStingrayAPIService.getFactoids();
             if (factoids.isEmpty()) {
