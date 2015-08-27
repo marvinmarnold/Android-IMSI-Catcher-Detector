@@ -397,9 +397,9 @@
 
     <!-- Mapping project -->
     <!-- DISCLAIMER -->
-    <string name="mapping_disclaimer_title">Consent to Participave</string>
+    <string name="mapping_disclaimer_title">Terms of Use</string>
     <string name="mapping_disclaimer">
-       By using AIMSICD you have understood and agree that AIMSICD is an experimental and informative Android application that can fail to detect surveillance and tracking for many reasons. You also understand that it can be circumvented or defeated by other means, not yet understood to the developers. Thus you also agree and understand that its developers cannot be held responsible for any results or outcome related to use of this application.
+      By using StingWatch you have understood and agree that StingWatch is an experimental and informative Android application that can fail to detect surveillance and tracking for many reasons. You also understand that it can be circumvented or defeated by other means, not yet understood to the developers. Thus you also agree and understand that its developers cannot be held responsible for any results or outcome related to use of this application.
     </string>
 
     <!-- Intro Slides -->
@@ -408,6 +408,7 @@
     <string name="mapping_slide_2_title">Stingrays are mobile devices that simulate cell phone towers, forcing nearby phones to connect to them.</string>
     <string name="mapping_slide_3_title">Stingrays can capture information from all cell phones within range, including identity, location, SMS, call logs, and call content.</string>
     <string name="mapping_slide_4_title">Use StingWatch to know when you’re at risk, warn your friends if you are, and map Stingray threats to expose police use of this unconstitutional technology.</string>
+    <string name="mapping_slide_4_button">Click here to start!</string>
 
     <!-- Mapper Safe -->
     <string name="activity_mapping_safe_title">No threats detected</string>

@@ -1,16 +1,13 @@
 package org.stingraymappingproject.stingwatch;
 
 import android.app.ActionBar;
-import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
@@ -154,37 +151,11 @@ public class AIMSICD extends BaseActivity implements AsyncResponse {
 
         mDisclaimerAccepted = getResources().getString(R.string.disclaimer_accepted);
 
-        if (!prefs.getBoolean(mDisclaimerAccepted, false)) {
-            final AlertDialog.Builder disclaimer = new AlertDialog.Builder(this)
-                    .setTitle(R.string.disclaimer_title)
-                    .setMessage(R.string.disclaimer)
-                    .setPositiveButton(R.string.text_agree, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            prefsEditor = prefs.edit();
-                            prefsEditor.putBoolean(mDisclaimerAccepted, true);
-                            prefsEditor.apply();
-                            startService();
-                        }
-                    })
-                    .setNegativeButton(R.string.text_disagree, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            prefsEditor = prefs.edit();
-                            prefsEditor.putBoolean(mDisclaimerAccepted, false);
-                            prefsEditor.apply();
-                            Uri packageUri = Uri.parse("package:com.SecUpwN.AIMSICD");
-                            Intent uninstallIntent =
-                                    new Intent(Intent.ACTION_DELETE, packageUri);
-                            startActivity(uninstallIntent);
-                            finish();
-                            if (mAimsicdService != null) mAimsicdService.onDestroy();
-                        }
-                    });
-
-            AlertDialog disclaimerAlert = disclaimer.create();
-            disclaimerAlert.show();
-        } else {
-            startService();
-        }
+        // They already accepted StingWatch terms
+        prefsEditor = prefs.edit();
+        prefsEditor.putBoolean(mDisclaimerAccepted, true);
+        prefsEditor.apply();
+        startService();
     }
 
     @Override

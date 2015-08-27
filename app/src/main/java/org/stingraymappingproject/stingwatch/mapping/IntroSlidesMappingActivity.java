@@ -1,7 +1,6 @@
 package org.stingraymappingproject.stingwatch.mapping;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -62,23 +61,9 @@ public class IntroSlidesMappingActivity extends FragmentActivity {
                 selectedIndex = arg0;
 
             }
-            boolean callHappened;
+
             @Override
             public void onPageScrolled(int arg0, float arg1, int arg2) {
-                // TODO Auto-generated method stub
-                if( mPageEnd && arg0 == selectedIndex && !callHappened)
-                {
-                    prefsEditor = prefs.edit();
-                    prefsEditor.putBoolean(getResources().getString(R.string.mapping_pref_setup_complete), true);
-                    prefsEditor.apply();
-                    Intent i = new Intent(IntroSlidesMappingActivity.this, MappingActivitySafe.class);
-                    startActivity(i);
-                    mPageEnd = false;//To avoid multiple calls.
-                    callHappened = true;
-                }else
-                {
-                    mPageEnd = false;
-                }
             }
 
             @Override
@@ -97,11 +82,6 @@ public class IntroSlidesMappingActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         if (mPager.getCurrentItem() == 0) {
-            prefsEditor = prefs.edit();
-            prefsEditor.putBoolean(getResources().getString(R.string.mapping_pref_setup_complete), true);
-            prefsEditor.apply();
-            Intent i = new Intent(IntroSlidesMappingActivity.this, MappingActivitySafe.class);
-            startActivity(i);
         } else {
             // Otherwise, select the previous step.
             mPager.setCurrentItem(mPager.getCurrentItem() - 1);
@@ -144,9 +124,10 @@ public class IntroSlidesMappingActivity extends FragmentActivity {
                     b.putString(IntroSlideMappingFragment.TEXT_KEY, getString(R.string.mapping_slide_3_title));
                     break;
                 case 4:
-                    b.putInt(IntroSlideMappingFragment.FRAGMENT_KEY, R.layout.fragment_mapping_slide_intro);
+                    b.putInt(IntroSlideMappingFragment.FRAGMENT_KEY, R.layout.fragment_mapping_slide_4);
                     b.putInt(IntroSlideMappingFragment.BACKGROUND_KEY, R.drawable.cameras_dark);
                     b.putString(IntroSlideMappingFragment.TEXT_KEY, getString(R.string.mapping_slide_4_title));
+                    b.putBoolean(IntroSlideMappingFragment.BUTTON_KEY, true);
                     break;
             }
             f.setArguments(b);

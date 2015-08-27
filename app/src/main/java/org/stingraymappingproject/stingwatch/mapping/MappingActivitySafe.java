@@ -72,36 +72,6 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
         ImageView iv = (ImageView)findViewById(R.id.mapper_safe_logo); 
         iv.setImageResource(R.drawable.stingwatch_logo);
 
-        // Accept terms
-        final String termsPref = getResources().getString(R.string.mapping_pref_terms_accepted);
-        if (!prefs.getBoolean(termsPref, false)) {
-            final AlertDialog.Builder disclaimer = new AlertDialog.Builder(this)
-                    .setTitle(R.string.mapping_disclaimer_title)
-                    .setMessage(R.string.mapping_disclaimer)
-                    .setPositiveButton(R.string.text_agree, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            prefsEditor = prefs.edit();
-                            prefsEditor.putBoolean(termsPref, true);
-                            prefsEditor.apply();
-                        }
-                    })
-                    .setNegativeButton(R.string.text_disagree, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            prefsEditor = prefs.edit();
-                            prefsEditor.putBoolean(termsPref, false);
-                            prefsEditor.apply();
-                            Uri packageUri = Uri.parse("package:com.SecUpwN.AIMSICD");
-                            Intent uninstallIntent =
-                                    new Intent(Intent.ACTION_DELETE, packageUri);
-                            startActivity(uninstallIntent);
-                            finish();
-                        }
-                    });
-
-            AlertDialog disclaimerAlert = disclaimer.create();
-            disclaimerAlert.show();
-        }
-
         mFactoidText = (TextView) findViewById(R.id.activity_mapping_safe_factoid);
         loadFactoids();
         mFactoidSwitcherHandler = new Handler();
@@ -124,6 +94,44 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
             mFactoidSwitcherHandler.postDelayed(mFactoidSwitcher, MILISECS_BETWEEN_FACTOIDS);
         }
     };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        displayTerms();
+    }
+
+    private void displayTerms() {
+        // Accept terms
+        final String termsPref = getResources().getString(R.string.mapping_pref_terms_accepted);
+        if (!prefs.getBoolean(termsPref, false)) {
+            final AlertDialog.Builder disclaimer = new AlertDialog.Builder(this)
+                    .setTitle(R.string.mapping_disclaimer_title)
+                    .setMessage(R.string.mapping_disclaimer)
+                    .setPositiveButton(R.string.text_agree, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            prefsEditor = prefs.edit();
+                            prefsEditor.putBoolean(termsPref, true);
+                            prefsEditor.apply();
+                        }
+                    })
+                    .setNegativeButton(R.string.text_disagree, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            prefsEditor = prefs.edit();
+                            prefsEditor.putBoolean(termsPref, false);
+                            prefsEditor.apply();
+                            Uri packageUri = Uri.parse("package:org.stingraymappingproject.stingwatch");
+                            Intent uninstallIntent =
+                                    new Intent(Intent.ACTION_DELETE, packageUri);
+                            startActivity(uninstallIntent);
+                            finish();
+                        }
+                    });
+
+            AlertDialog disclaimerAlert = disclaimer.create();
+            disclaimerAlert.show();
+        }
+    }
 
     @Override
     public void onDestroy() {
