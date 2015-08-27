@@ -78,7 +78,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/activity_mapping_safe_teaser"
+                    android:text="@string/mapping_factoids_1"
                     android:id="@+id/activity_mapping_safe_factoid"
                     android:layout_gravity="center"
                     android:gravity="center"

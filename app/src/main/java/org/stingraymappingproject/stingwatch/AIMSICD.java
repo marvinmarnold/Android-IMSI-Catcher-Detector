@@ -158,6 +158,7 @@ public class AIMSICD extends BaseActivity implements AsyncResponse {
         startService();
     }
 
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);

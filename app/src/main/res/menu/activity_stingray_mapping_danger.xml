@@ -11,4 +11,10 @@
         android:icon="@drawable/twitter"
         app:showAsAction="always"
         android:title="Warn your Friends" />
+
+    <item android:id="@+id/menu_activity_stingray_mapping_danger_learn"
+        android:icon="@drawable/learn"
+        app:showAsAction="always"
+        android:title="Learn more"
+        android:paddingRight="40dp"/>
 </menu>

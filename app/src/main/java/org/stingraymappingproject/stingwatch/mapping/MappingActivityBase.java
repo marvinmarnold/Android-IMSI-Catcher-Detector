@@ -32,8 +32,6 @@ import org.stingraymappingproject.stingwatch.service.AimsicdService;
 import org.stingraymappingproject.stingwatch.utils.GeoLocation;
 import org.stingraymappingproject.stingwatch.utils.Status;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -68,11 +66,8 @@ public class MappingActivityBase extends BaseStingrayActivity {
     protected SharedPreferences prefs;
     protected SharedPreferences.Editor prefsEditor;
 
-    protected List<Factoid> mFactoids;
-    protected List<StingrayReading> mStingrayReadings;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
 
@@ -189,6 +184,7 @@ public class MappingActivityBase extends BaseStingrayActivity {
     }
 
     protected void startActivityForThreatLevel(Activity activity) {
+        Log.d(TAG, "startActivityForThreatLevel: " + Status.getStatus().name());
         switch(Status.getStatus().name()) {
             case("IDLE"):
                 startSafe(activity);
@@ -197,7 +193,9 @@ public class MappingActivityBase extends BaseStingrayActivity {
             case("MEDIUM"):
                 startSafe(activity);
             case("ALARM"):
-                startDanger(activity);
+                startSafe(activity);
+
+//                startDanger(activity);
             default:
                 startSafe(activity);
         }
@@ -231,6 +229,18 @@ public class MappingActivityBase extends BaseStingrayActivity {
         return new Date(now().getTime() - agoUnit.toMillis(agoValue));
     }
 
+    @Override
+    public void startStingrayClientService() {
+        Log.d(TAG, "startStingrayClientService");
+        if (!mBoundToStingrayAPIService) {
+            // Bind to LocalService
+            Intent intent = new Intent(MappingActivityBase.this, MappingStingrayAPIClientService.class);
+            //Start Service before binding to keep it resident when activity is destroyed
+            startService(intent);
+            bindService(intent, mStingrayAPIServiceConnection, Context.BIND_AUTO_CREATE);
+        }
+    }
+
     private void scheduleNearbyRequester() {
         NearbyRequester nearbyRequester = new NearbyRequester(mStingrayAPIService) {
             @Override
@@ -262,10 +272,10 @@ public class MappingActivityBase extends BaseStingrayActivity {
             @Override
             public void onResponse(StingrayReading[] response) {
                 Log.d(TAG, "scheduleNearbyRequester:onResponse");
-                if(response.length > 0) {
+                if(response.length > 0 && mBoundToStingrayAPIService) {
                     for(StingrayReading stingrayReading : response) {
                         if(isNewStingrayReading(stingrayReading))
-                            mStingrayReadings.add(stingrayReading);
+                            mStingrayAPIService.addStingrayReading(stingrayReading);
                     }
                 }
             }
@@ -286,9 +296,8 @@ public class MappingActivityBase extends BaseStingrayActivity {
             @Override
             public void onResponse(Factoid[] response) {
                 Log.d(TAG, "scheduleFactoidsRequester:onResponse");
-                if(response.length > 0) {
-                    mFactoids = new ArrayList<>();
-                    mFactoids = Arrays.asList(response);
+                if(response.length > 0 && mBoundToStingrayAPIService) {
+                    mStingrayAPIService.setFactoids(response);
                 }
             }
 
@@ -322,42 +331,11 @@ public class MappingActivityBase extends BaseStingrayActivity {
      *
      */
     private void schedulePostStingrayReadingRequester() {
-        mStingrayReadings = new ArrayList<>();
         Log.d(TAG, "schedulePostStingrayReadingRequester");
         PostStingrayReadingRequester postStingrayReadingRequester = new PostStingrayReadingRequester(mStingrayAPIService) {
             @Override
             protected String getRequestParams() {
-                JSONObject attributeFields = new JSONObject();
-                JSONObject stingrayJSON = new JSONObject();
-
-                try {
-                    // Attributes
-                    int _threat_level = getStatus();
-                    Date _observed_at = new Date();
-                    double _lat = lastKnownLatDegrees();
-                    double _long = lastKnownLongDegrees();
-                    String _version = getVersion();
-                    StingrayReading stingrayReading = new StingrayReading(_threat_level, _observed_at, _lat, _long, null, _version);
-                    mStingrayReadings.add(stingrayReading);
-
-
-                    //:lat,:long,:since)
-                    attributeFields.put("threat_level", _threat_level);
-                    attributeFields.put("lat", _lat);
-                    attributeFields.put("long", _long);
-                    attributeFields.put("observed_at", _observed_at);
-                    attributeFields.put("unique_token", stingrayReading.getUniqueToken());
-                    attributeFields.put("version", _version);
-                    stingrayJSON.put("stingray_reading", attributeFields);
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                Log.d(TAG, "schedulePostStingrayReadingRequester: " + stingrayJSON);
-                return stingrayJSON.toString();
+                return getReqParamsAndAddNewReading();
             }
 
             @Override
@@ -368,30 +346,47 @@ public class MappingActivityBase extends BaseStingrayActivity {
             @Override
             public void onResponse(StingrayReading response) {
                 Log.d(TAG, "schedulePostStingrayReadingRequester:onResponse");
-                mStingrayReadings.add(response);
+                if(mBoundToStingrayAPIService)
+                    mStingrayAPIService.addStingrayReading(response);
             }
 
-            public int getStatus() {
-                return statusToAPIInt(Status.getStatus());
-            }
 
-            public int statusToAPIInt(Status.Type statusType) {
-                switch(statusType.toString()) {
-                    case("IDLE"):
-                        return 0;
-                    case("NORMAL"):
-                        return 5;
-                    case("MEDIUM"):
-                        return 10;
-                    case("ALARM"):
-                        return 15;
-                    default:
-                        return -1;
-                }
-            }
         };
         RecurringRequest recurringRequest = new RecurringRequest(UPLOAD_FREQUENCY_VALUE, UPLOAD_FREQUENCY_UNIT, postStingrayReadingRequester);
         mStingrayAPIService.addRecurringRequest(recurringRequest);
+    }
+
+    private String getReqParamsAndAddNewReading() {
+        JSONObject attributeFields = new JSONObject();
+        JSONObject stingrayJSON = new JSONObject();
+
+        Date _observed_at = new Date();
+        int _threat_level = getStatus();
+        double _lat = 1.1;
+        double _long = 2.2;
+        String _version = getVersion();
+        StingrayReading stingrayReading = new StingrayReading(_threat_level, _observed_at, _lat, _long, null, _version);
+        if(mBoundToStingrayAPIService)
+            mStingrayAPIService.addStingrayReading(stingrayReading);
+
+        try {
+            //:lat,:long,:since)
+            attributeFields.put("threat_level", _threat_level);
+            attributeFields.put("lat", _lat);
+            attributeFields.put("long", _long);
+            attributeFields.put("observed_at", _observed_at);
+            attributeFields.put("unique_token", stingrayReading.getUniqueToken());
+            attributeFields.put("version", _version);
+            stingrayJSON.put("stingray_reading", attributeFields);
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+//        Log.d(TAG, "schedulePostStingrayReadingRequester: " + stingrayJSON);
+        return stingrayJSON.toString();
     }
 
     public String getVersion() {
@@ -406,12 +401,35 @@ public class MappingActivityBase extends BaseStingrayActivity {
     }
 
     protected void loadFactoids() {
-        if(mFactoids == null || mFactoids.isEmpty()) mFactoids = new ArrayList<Factoid>();
-        if(mFactoids.isEmpty()) {
-            for (int i = 0; i < NUM_PRELOADED_FACTOIDS; i++) {
-                Factoid factoid = createPreloadedFactoid(mContext, i);
-                mFactoids.add(factoid);
+        Log.d(TAG, "loadFactoids");
+        if(mBoundToStingrayAPIService) {
+            Log.d(TAG, "loadFactoids:mBoundToStingrayAPIService");
+            List<Factoid> factoids = mStingrayAPIService.getFactoids();
+            if (factoids.isEmpty()) {
+                for (int i = 0; i < NUM_PRELOADED_FACTOIDS; i++) {
+                    Factoid factoid = createPreloadedFactoid(mContext, i);
+                    mStingrayAPIService.addFactoid(factoid);
+                }
             }
+        }
+    }
+
+    public int getStatus() {
+        return statusToAPIInt(Status.getStatus());
+    }
+
+    public int statusToAPIInt(Status.Type statusType) {
+        switch(statusType.toString()) {
+            case("IDLE"):
+                return 0;
+            case("NORMAL"):
+                return 5;
+            case("MEDIUM"):
+                return 10;
+            case("ALARM"):
+                return 15;
+            default:
+                return -1;
         }
     }
 }

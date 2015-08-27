@@ -114,6 +114,7 @@ public class AimsicdService extends Service {
 
 
     private void goCrazy() {
+        Log.d(TAG, "goCrazy()");
         final String termsPref = getResources().getString(R.string.mapping_pref_terms_accepted);
         final String isGoingCrazy = getResources().getString(R.string.mapping_currently_going_crazy);
         if (prefs.getBoolean(termsPref, false) && prefs.getBoolean(termsPref, false)) {
@@ -197,7 +198,6 @@ public class AimsicdService extends Service {
         LocalBroadcastManager.getInstance(this).registerReceiver(mStatusChangeReceiver,
                 new IntentFilter("StatusChange"));
         prefs = getApplicationContext().getSharedPreferences(SHARED_PREFERENCES_BASENAME, 0);
-        goCrazy();
         Log.i(TAG, mTAG + ": Service launched successfully.");
     }
 

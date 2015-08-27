@@ -129,6 +129,12 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".mapping.MappingStingrayAPIClientService"
+            android:enabled="true"
+            android:exported="false">
+        </service>
+
         <activity
             android:name=".mapping.MappingActivityDanger"
             android:exported="true"

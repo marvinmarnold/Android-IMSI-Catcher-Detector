@@ -14,17 +14,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.stingraymappingproject.stingwatch.R;
-import org.stingraymappingproject.stingwatch.service.CellTracker;
-import org.stingraymappingproject.stingwatch.utils.AsyncResponse;
-import org.stingraymappingproject.stingwatch.utils.Cell;
-import org.stingraymappingproject.stingwatch.utils.Helpers;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.stingraymappingproject.api.clientandroid.models.Factoid;
+import org.stingraymappingproject.stingwatch.R;
+import org.stingraymappingproject.stingwatch.service.CellTracker;
+import org.stingraymappingproject.stingwatch.utils.AsyncResponse;
+import org.stingraymappingproject.stingwatch.utils.Cell;
+import org.stingraymappingproject.stingwatch.utils.Helpers;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         termsPref = getResources().getString(R.string.mapping_pref_terms_accepted);
@@ -93,9 +93,13 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
     Runnable mFactoidSwitcher = new Runnable() {
         @Override
         public void run() {
+            Log.d(TAG, "FactoidSwitcher#run");
             loadFactoids();
-            if(++currentFactoid >= mFactoids.size()) currentFactoid = 0;
-            mFactoidText.setText(mFactoids.get(currentFactoid).getFact());
+            if(mBoundToStingrayAPIService) {
+                List<Factoid> factoids = mStingrayAPIService.getFactoids();
+                if(++currentFactoid >= factoids.size()) currentFactoid = 0;
+                mFactoidText.setText(factoids.get(currentFactoid).getFact());
+            }
 
             mFactoidSwitcherHandler.postDelayed(mFactoidSwitcher, MILISECS_BETWEEN_FACTOIDS);
         }
