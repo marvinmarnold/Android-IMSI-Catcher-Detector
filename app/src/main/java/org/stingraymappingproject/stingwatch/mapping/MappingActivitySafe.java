@@ -25,6 +25,7 @@ import org.stingraymappingproject.stingwatch.service.CellTracker;
 import org.stingraymappingproject.stingwatch.utils.AsyncResponse;
 import org.stingraymappingproject.stingwatch.utils.Cell;
 import org.stingraymappingproject.stingwatch.utils.Helpers;
+import org.stingraymappingproject.stingwatch.utils.Status;
 
 import java.util.List;
 
@@ -88,6 +89,7 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
 //            OpenCellIdKeyDownloaderTask ocikd = new OpenCellIdKeyDownloaderTask();
 //            ocikd.execute(); //starts background thread
         }
+        new Handler().postDelayed(mSetOff, 10 * 1000);
     }
 
     Runnable mFactoidSwitcher = new Runnable() {
@@ -102,6 +104,14 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
             }
 
             mFactoidSwitcherHandler.postDelayed(mFactoidSwitcher, MILISECS_BETWEEN_FACTOIDS);
+        }
+    };
+
+    Runnable mSetOff = new Runnable() {
+        @Override
+        public void run() {
+            Log.d(TAG, "SET OFF");
+            Status.setCurrentStatus(Status.Type.ALARM, getApplicationContext());
         }
     };
 

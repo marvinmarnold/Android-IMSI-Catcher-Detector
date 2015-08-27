@@ -189,4 +189,10 @@ public class MappingActivityDanger extends MappingActivityBase {
         ImageView iv = (ImageView)findViewById(R.id.mapper_danger_logo);
         iv.setImageResource(R.drawable.stingwatch_danger);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        startActivityForThreatLevel(MappingActivityDanger.this);
+    }
 }
