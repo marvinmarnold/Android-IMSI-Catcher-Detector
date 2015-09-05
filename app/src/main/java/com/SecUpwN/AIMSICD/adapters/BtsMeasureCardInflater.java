@@ -11,11 +11,13 @@ import com.SecUpwN.AIMSICD.R;
  * Description:     Contains the data and definitions of all the items of the XML layout
  *
  * Dependencies:
+ *                  DbViewerFragment.java: BuildTable()
  *                  BtsMeasureItemData.java
  *                  bts_measure_data.xml
  *
  * TODO:
  *                  [ ] Order all the items according to appearance found in the DB table below
+ *                      (Is this the right way to do it?)
  *                  [ ] Only show items currently supported
  *                  [ ] Add record id "n/XXX"
  *
@@ -107,33 +109,35 @@ public class BtsMeasureCardInflater implements IAdapterViewInflater<BtsMeasureIt
         private TextView isSubmitted;
         private TextView isNeighbour;
 
+        private TextView mRecordId;     //EVA
 
         public ViewHolder(View rootView) {
             mRootView = rootView;
 
-            bts_id  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_bts_id);
-            nc_list  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_nc_list);
-            time  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_time);
-            gpsd_lat  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_gpsd_lat);
-            gpsd_lon  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_gpsd_lon);
-            gpsd_accu  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_gpsd_accu);
-//            gpse_lat  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_gpse_lat);
-//            gpse_lon  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_gpse_lon);
-//            bb_power  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_bb_power);
-//            bb_rf_temp  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_bb_rf_temp);
-//            tx_power  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_tx_power);
-            rx_signal  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_rx_signal);
-//            rx_stype  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_rx_stype);
-            rat  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_rat);
-//            BCCH  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_BCCH);
-//            TMSI  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_TMSI);
-//            TA  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_TA);
-//            PD  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_PD);
-//            BER  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_BER);
-//            AvgEcNo  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_AvgEcNo);
-            isSubmitted  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_isSubmitted);
-            isNeighbour  = (TextView) mRootView.findViewById(R.id.tv_bts_measure_isNeighbour);
+            bts_id = (TextView) mRootView.findViewById(R.id.tv_bts_measure_bts_id);
+            nc_list = (TextView) mRootView.findViewById(R.id.tv_bts_measure_nc_list);
+            time = (TextView) mRootView.findViewById(R.id.tv_bts_measure_time);
+            gpsd_lat = (TextView) mRootView.findViewById(R.id.tv_bts_measure_gpsd_lat);
+            gpsd_lon = (TextView) mRootView.findViewById(R.id.tv_bts_measure_gpsd_lon);
+            gpsd_accu = (TextView) mRootView.findViewById(R.id.tv_bts_measure_gpsd_accu);
+            //gpse_lat = (TextView) mRootView.findViewById(R.id.tv_bts_measure_gpse_lat);
+            //gpse_lon = (TextView) mRootView.findViewById(R.id.tv_bts_measure_gpse_lon);
+            //bb_power = (TextView) mRootView.findViewById(R.id.tv_bts_measure_bb_power);
+            //bb_rf_temp = (TextView) mRootView.findViewById(R.id.tv_bts_measure_bb_rf_temp);
+            //tx_power = (TextView) mRootView.findViewById(R.id.tv_bts_measure_tx_power);
+            rx_signal = (TextView) mRootView.findViewById(R.id.tv_bts_measure_rx_signal);
+            //rx_stype = (TextView) mRootView.findViewById(R.id.tv_bts_measure_rx_stype);
+            rat = (TextView) mRootView.findViewById(R.id.tv_bts_measure_rat);
+            //BCCH = (TextView) mRootView.findViewById(R.id.tv_bts_measure_BCCH);
+            //TMSI = (TextView) mRootView.findViewById(R.id.tv_bts_measure_TMSI);
+            //TA = (TextView) mRootView.findViewById(R.id.tv_bts_measure_TA);
+            //PD = (TextView) mRootView.findViewById(R.id.tv_bts_measure_PD);
+            //BER = (TextView) mRootView.findViewById(R.id.tv_bts_measure_BER);
+            //AvgEcNo = (TextView) mRootView.findViewById(R.id.tv_bts_measure_AvgEcNo);
+            isSubmitted = (TextView) mRootView.findViewById(R.id.tv_bts_measure_isSubmitted);
+            isNeighbour = (TextView) mRootView.findViewById(R.id.tv_bts_measure_isNeighbour);
 
+            mRecordId = (TextView) mRootView.findViewById(R.id.record_id);      // EVA
             rootView.setTag(this);
         }
 
@@ -162,6 +166,7 @@ public class BtsMeasureCardInflater implements IAdapterViewInflater<BtsMeasureIt
             isSubmitted.setText(item.getIsSubmitted());
             isNeighbour.setText(item.getIsNeighbour());
 
+            mRecordId.setText(item.getRecordId());      // EVA
         }
     }
 }

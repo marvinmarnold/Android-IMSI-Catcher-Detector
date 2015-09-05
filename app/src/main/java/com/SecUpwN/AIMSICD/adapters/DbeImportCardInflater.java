@@ -13,17 +13,17 @@ import android.widget.TextView;
 import com.SecUpwN.AIMSICD.R;
 
 /**
- *  Description:     TODO!
+ *  Description:     Contains the data and definitions of all the items of the XML layout
  *
  *  Dependencies:
+ *                  DbViewerFragment.java: BuildTable()
+ *                  DbeImportItemData.java
  *                  dbe_import_items.xml
  *
- *
  *  Issues:
- *          [ ]     LAC and CID seem swapped...hard to debug
  *
  *  ChangeLog:
- *
+ *                  2015-08-02  E:V:A           Added rej_cause
  */
 public class DbeImportCardInflater implements IAdapterViewInflater<DbeImportItemData> {
 
@@ -64,6 +64,9 @@ public class DbeImportCardInflater implements IAdapterViewInflater<DbeImportItem
         private final TextView SAMPLES;
         private final TextView TIME_FIRST;
         private final TextView TIME_LAST;
+        private final TextView REJ_CAUSE;
+
+        private final TextView mRecordId;
 
         public ViewHolder(View rootView) {
             mRootView = rootView;
@@ -84,7 +87,9 @@ public class DbeImportCardInflater implements IAdapterViewInflater<DbeImportItem
             SAMPLES =       (TextView) mRootView.findViewById(R.id.nSAMPLES);
             TIME_FIRST =    (TextView) mRootView.findViewById(R.id.nTIME_FIRST);
             TIME_LAST =     (TextView) mRootView.findViewById(R.id.nTIME_LAST);
+            REJ_CAUSE =     (TextView) mRootView.findViewById(R.id.nREJ_CAUSE);
 
+            mRecordId =     (TextView) mRootView.findViewById(R.id.record_id);
             rootView.setTag(this);
         }
 
@@ -104,6 +109,9 @@ public class DbeImportCardInflater implements IAdapterViewInflater<DbeImportItem
             SAMPLES.setText(item.getSAMPLES());
             TIME_FIRST.setText(item.getTIME_FIRST());
             TIME_LAST.setText(item.getTIME_LAST());
+            REJ_CAUSE.setText(item.getREJ_CAUSE());
+
+            mRecordId.setText(item.getRecordId());
         }
     }
 }
