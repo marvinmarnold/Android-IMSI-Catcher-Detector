@@ -134,6 +134,10 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
     private void displayTerms() {
         // Accept terms
 
+        prefsEditor = prefs.edit();
+        prefsEditor.putBoolean(termsPref, true);
+        prefsEditor.apply();
+
         if (!prefs.getBoolean(termsPref, false)) {
             final AlertDialog.Builder disclaimer = new AlertDialog.Builder(this)
                     .setTitle(R.string.mapping_disclaimer_title)
