@@ -1,4 +1,4 @@
-package org.stingraymappingproject.stingwatch.mapping;
+package org.stingraymappingproject.stingwatch.mapping2;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

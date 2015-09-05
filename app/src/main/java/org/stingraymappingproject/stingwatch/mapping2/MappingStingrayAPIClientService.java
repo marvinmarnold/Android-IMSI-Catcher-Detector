@@ -1,4 +1,4 @@
-package org.stingraymappingproject.stingwatch.mapping;
+package org.stingraymappingproject.stingwatch.mapping2;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;

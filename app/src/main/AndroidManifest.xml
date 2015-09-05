@@ -110,7 +110,7 @@
         </activity>
 
         <activity
-            android:name=".mapping.IntroSlidesMappingActivity"
+            android:name=".mapping2.IntroSlidesMappingActivity"
             android:exported="true"
             android:label="@string/app_name_short"
             android:configChanges="screenSize|orientation"
@@ -118,7 +118,7 @@
         </activity>
 
         <activity
-            android:name=".mapping.MappingActivitySafe"
+            android:name=".mapping2.MappingActivitySafe"
             android:exported="true"
             android:label="@string/app_name_short"
             android:configChanges="screenSize|orientation"
@@ -130,13 +130,13 @@
         </activity>
 
         <service
-            android:name=".mapping.MappingStingrayAPIClientService"
+            android:name=".mapping2.MappingStingrayAPIClientService"
             android:enabled="true"
             android:exported="false">
         </service>
 
         <activity
-            android:name=".mapping.MappingActivityDanger"
+            android:name=".mapping2.MappingActivityDanger"
             android:exported="true"
             android:label="@string/app_name_short"
             android:configChanges="screenSize|orientation"
@@ -145,11 +145,11 @@
         </activity>
 
         <activity
-            android:name=".mapping.MappingPrefActivity"
+            android:name=".mapping2.MappingPrefActivity"
             android:exported="true"
             android:icon="@drawable/ic_action_settings"
             android:label="@string/preferences"
-            android:parentActivityName=".mapping.MappingActivitySafe"
+            android:parentActivityName=".mapping2.MappingActivitySafe"
             android:configChanges="keyboardHidden|screenLayout|screenSize|orientation">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT"/>

@@ -15,7 +15,7 @@ import android.os.Bundle;
 import org.stingraymappingproject.stingwatch.AIMSICD;
 import org.stingraymappingproject.stingwatch.R;
 import org.stingraymappingproject.stingwatch.fragments.PrefFragment;
-import org.stingraymappingproject.stingwatch.mapping.MappingActivitySafe;
+import org.stingraymappingproject.stingwatch.mapping2.MappingActivitySafe;
 import org.stingraymappingproject.stingwatch.service.AimsicdService;
 
 
