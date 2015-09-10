@@ -8,8 +8,6 @@ package org.stingraymappingproject.stingwatch;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -17,7 +15,6 @@ import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
 import org.stingraymappingproject.stingwatch.constants.TinyDbKeys;
-import org.stingraymappingproject.stingwatch.service.AimsicdService;
 import org.stingraymappingproject.stingwatch.utils.BaseAsyncTask;
 import org.stingraymappingproject.stingwatch.utils.TinyDB;
 
@@ -128,41 +125,6 @@ public class AppAIMSICD extends Application {
                 task.setActivity(activity);
             }
         }
-    }
-
-    public static SharedPreferences getSharedPrefences(Context context) {
-        return context.getSharedPreferences(AimsicdService.SHARED_PREFERENCES_BASENAME, 0);
-    }
-
-    public static SharedPreferences.Editor getSharedPreferencesEditor(Context context) {
-        return getSharedPrefences(context).edit();
-    }
-
-    public static boolean isMappingGoingCrazy(Context context) {
-        final String isGoingCrazyString = context.getResources().getString(R.string.mapping_currently_going_crazy);
-        return getSharedPrefences(context).getBoolean(isGoingCrazyString, false);
-    }
-
-
-    public static void setMappingIntroCompleted(Context context, boolean isCompleted) {
-        String mappingIntroCompletedString = isMappingIntroCompletedString(context);
-        SharedPreferences.Editor editor = getSharedPreferencesEditor(context);
-        editor.putBoolean(mappingIntroCompletedString, isCompleted);
-        editor.apply();
-    }
-
-    private static String isMappingIntroCompletedString(Context context) {
-        return context.getResources().getString(R.string.mapping_pref_setup_complete);
-    }
-
-    public static boolean isMappingIntroCompleted(Context context) {
-        String mappingIntroCompletedString = isMappingIntroCompletedString(context);
-        return getSharedPrefences(context).getBoolean(mappingIntroCompletedString, false);
-    }
-
-    public static boolean areMappingTermsAccepted(Context context) {
-        String termsAcceptedString = context.getResources().getString(R.string.mapping_pref_terms_accepted);
-        return AppAIMSICD.getSharedPrefences(context).getBoolean(termsAcceptedString, false);
     }
 
 }

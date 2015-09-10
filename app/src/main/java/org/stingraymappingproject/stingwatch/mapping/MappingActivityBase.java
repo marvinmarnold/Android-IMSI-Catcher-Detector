@@ -10,8 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
-import org.stingraymappingproject.stingwatch.AppAIMSICD;
-
 /**
  * Created by Marvin Arnold on 5/09/15.
  */
@@ -30,7 +28,7 @@ public class MappingActivityBase extends AppCompatActivity {
         Log.d(TAG, "onCreate");
 
         // Users must go through intro slides on first run
-        if (!AppAIMSICD.isMappingIntroCompleted(this)) {
+        if (!MappingPreferences.isIntroCompleted(this)) {
             Intent intent = new Intent(MappingActivityBase.this, MappingActivityIntro.class);
             startActivity(intent);
         } else {

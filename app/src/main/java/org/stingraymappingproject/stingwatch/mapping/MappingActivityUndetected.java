@@ -1,5 +1,7 @@
 package org.stingraymappingproject.stingwatch.mapping;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.stingraymappingproject.api.clientandroid.models.Factoid;
-import org.stingraymappingproject.stingwatch.AppAIMSICD;
 import org.stingraymappingproject.stingwatch.R;
 
 import java.util.List;
@@ -42,8 +43,8 @@ public class MappingActivityUndetected extends MappingActivityBase {
         initLearnMoreButton();
         initLogo();
 
-        if (!AppAIMSICD.areMappingTermsAccepted(this)) {
-
+        if (!MappingPreferences.areTermsAccepted(this)) {
+            displayTerms();
         } else {
             initFactoids();
         }
@@ -93,4 +94,32 @@ public class MappingActivityUndetected extends MappingActivityBase {
             mFactoidSwitcherHandler.postDelayed(mFactoidSwitcher, MILISECS_BETWEEN_FACTOIDS);
         }
     };
+
+    private void displayTerms() {
+        // Accept terms
+        if (!MappingPreferences.areTermsAccepted(this)) {
+            final AlertDialog.Builder disclaimer = new AlertDialog.Builder(this)
+                    .setTitle(R.string.mapping_disclaimer_title)
+                    .setMessage(R.string.mapping_disclaimer)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.text_agree, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            MappingPreferences.setAreTermsAccepted(getApplicationContext(), true);
+//                            startActivityForThreatLevel(MappingActivitySafe.this);
+                        }
+                    })
+                    .setNegativeButton(R.string.text_disagree, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Uri packageUri = Uri.parse("package:org.stingraymappingproject.stingwatch");
+                            Intent uninstallIntent =
+                                    new Intent(Intent.ACTION_DELETE, packageUri);
+                            startActivity(uninstallIntent);
+                            finish();
+                        }
+                    });
+
+            AlertDialog disclaimerAlert = disclaimer.create();
+            disclaimerAlert.show();
+        }
+    }
 }

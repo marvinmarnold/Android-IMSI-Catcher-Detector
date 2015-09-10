@@ -13,7 +13,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import org.stingraymappingproject.api.clientandroid.models.Factoid;
-import org.stingraymappingproject.stingwatch.AppAIMSICD;
 import org.stingraymappingproject.stingwatch.mapping2.MappingActivitySafe;
 import org.stingraymappingproject.stingwatch.service.AimsicdService;
 import org.stingraymappingproject.stingwatch.utils.Status;
@@ -58,7 +57,7 @@ public class MappingService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        if(AppAIMSICD.areMappingTermsAccepted(this)) {
+        if(MappingPreferences.areTermsAccepted(this)) {
             LocalBroadcastManager.getInstance(this).registerReceiver(mStatusChangeReceiver,
                     new IntentFilter("StatusChange"));
 

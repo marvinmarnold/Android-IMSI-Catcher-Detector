@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import org.stingraymappingproject.stingwatch.AppAIMSICD;
 import org.stingraymappingproject.stingwatch.R;
 import org.stingraymappingproject.stingwatch.service.AimsicdService;
 
@@ -53,7 +52,7 @@ public class MappingFragmentIntro extends Fragment {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AppAIMSICD.setMappingIntroCompleted(getActivity(), true);
+                    MappingPreferences.setIntroCompleted(getActivity(), true);
                     Intent i = new Intent(getActivity(), MappingActivityUndetected.class);
                     startActivity(i);
                 }

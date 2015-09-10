@@ -25,13 +25,13 @@ public class OCIDAPIHelper {
         if(!isOCIDKeySet(context)) {
             String ocidKey = getOCIDKey();
             if(ocidKey != null) {
-                AppAIMSICD.getSharedPrefences(context).edit().putString(getOCIDPrefString(context), ocidKey).commit();
+                MappingPreferences.getSharedPrefences(context).edit().putString(getOCIDPrefString(context), ocidKey).commit();
             }
         }
     }
 
     public static boolean isOCIDKeySet(Context context) {
-        return AppAIMSICD.getSharedPrefences(context).getBoolean(getOCIDPrefString(context), false);
+        return MappingPreferences.getSharedPrefences(context).getBoolean(getOCIDPrefString(context), false);
     }
 
     public static String getOCIDPrefString(Context context) {
