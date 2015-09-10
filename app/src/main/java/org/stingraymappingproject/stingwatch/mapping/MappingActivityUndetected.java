@@ -32,9 +32,7 @@ public class MappingActivityUndetected extends MappingActivityBase {
     protected static final int NUM_PRELOADED_FACTOIDS = 5;
 
     private TextView mFactoidText;
-    private Button mLearnMoreButton;
 
-    private String termsPref;
     private List<Factoid> mFactoids;
 
     @Override
@@ -51,7 +49,7 @@ public class MappingActivityUndetected extends MappingActivityBase {
         if (!MappingPreferences.areTermsAccepted(this)) {
             displayTerms();
         }
-        goCrazy();
+//        goCrazy();
     }
 
     private void goCrazy() {
@@ -71,7 +69,7 @@ public class MappingActivityUndetected extends MappingActivityBase {
     }
 
     private void initLearnMoreButton() {
-        mLearnMoreButton = (Button) findViewById(R.id.activity_mapping_safe_learn_more_button);
+        Button mLearnMoreButton = (Button) findViewById(R.id.activity_mapping_safe_learn_more_button);
         mLearnMoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

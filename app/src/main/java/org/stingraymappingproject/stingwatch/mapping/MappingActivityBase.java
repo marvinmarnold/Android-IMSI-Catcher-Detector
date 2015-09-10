@@ -9,6 +9,10 @@ import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
+
+import org.stingraymappingproject.stingwatch.AppAIMSICD;
+import org.stingraymappingproject.stingwatch.R;
 
 /**
  * Created by Marvin Arnold on 5/09/15.
@@ -40,6 +44,30 @@ public class MappingActivityBase extends AppCompatActivity {
         super.onResume();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        ((AppAIMSICD) getApplication()).detach(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.menu_stingray_mapping_toolbar_settings:
+                Intent intent = new Intent(MappingActivityBase.this, MappingPrefActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        ((AppAIMSICD) getApplication()).attach(this);
+    }
 
     private void startMappingService() {
         if (!mBoundToMapping) {

@@ -1,4 +1,4 @@
-package org.stingraymappingproject.stingwatch.mapping2;
+package org.stingraymappingproject.stingwatch.mapping;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;

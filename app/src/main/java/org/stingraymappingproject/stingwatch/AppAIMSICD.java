@@ -27,7 +27,6 @@ import io.fabric.sdk.android.Fabric;
 //import com.squareup.leakcanary.LeakCanary;
 
 public class AppAIMSICD extends Application {
-
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
     private static final String TWITTER_KEY = "6iOIyy2Cs70rq7QQbjam9ZtIG";
     private static final String TWITTER_SECRET = "GJQrufmB2C6fqZRTzVAemy1k6eJgkwVQWiIYE1ZqfKB1lL0Fqx";

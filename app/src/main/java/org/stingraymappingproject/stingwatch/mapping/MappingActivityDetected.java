@@ -10,8 +10,6 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.twitter.sdk.android.core.identity.TwitterAuthClient;
-
 import org.osmdroid.bonuspack.overlays.Polygon;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -31,13 +29,13 @@ public class MappingActivityDetected extends MappingActivityBase {
 
     protected Toolbar mActionToolbar;
     private MapView mMap;
-    protected final static double DEFAULT_MAP_LAT = 29.951287;
-    protected final static double DEFAULT_MAP_LONG = -90.081102;
+    public final static double DEFAULT_MAP_LAT = 29.951287;
+    public final static double DEFAULT_MAP_LONG = -90.081102;
     private MyLocationNewOverlay mMyLocationOverlay;
     private CompassOverlay mCompassOverlay;
     private ScaleBarOverlay mScaleBarOverlay;
 
-    TwitterAuthClient mTwitterAuthClient;
+//    TwitterAuthClient mTwitterAuthClient;
 
 
     @Override
@@ -47,14 +45,10 @@ public class MappingActivityDetected extends MappingActivityBase {
         setContentView(R.layout.activity_mapping_danger);
 
         initToolbar();
+//        initTwitter();
         initActionBar();
         initLogo();
         initMap();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 
     private void initToolbar() {
@@ -63,11 +57,13 @@ public class MappingActivityDetected extends MappingActivityBase {
         mToolbar.setTitle("Threat detected");
     }
 
-    private void initActionBar() {
+//    private void initTwitter() {
 //        mTwitterAuthClient = new TwitterAuthClient();
 //        TwitterAuthConfig authConfig =  new TwitterAuthConfig("consumerKey", "consumerSecret");
 //        Fabric.with(this, new TwitterCore(authConfig), new TweetComposer());
+//    }
 
+    private void initActionBar() {
         mActionToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping_danger_action);
         mActionToolbar.setTitle("Take Action:");
         mActionToolbar.inflateMenu(R.menu.activity_stingray_mapping_danger);
@@ -79,9 +75,9 @@ public class MappingActivityDetected extends MappingActivityBase {
                     case R.id.menu_activity_stingray_mapping_danger_airplane:
                         handleAirplanePressed();
                         break;
-                    case R.id.menu_activity_stingray_mapping_danger_twitter:
-                        handleTwitterPressed();
-                        break;
+//                    case R.id.menu_activity_stingray_mapping_danger_twitter:
+//                        handleTwitterPressed();
+//                        break;
                     case R.id.menu_activity_stingray_mapping_danger_learn:
                         handleLearnPressed();
                         break;
@@ -100,7 +96,8 @@ public class MappingActivityDetected extends MappingActivityBase {
     }
 
     private void handleTwitterPressed() {
-//        mTwitterAuthClient.authorize(that, new com.twitter.sdk.android.core.Callback<TwitterSession>() {
+//        mTwitterAuthClient.authorize(this, new com.twitter.sdk.android.core.Callback<TwitterSession>() {
+//
 //
 //            @Override
 //            public void onResponse(Response<TwitterSession> response) {
@@ -127,6 +124,21 @@ public class MappingActivityDetected extends MappingActivityBase {
 //                e.printStackTrace();
 //            }
 //        });
+    }
+
+    private void postToTwitter(String consumerKey, String consumerSecret) {
+//        String location;
+////        if(mBoundToStingrayAPIService) {
+////            location = mStingrayAPIService.getStingrayReadings()
+////        } else {
+//        location = "me";
+////        }
+//        TwitterAuthConfig authConfig =  new TwitterAuthConfig(consumerKey, consumerSecret);
+//        Fabric.with(this, new TwitterCore(authConfig), new TweetComposer());
+//
+//        TweetComposer.Builder builder = new TweetComposer.Builder(this)
+//                .text("The police may be using a Stingray surveillance near " + location + " #stingraymapping");
+//        builder.show();
     }
 
     private void handleLearnPressed() {

@@ -1,4 +1,4 @@
-package org.stingraymappingproject.stingwatch.mapping2;
+package org.stingraymappingproject.stingwatch.mapping;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentActivity;
 
 import org.stingraymappingproject.stingwatch.AIMSICD;
 import org.stingraymappingproject.stingwatch.R;
-import org.stingraymappingproject.stingwatch.mapping.MappingActivityUndetected;
 import org.stingraymappingproject.stingwatch.service.AimsicdService;
 
 /**

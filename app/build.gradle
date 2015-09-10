@@ -1,8 +1,6 @@
 buildscript {
     repositories {
-        maven {
-            url 'https://maven.fabric.io/public'
-        }
+        maven { url 'https://maven.fabric.io/public' }
     }
 
     dependencies {
@@ -19,11 +17,12 @@ repositories {
 }
 
 dependencies {
-    compile('com.twitter.sdk.android:twitter:1.7.2@aar') {
+    compile('com.twitter.sdk.android:twitter:1.8.0@aar') {
         transitive = true;
     }
-
 }
+
+
 
 
 //======================================================================

@@ -149,7 +149,7 @@
         </activity>
 
         <activity
-            android:name=".mapping2.MappingPrefActivity"
+            android:name=".mapping.MappingPrefActivity"
             android:exported="true"
             android:icon="@drawable/ic_action_settings"
             android:label="@string/preferences"
