@@ -20,7 +20,6 @@ public class MappingActivityBase extends AppCompatActivity {
     protected MappingService mMappingService;
 
     protected Toolbar mToolbar;
-    protected Toolbar mActionToolbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +50,7 @@ public class MappingActivityBase extends AppCompatActivity {
             bindService(intent, mMappingServiceConnection, Context.BIND_AUTO_CREATE);
         }
     }
+
 
     /**
      * Service Connection to bind the activity to the service

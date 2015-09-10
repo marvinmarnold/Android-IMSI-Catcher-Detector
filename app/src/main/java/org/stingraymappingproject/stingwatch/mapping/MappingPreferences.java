@@ -19,12 +19,6 @@ public class MappingPreferences {
         return getSharedPrefences(context).edit();
     }
 
-    public static boolean isGoingCrazy(Context context) {
-        final String isGoingCrazyString = context.getResources().getString(R.string.mapping_currently_going_crazy);
-        return getSharedPrefences(context).getBoolean(isGoingCrazyString, false);
-    }
-
-
     /**
      * Intro completed
      * @param context

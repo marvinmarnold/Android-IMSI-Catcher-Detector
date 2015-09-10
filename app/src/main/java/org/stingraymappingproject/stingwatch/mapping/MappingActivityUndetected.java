@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import org.stingraymappingproject.api.clientandroid.models.Factoid;
 import org.stingraymappingproject.stingwatch.R;
+import org.stingraymappingproject.stingwatch.utils.Status;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,14 +46,24 @@ public class MappingActivityUndetected extends MappingActivityBase {
         initToolbar();
         initLearnMoreButton();
         initLogo();
+        initFactoids();
 
         if (!MappingPreferences.areTermsAccepted(this)) {
             displayTerms();
-        } else {
-            initFactoids();
         }
+        goCrazy();
     }
 
+    private void goCrazy() {
+        Handler h = new Handler();
+        h.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "goCrazy");
+                Status.setCurrentStatus(Status.Type.ALARM, getApplicationContext());
+            }
+        }, 10 * 1000);
+    }
     private void initToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping);
         setSupportActionBar(mToolbar);
@@ -108,7 +119,6 @@ public class MappingActivityUndetected extends MappingActivityBase {
                     .setPositiveButton(R.string.text_agree, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             MappingPreferences.setAreTermsAccepted(getApplicationContext(), true);
-//                            startActivityForThreatLevel(MappingActivitySafe.this);
                         }
                     })
                     .setNegativeButton(R.string.text_disagree, new DialogInterface.OnClickListener() {
@@ -128,7 +138,7 @@ public class MappingActivityUndetected extends MappingActivityBase {
 
     private void loadFactoids() {
         if(mFactoids == null) mFactoids = new ArrayList<>();
-        if(mBoundToMapping) {
+        if(MappingPreferences.areTermsAccepted(this) && mBoundToMapping) {
             List<Factoid> factoids = mMappingService.getFactoids();
             if (!factoids.isEmpty()) {
                 mFactoids = factoids;
