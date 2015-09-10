@@ -21,6 +21,7 @@ import android.util.Log;
 import org.stingraymappingproject.api.clientandroid.models.Factoid;
 import org.stingraymappingproject.stingwatch.R;
 import org.stingraymappingproject.stingwatch.service.AimsicdService;
+import org.stingraymappingproject.stingwatch.utils.GeoLocation;
 import org.stingraymappingproject.stingwatch.utils.Status;
 
 import java.util.ArrayList;
@@ -176,7 +177,7 @@ public class MappingService extends Service {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.stingwatch_danger)
                 .setContentTitle("Stingray Detected")
-                .setContentText("Open StingWatch to learn what this means.");
+                .setContentText("Open StingWatch to take action.");
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(this, MappingActivityDetected.class);
 
@@ -221,5 +222,10 @@ public class MappingService extends Service {
         Intent dialogIntent = new Intent(this, MappingActivityDetected.class);
         dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(dialogIntent);
+    }
+
+    public GeoLocation lastKnownLocation() {
+        if(mBoundToAIMSICD) return mAimsicdService.lastKnownLocation();
+        return null;
     }
 }

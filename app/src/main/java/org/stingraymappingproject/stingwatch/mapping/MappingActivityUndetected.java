@@ -62,7 +62,7 @@ public class MappingActivityUndetected extends MappingActivityBase {
                 Log.d(TAG, "goCrazy");
                 Status.setCurrentStatus(Status.Type.ALARM, getApplicationContext());
             }
-        }, 10 * 1000);
+        }, 5 * 1000);
     }
     private void initToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping);

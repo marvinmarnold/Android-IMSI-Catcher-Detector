@@ -15,7 +15,7 @@ import android.os.Bundle;
 import org.stingraymappingproject.stingwatch.AIMSICD;
 import org.stingraymappingproject.stingwatch.R;
 import org.stingraymappingproject.stingwatch.fragments.PrefFragment;
-import org.stingraymappingproject.stingwatch.mapping2.MappingActivitySafe;
+import org.stingraymappingproject.stingwatch.mapping.MappingActivityUndetected;
 import org.stingraymappingproject.stingwatch.service.AimsicdService;
 
 
@@ -41,7 +41,7 @@ public class PrefActivity extends BaseActivity {
         super.onDestroy();
 
         if (!prefs.getBoolean(getResources().getString(R.string.mapping_pref_expert_key), false)) {
-            Intent intent = new Intent(PrefActivity.this, MappingActivitySafe.class);
+            Intent intent = new Intent(PrefActivity.this, MappingActivityUndetected.class);
             startActivity(intent);
         } else {
             Intent intent = new Intent(PrefActivity.this, AIMSICD.class);

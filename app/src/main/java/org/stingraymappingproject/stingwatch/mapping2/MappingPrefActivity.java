@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentActivity;
 
 import org.stingraymappingproject.stingwatch.AIMSICD;
 import org.stingraymappingproject.stingwatch.R;
+import org.stingraymappingproject.stingwatch.mapping.MappingActivityUndetected;
 import org.stingraymappingproject.stingwatch.service.AimsicdService;
 
 /**
@@ -37,7 +38,7 @@ public class MappingPrefActivity extends FragmentActivity {
         super.onDestroy();
 
         if (!prefs.getBoolean(getResources().getString(R.string.mapping_pref_expert_key), false)) {
-            Intent intent = new Intent(MappingPrefActivity.this, MappingActivitySafe.class);
+            Intent intent = new Intent(MappingPrefActivity.this, MappingActivityUndetected.class);
             startActivity(intent);
         } else {
             Intent intent = new Intent(MappingPrefActivity.this, AIMSICD.class);

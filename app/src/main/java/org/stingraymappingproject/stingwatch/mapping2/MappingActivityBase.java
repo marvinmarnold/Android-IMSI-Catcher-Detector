@@ -28,6 +28,7 @@ import org.stingraymappingproject.api.clientandroid.requesters.NearbyRequester;
 import org.stingraymappingproject.api.clientandroid.requesters.PostStingrayReadingRequester;
 import org.stingraymappingproject.stingwatch.AppAIMSICD;
 import org.stingraymappingproject.stingwatch.R;
+import org.stingraymappingproject.stingwatch.mapping.MappingActivityUndetected;
 import org.stingraymappingproject.stingwatch.service.AimsicdService;
 import org.stingraymappingproject.stingwatch.utils.GeoLocation;
 import org.stingraymappingproject.stingwatch.utils.Status;
@@ -214,8 +215,8 @@ public class MappingActivityBase extends BaseStingrayActivity {
     }
 
     private void startSafe(Activity activity) {
-        if(!activity.getClass().equals(MappingActivitySafe.class)) {
-            Intent i = new Intent(getApplicationContext(), MappingActivitySafe.class);
+        if(!activity.getClass().equals(MappingActivityUndetected.class)) {
+            Intent i = new Intent(getApplicationContext(), MappingActivityUndetected.class);
             startActivity(i);
         }
     }

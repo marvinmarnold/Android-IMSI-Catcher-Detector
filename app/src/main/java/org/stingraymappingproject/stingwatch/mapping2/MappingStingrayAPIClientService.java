@@ -17,6 +17,7 @@ import android.util.Log;
 
 import org.stingraymappingproject.api.clientandroid.StingrayAPIClientService;
 import org.stingraymappingproject.stingwatch.R;
+import org.stingraymappingproject.stingwatch.mapping.MappingActivityUndetected;
 import org.stingraymappingproject.stingwatch.service.AimsicdService;
 import org.stingraymappingproject.stingwatch.utils.Status;
 
@@ -70,7 +71,7 @@ public class MappingStingrayAPIClientService extends StingrayAPIClientService {
     };
 
     public void startActivityForThreatLevel() {
-        Intent dialogIntent = new Intent(this, MappingActivitySafe.class);
+        Intent dialogIntent = new Intent(this, MappingActivityUndetected.class);
         dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(dialogIntent);
     }
