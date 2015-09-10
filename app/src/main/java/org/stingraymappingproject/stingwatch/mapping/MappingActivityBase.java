@@ -4,16 +4,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
-import org.stingraymappingproject.stingwatch.R;
-import org.stingraymappingproject.stingwatch.mapping2.IntroSlidesMappingActivity;
-import org.stingraymappingproject.stingwatch.service.AimsicdService;
+import org.stingraymappingproject.stingwatch.AppAIMSICD;
 
 /**
  * Created by Marvin Arnold on 5/09/15.
@@ -24,9 +21,6 @@ public class MappingActivityBase extends AppCompatActivity {
     protected boolean mBoundToMapping = false;
     protected MappingService mMappingService;
 
-    protected SharedPreferences prefs;
-    protected SharedPreferences.Editor prefsEditor;
-
     protected Toolbar mToolbar;
     protected Toolbar mActionToolbar;
 
@@ -35,9 +29,13 @@ public class MappingActivityBase extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
 
-        prefs = getSharedPreferences(AimsicdService.SHARED_PREFERENCES_BASENAME, 0);
-
-        startMappingService();
+        // Users must go through intro slides on first run
+        if (!AppAIMSICD.isMappingIntroCompleted(this)) {
+            Intent intent = new Intent(MappingActivityBase.this, MappingActivityIntro.class);
+            startActivity(intent);
+        } else {
+            startMappingService();
+        }
     }
 
     @Override
@@ -74,14 +72,5 @@ public class MappingActivityBase extends AppCompatActivity {
         }
     };
 
-    protected boolean mappingTermsAccepted() {
-        return prefs.getBoolean(getResources().getString(R.string.mapping_pref_terms_accepted), false);
-    }
-    
-    protected void ensureTermsAccepted() {
-        if (!mappingTermsAccepted()) {
-            Intent intent = new Intent(MappingActivityBase.this, IntroSlidesMappingActivity.class);
-            startActivity(intent);
-        }
-    }
+
 }

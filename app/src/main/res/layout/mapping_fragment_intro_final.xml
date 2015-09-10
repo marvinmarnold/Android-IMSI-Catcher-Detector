@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+    android:id="@+id/instructions"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="layout" >
+
+    <ImageView
+        android:id="@+id/fragment_mapping_slide_intro_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/mapping_fragment_intro"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fadingEdge="none">
+
+    </ScrollView>
+
+
+</FrameLayout>
+    <Button
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/mapping_slide_final_button_margin"
+        android:textSize="30sp"
+        android:layout_marginBottom="@dimen/mapping_slide_final_button_margin"
+        android:text="@string/mapping_slide_4_button"
+        android:id="@+id/fragment_mapping_slide_intro_button"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>

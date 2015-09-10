@@ -140,7 +140,24 @@ public class AppAIMSICD extends Application {
 
     public static boolean isMappingGoingCrazy(Context context) {
         final String isGoingCrazyString = context.getResources().getString(R.string.mapping_currently_going_crazy);
-        return AppAIMSICD.getSharedPrefences(context).getBoolean(isGoingCrazyString, false);
+        return getSharedPrefences(context).getBoolean(isGoingCrazyString, false);
+    }
+
+
+    public static void setMappingIntroCompleted(Context context, boolean isCompleted) {
+        String mappingIntroCompletedString = isMappingIntroCompletedString(context);
+        SharedPreferences.Editor editor = getSharedPreferencesEditor(context);
+        editor.putBoolean(mappingIntroCompletedString, isCompleted);
+        editor.apply();
+    }
+
+    private static String isMappingIntroCompletedString(Context context) {
+        return context.getResources().getString(R.string.mapping_pref_setup_complete);
+    }
+
+    public static boolean isMappingIntroCompleted(Context context) {
+        String mappingIntroCompletedString = isMappingIntroCompletedString(context);
+        return getSharedPrefences(context).getBoolean(mappingIntroCompletedString, false);
     }
 
     public static boolean areMappingTermsAccepted(Context context) {

@@ -1,11 +1,5 @@
 <resources>
     <dimen name="mapping_logo_size">40dp</dimen>
     <dimen name="mapping_page_title">20sp</dimen>
-    <dimen name="mapping_slide_intro_text_width">250dp</dimen>
-    <dimen name="mapping_slide_intro_text_size">18sp</dimen>
-    <dimen name="mapping_slide_3_text_width">150dp</dimen>
-    <dimen name="mapping_slide_3_text_size">20sp</dimen>
-    <dimen name="mapping_slide_4_text_width">150dp</dimen>
-    <dimen name="mapping_slide_4_text_size">20sp</dimen>
-    <dimen name="mapping_slide_4_button_margin">30sp</dimen>
+    <dimen name="mapping_slide_final_button_margin">50sp</dimen>
 </resources>

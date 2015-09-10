@@ -21,6 +21,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.stingraymappingproject.api.clientandroid.models.Factoid;
 import org.stingraymappingproject.stingwatch.R;
+import org.stingraymappingproject.stingwatch.mapping.MappingActivityIntro;
 import org.stingraymappingproject.stingwatch.service.CellTracker;
 import org.stingraymappingproject.stingwatch.utils.AsyncResponse;
 import org.stingraymappingproject.stingwatch.utils.Cell;
@@ -55,7 +56,7 @@ public class MappingActivitySafe extends MappingActivityBase implements AsyncRes
         Log.d(TAG, "onCreate");
 
         if (!prefs.getBoolean(getResources().getString(R.string.mapping_pref_setup_complete), false)) {
-            Intent intent = new Intent(MappingActivitySafe.this, IntroSlidesMappingActivity.class);
+            Intent intent = new Intent(MappingActivitySafe.this, MappingActivityIntro.class);
             startActivity(intent);
         }
 

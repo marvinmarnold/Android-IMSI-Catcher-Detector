@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.stingraymappingproject.api.clientandroid.models.Factoid;
+import org.stingraymappingproject.stingwatch.AppAIMSICD;
 import org.stingraymappingproject.stingwatch.R;
 
 import java.util.List;
@@ -36,13 +37,16 @@ public class MappingActivityUndetected extends MappingActivityBase {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
 
-        ensureTermsAccepted();
-
         setContentView(R.layout.activity_mapping_safe);
         initToolbar();
         initLearnMoreButton();
         initLogo();
-        initFactoids();
+
+        if (!AppAIMSICD.areMappingTermsAccepted(this)) {
+
+        } else {
+            initFactoids();
+        }
     }
 
     private void initToolbar() {

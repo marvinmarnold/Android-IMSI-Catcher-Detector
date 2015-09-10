@@ -111,19 +111,21 @@
 
         // Stingray Mapping Project
         <activity
-            android:name=".mapping2.IntroSlidesMappingActivity"
+            android:name=".mapping.MappingActivityIntro"
             android:exported="true"
             android:label="@string/app_name_short"
-            android:configChanges="screenSize|orientation"
-            android:theme="@style/Theme.StingrayMapping">
+            android:configChanges="screenSize"
+            android:theme="@style/Theme.StingrayMapping"
+            android:screenOrientation="portrait">
         </activity>
 
         <activity
             android:name=".mapping.MappingActivityUndetected"
             android:exported="true"
             android:label="@string/app_name_short"
-            android:configChanges="screenSize|orientation"
-            android:theme="@style/Theme.StingrayMapping">
+            android:configChanges="screenSize"
+            android:theme="@style/Theme.StingrayMapping"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -140,8 +142,9 @@
             android:name=".mapping.MappingActivityDetected"
             android:exported="true"
             android:label="@string/app_name_short"
-            android:configChanges="screenSize|orientation"
-            android:theme="@style/Theme.StingrayMapping">
+            android:configChanges="screenSize"
+            android:theme="@style/Theme.StingrayMapping"
+            android:screenOrientation="portrait" >
 
         </activity>
 
@@ -151,7 +154,8 @@
             android:icon="@drawable/ic_action_settings"
             android:label="@string/preferences"
             android:parentActivityName=".mapping2.MappingActivitySafe"
-            android:configChanges="keyboardHidden|screenLayout|screenSize|orientation">
+            android:configChanges="keyboardHidden|screenLayout|screenSize"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
