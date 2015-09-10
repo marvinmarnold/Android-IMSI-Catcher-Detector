@@ -33,6 +33,7 @@ import org.stingraymappingproject.stingwatch.utils.GeoLocation;
 import org.stingraymappingproject.stingwatch.utils.Status;
 
 import io.fabric.sdk.android.Fabric;
+import retrofit.Response;
 
 /**
  * Created by Marvin Arnold on 14/08/15.
@@ -184,6 +185,16 @@ public class MappingActivityDanger extends MappingActivityBase {
                         break;
                     case R.id.menu_activity_stingray_mapping_danger_twitter:
                         mTwitterAuthClient.authorize(that, new com.twitter.sdk.android.core.Callback<TwitterSession>() {
+
+                            @Override
+                            public void onResponse(Response<TwitterSession> response) {
+
+                            }
+
+                            @Override
+                            public void onFailure(Throwable t) {
+
+                            }
 
                             @Override
                             public void success(Result<TwitterSession> result) {

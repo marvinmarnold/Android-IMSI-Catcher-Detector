@@ -11,6 +11,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import org.stingraymappingproject.stingwatch.R;
+import org.stingraymappingproject.stingwatch.mapping2.IntroSlideMappingFragment;
 import org.stingraymappingproject.stingwatch.service.AimsicdService;
 
 /**

@@ -8,6 +8,8 @@ package org.stingraymappingproject.stingwatch;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -15,6 +17,7 @@ import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
 import org.stingraymappingproject.stingwatch.constants.TinyDbKeys;
+import org.stingraymappingproject.stingwatch.service.AimsicdService;
 import org.stingraymappingproject.stingwatch.utils.BaseAsyncTask;
 import org.stingraymappingproject.stingwatch.utils.TinyDB;
 
@@ -126,4 +129,23 @@ public class AppAIMSICD extends Application {
             }
         }
     }
+
+    public static SharedPreferences getSharedPrefences(Context context) {
+        return context.getSharedPreferences(AimsicdService.SHARED_PREFERENCES_BASENAME, 0);
+    }
+
+    public static SharedPreferences.Editor getSharedPreferencesEditor(Context context) {
+        return getSharedPrefences(context).edit();
+    }
+
+    public static boolean isMappingGoingCrazy(Context context) {
+        final String isGoingCrazyString = context.getResources().getString(R.string.mapping_currently_going_crazy);
+        return AppAIMSICD.getSharedPrefences(context).getBoolean(isGoingCrazyString, false);
+    }
+
+    public static boolean areMappingTermsAccepted(Context context) {
+        String termsAcceptedString = context.getResources().getString(R.string.mapping_pref_terms_accepted);
+        return AppAIMSICD.getSharedPrefences(context).getBoolean(termsAcceptedString, false);
+    }
+
 }

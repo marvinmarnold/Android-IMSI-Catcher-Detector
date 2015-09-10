@@ -109,6 +109,7 @@
             </intent-filter>
         </activity>
 
+        // Stingray Mapping Project
         <activity
             android:name=".mapping2.IntroSlidesMappingActivity"
             android:exported="true"
@@ -118,7 +119,7 @@
         </activity>
 
         <activity
-            android:name=".mapping2.MappingActivitySafe"
+            android:name=".mapping.MappingActivityUndetected"
             android:exported="true"
             android:label="@string/app_name_short"
             android:configChanges="screenSize|orientation"
@@ -130,13 +131,13 @@
         </activity>
 
         <service
-            android:name=".mapping2.MappingStingrayAPIClientService"
+            android:name=".mapping.MappingService"
             android:enabled="true"
             android:exported="false">
         </service>
 
         <activity
-            android:name=".mapping2.MappingActivityDanger"
+            android:name=".mapping.MappingActivityDetected"
             android:exported="true"
             android:label="@string/app_name_short"
             android:configChanges="screenSize|orientation"
@@ -155,6 +156,8 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+
+        // End SMP
 
         <activity
                 android:name=".activities.MapViewerOsmDroid"
