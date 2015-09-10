@@ -2,9 +2,6 @@ package org.stingraymappingproject.stingwatch.mapping;
 
 import android.content.Context;
 
-import org.stingraymappingproject.stingwatch.AppAIMSICD;
-import org.stingraymappingproject.stingwatch.R;
-
 import retrofit.Call;
 import retrofit.http.GET;
 
@@ -22,22 +19,14 @@ public class OCIDAPIHelper {
      */
     public static void setOCIDKey(Context context) {
         // If OCID key has never been set
-        if(!isOCIDKeySet(context)) {
+        if(!MappingPreferences.isOCIDKeySet(context)) {
             String ocidKey = getOCIDKey();
             if(ocidKey != null) {
-                MappingPreferences.getSharedPrefences(context).edit().putString(getOCIDPrefString(context), ocidKey).commit();
+                MappingPreferences.setIsOCIDKeySet(context, true);
+                MappingPreferences.setOCIDKey(context, ocidKey);
             }
         }
     }
-
-    public static boolean isOCIDKeySet(Context context) {
-        return MappingPreferences.getSharedPrefences(context).getBoolean(getOCIDPrefString(context), false);
-    }
-
-    public static String getOCIDPrefString(Context context) {
-        return context.getResources().getString(R.string.pref_ocid_key);
-    }
-
 
     public static String getOCIDKey() {
         return "dev-usr--0d18-47c5-9e3e-6184d4b748ab"; //dev only

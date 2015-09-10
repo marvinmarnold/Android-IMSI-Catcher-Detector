@@ -66,4 +66,31 @@ public class MappingPreferences {
         editor.putBoolean(termsAcceptedString, areTermsAccepted);
         editor.apply();
     }
+
+    /**
+     * Has an OCID key been set
+     * @param context
+     * @return
+     */
+    private static String isOCIDKeySetString(Context context) {
+        return context.getResources().getString(R.string.mapping_pref_ocid_key_set);
+    }
+
+    public static boolean isOCIDKeySet(Context context) {
+        return getSharedPrefences(context).getBoolean(isOCIDKeySetString(context), false);
+    }
+
+    public static void setIsOCIDKeySet(Context context, boolean isOCIDKeySet) {
+        String isOCIDKeySetString = isOCIDKeySetString(context);
+        SharedPreferences.Editor editor = getSharedPreferencesEditor(context);
+        editor.putBoolean(isOCIDKeySetString, isOCIDKeySet);
+        editor.apply();
+    }
+
+    public static void setOCIDKey(Context context, String ocidKey) {
+        String ocidKeyString = context.getResources().getString(R.string.pref_ocid_key);
+        SharedPreferences.Editor editor = getSharedPreferencesEditor(context);
+        editor.putString(ocidKeyString, ocidKey);
+        editor.apply();
+    }
 }

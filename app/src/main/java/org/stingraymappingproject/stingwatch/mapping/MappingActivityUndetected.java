@@ -16,6 +16,7 @@ import android.widget.TextView;
 import org.stingraymappingproject.api.clientandroid.models.Factoid;
 import org.stingraymappingproject.stingwatch.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,11 +28,13 @@ public class MappingActivityUndetected extends MappingActivityBase {
     private int currentFactoid = 0;
     Handler mFactoidSwitcherHandler;
     public static final int MILISECS_BETWEEN_FACTOIDS = 8 * 1000;
+    protected static final int NUM_PRELOADED_FACTOIDS = 5;
 
     private TextView mFactoidText;
     private Button mLearnMoreButton;
 
     private String termsPref;
+    private List<Factoid> mFactoids;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,7 +79,7 @@ public class MappingActivityUndetected extends MappingActivityBase {
 
     private void initFactoids() {
         mFactoidText = (TextView) findViewById(R.id.activity_mapping_safe_factoid);
-//        loadFactoids();
+        loadFactoids();
         mFactoidSwitcherHandler = new Handler();
         mFactoidSwitcher.run();
     }
@@ -121,5 +124,41 @@ public class MappingActivityUndetected extends MappingActivityBase {
             AlertDialog disclaimerAlert = disclaimer.create();
             disclaimerAlert.show();
         }
+    }
+
+    private void loadFactoids() {
+        if(mFactoids == null) mFactoids = new ArrayList<>();
+        if(mBoundToMapping) {
+            List<Factoid> factoids = mMappingService.getFactoids();
+            if (!factoids.isEmpty()) {
+                mFactoids = factoids;
+                return;
+            }
+        }
+        loadLocalFactoids();
+    }
+
+    private void loadLocalFactoids() {
+        for (int i = 0; i < NUM_PRELOADED_FACTOIDS; i++) {
+            mFactoids.add(createPreloadedFactoid(i));
+        }
+    }
+
+    public Factoid createPreloadedFactoid(int n) {
+        Log.d(TAG, "created a factoid");
+        if(n < 0 || n >= NUM_PRELOADED_FACTOIDS) return null;
+        switch(n) {
+            case 0:
+                return new Factoid(getString(R.string.mapping_factoids_1));
+            case 1:
+                return new Factoid(getString(R.string.mapping_factoids_2));
+            case 2:
+                return new Factoid(getString(R.string.mapping_factoids_3));
+            case 3:
+                return new Factoid(getString(R.string.mapping_factoids_4));
+            case 4:
+                return new Factoid(getString(R.string.mapping_factoids_5));
+        }
+        return null;
     }
 }

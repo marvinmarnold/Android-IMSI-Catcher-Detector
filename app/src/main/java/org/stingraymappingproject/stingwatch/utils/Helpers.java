@@ -97,7 +97,7 @@ import java.util.List;
     */
     public static void msgLong(Context context, String msg) {
         if (context != null && msg != null) {
-            Toaster.getInstance().msgLong(context, msg);
+//            Toaster.getInstance().msgLong(context, msg);
         }
     }
    /**
@@ -113,7 +113,7 @@ import java.util.List;
     */
     public static void msgShort(Context context, String msg) {
         if (context != null && msg != null) {
-            Toaster.getInstance().msgShort(context, msg);
+//            Toaster.getInstance().msgShort(context, msg);
         }
     }
    /**
@@ -129,7 +129,7 @@ import java.util.List;
     */
     public static void sendMsg(Context context, String msg) {
         if (context != null && msg != null) {
-            Toaster.getInstance().msgLong(context, msg);
+//            Toaster.getInstance().msgLong(context, msg);
         }
     }
     

@@ -13,7 +13,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import org.stingraymappingproject.api.clientandroid.models.Factoid;
-import org.stingraymappingproject.stingwatch.mapping2.MappingActivitySafe;
 import org.stingraymappingproject.stingwatch.service.AimsicdService;
 import org.stingraymappingproject.stingwatch.utils.Status;
 
@@ -220,7 +219,7 @@ public class MappingService extends Service {
     }
 
     public void startActivityForThreatLevel() {
-        Intent dialogIntent = new Intent(this, MappingActivitySafe.class);
+        Intent dialogIntent = new Intent(this, MappingActivityUndetected.class);
         dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(dialogIntent);
     }
