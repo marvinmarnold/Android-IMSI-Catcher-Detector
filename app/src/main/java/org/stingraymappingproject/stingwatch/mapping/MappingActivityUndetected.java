@@ -88,10 +88,10 @@ public class MappingActivityUndetected extends MappingActivityBase {
         @Override
         public void run() {
             if(mBoundToMapping) {
-                List<Factoid> factoids = mMappingService.getFactoids();
-                int numFactoids = factoids.size();
+                loadFactoids();
+                int numFactoids = mFactoids.size();
                 if(++currentFactoid >= numFactoids) currentFactoid = 0;
-                if(numFactoids > 0 ) mFactoidText.setText(factoids.get(currentFactoid).getFact());
+                if(numFactoids > 0 ) mFactoidText.setText(mFactoids.get(currentFactoid).getFact());
             }
 
             mFactoidSwitcherHandler.postDelayed(mFactoidSwitcher, MILISECS_BETWEEN_FACTOIDS);
@@ -145,7 +145,6 @@ public class MappingActivityUndetected extends MappingActivityBase {
     }
 
     public Factoid createPreloadedFactoid(int n) {
-        Log.d(TAG, "created a factoid");
         if(n < 0 || n >= NUM_PRELOADED_FACTOIDS) return null;
         switch(n) {
             case 0:
