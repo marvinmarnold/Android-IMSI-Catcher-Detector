@@ -171,6 +171,7 @@ public class MappingService extends StingrayAPIClientService {
                 case("MEDIUM"):
                     break;
                 case("ALARM"):
+                    newPostStingrayReadingRequest().run();
                     goCrazy();
                     return;
                 default:
@@ -355,12 +356,8 @@ public class MappingService extends StingrayAPIClientService {
         addRecurringRequest(recurringRequest);
     }
 
-    /**
-     *
-     */
-    private void schedulePostStingrayReadingRequester() {
-//        Log.d(TAG, "schedulePostStingrayReadingRequester");
-        PostStingrayReadingRequester postStingrayReadingRequester = new PostStingrayReadingRequester(this) {
+    private PostStingrayReadingRequester newPostStingrayReadingRequest() {
+        return new PostStingrayReadingRequester(this) {
             @Override
             protected String getRequestParams() {
                 return getReqParamsAndAddNewReading();
@@ -377,6 +374,14 @@ public class MappingService extends StingrayAPIClientService {
                 addStingrayReading(response);
             }
         };
+    }
+
+    /**
+     *
+     */
+    private void schedulePostStingrayReadingRequester() {
+//        Log.d(TAG, "schedulePostStingrayReadingRequester");
+        PostStingrayReadingRequester postStingrayReadingRequester = newPostStingrayReadingRequest();
         RecurringRequest recurringRequest = new RecurringRequest(UPLOAD_FREQUENCY_VALUE, UPLOAD_FREQUENCY_UNIT, postStingrayReadingRequester);
         addRecurringRequest(recurringRequest);
     }
