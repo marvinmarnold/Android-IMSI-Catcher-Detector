@@ -37,7 +37,6 @@ public class MappingActivityDetected extends MappingActivityBase {
 
 //    TwitterAuthClient mTwitterAuthClient;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,11 +56,11 @@ public class MappingActivityDetected extends MappingActivityBase {
         mToolbar.setTitle("Threat detected");
     }
 
-//    private void initTwitter() {
+    private void initTwitter() {
 //        mTwitterAuthClient = new TwitterAuthClient();
 //        TwitterAuthConfig authConfig =  new TwitterAuthConfig("consumerKey", "consumerSecret");
 //        Fabric.with(this, new TwitterCore(authConfig), new TweetComposer());
-//    }
+    }
 
     private void initActionBar() {
         mActionToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping_danger_action);
@@ -97,16 +96,12 @@ public class MappingActivityDetected extends MappingActivityBase {
 
     private void handleTwitterPressed() {
 //        mTwitterAuthClient.authorize(this, new com.twitter.sdk.android.core.Callback<TwitterSession>() {
-//
-//
 //            @Override
 //            public void onResponse(Response<TwitterSession> response) {
-//
 //            }
 //
 //            @Override
 //            public void onFailure(Throwable t) {
-//
 //            }
 //
 //            @Override

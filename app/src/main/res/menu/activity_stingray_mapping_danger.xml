@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--<item android:id="@+id/menu_activity_stingray_mapping_danger_twitter"-->
+        <!--android:icon="@drawable/twitter"-->
+        <!--app:showAsAction="always"-->
+        <!--android:title="Warn your Friends" />-->
+
     <item android:id="@+id/menu_activity_stingray_mapping_danger_airplane"
         android:icon="@drawable/airplane_mode"
         app:showAsAction="always"

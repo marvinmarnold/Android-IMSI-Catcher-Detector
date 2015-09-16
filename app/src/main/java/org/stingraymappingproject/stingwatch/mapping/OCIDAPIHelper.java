@@ -2,11 +2,8 @@ package org.stingraymappingproject.stingwatch.mapping;
 
 import android.content.Context;
 
-import java.io.IOException;
-
-import retrofit.Call;
-import retrofit.Retrofit;
-import retrofit.http.GET;
+//import retrofit.Call;
+//import retrofit.http.GET;
 
 
 /**
@@ -32,37 +29,38 @@ public class OCIDAPIHelper {
     }
 
     public static String getOCIDKey() {
-        // Create a very simple REST adapter which points the OCID API.
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .build();
-
-        // Create an instance of our OCID API interface.
-        OCID ocid = retrofit.create(OCID.class);
-
-        // Create a call instance for looking up Retrofit key.
-        Call<OCIDKey> call = ocid.key();
-
-        // Fetch and return OCID key
-        try {
-            OCIDKey key = call.execute().body();
-            return key.key;
-        } catch (IOException e) {
-            return "dev-usr--0d18-47c5-9e3e-6184d4b748ab"; //dev only
-//            return null; // production
-        }
+        return "dev-usr--0d18-47c5-9e3e-6184d4b748ab"; //dev only
+//        // Create a very simple REST adapter which points the OCID API.
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl(API_URL)
+//                .build();
+//
+//        // Create an instance of our OCID API interface.
+//        OCID ocid = retrofit.create(OCID.class);
+//
+//        // Create a call instance for looking up Retrofit key.
+//        Call<OCIDKey> call = ocid.key();
+//
+//        // Fetch and return OCID key
+//        try {
+//            OCIDKey key = call.execute().body();
+//            return key.key;
+//        } catch (IOException e) {
+//            return "dev-usr--0d18-47c5-9e3e-6184d4b748ab"; //dev only
+////            return null; // production
+//        }
     }
 
-    public static class OCIDKey {
-        public final String key;
-
-        public OCIDKey(String key) {
-            this.key = key;
-        }
-    }
-
-    public interface OCID {
-        @GET("")
-        Call<OCIDKey> key();
-    }
+//    public static class OCIDKey {
+//        public final String key;
+//
+//        public OCIDKey(String key) {
+//            this.key = key;
+//        }
+//    }
+//
+//    public interface OCID {
+//        @GET("")
+//        Call<OCIDKey> key();
+//    }
 }
