@@ -52,9 +52,7 @@ import org.stingraymappingproject.stingwatch.utils.GeoLocation;
  */
 public class AimsicdService extends Service {
 
-    //private final String TAG = "AimsicdService";
-    private final String TAG = "AIMSICD";
-    private final String mTAG = "AimsicdService";
+    private static final String TAG = "AimsicdService";
 
     // /data/data/com.SecUpwN.AIMSICD/shared_prefs/com.SecUpwN.AIMSICD_preferences.xml
     public static final String SHARED_PREFERENCES_BASENAME = "com.SecUpwN.AIMSICD_preferences";
@@ -64,7 +62,7 @@ public class AimsicdService extends Service {
      * System and helper declarations
      */
     private final AimscidBinder mBinder = new AimscidBinder();
-    private final Handler timerHandler = new Handler();
+    private static final Handler timerHandler = new Handler();
 
     private CellTracker mCellTracker;
     private AccelerometerMonitor mAccelerometerMonitor;
@@ -101,9 +99,21 @@ public class AimsicdService extends Service {
             @Override
             public void run() {
                 // movement detected, so enable GPS
-                mLocationTracker.start();
-                signalStrengthTracker.onSensorChanged();
 
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        timerHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mLocationTracker.start();
+                            }
+                        });
+                    }
+                };
+                new Thread(runnable).start();
+
+                signalStrengthTracker.onSensorChanged();
 
                 // check again in a while to see if GPS should be disabled
                 // this runnable also re-enables this movement sensor
@@ -116,7 +126,8 @@ public class AimsicdService extends Service {
         mCellTracker = new CellTracker(this, signalStrengthTracker);
 
         prefs = getApplicationContext().getSharedPreferences(SHARED_PREFERENCES_BASENAME, 0);
-        Log.i(TAG, mTAG + ": Service launched successfully.");
+
+        Log.i(TAG, "Service launched successfully.");
     }
 
     @Override
@@ -136,7 +147,7 @@ public class AimsicdService extends Service {
             smsdetector.stopSmsDetection();
         }
 
-        Log.i(TAG, mTAG +  ": Service destroyed.");
+        Log.i(TAG, "Service destroyed.");
     }
 
     public GeoLocation lastKnownLocation() {
@@ -187,7 +198,7 @@ public class AimsicdService extends Service {
 
     public void startSmsTracking() {
         if(!isSmsTracking()) {
-            Log.i(TAG, mTAG +  ": Sms Detection Thread Started");
+            Log.i(TAG, "Sms Detection Thread Started");
             smsdetector = new SmsDetector(this);
             smsdetector.startSmsDetection();
         }
@@ -196,7 +207,7 @@ public class AimsicdService extends Service {
     public void stopSmsTracking() {
         if(isSmsTracking()) {
             smsdetector.stopSmsDetection();
-            Log.i(TAG, mTAG +  ": Sms Detection Thread Stopped");
+            Log.i(TAG, "Sms Detection Thread Stopped");
         }
     }
 
@@ -205,11 +216,9 @@ public class AimsicdService extends Service {
         @Override
         public void run() {
             if (mCellTracker.isTrackingCell()) {
-                //Log.d(TAG, mTAG +  ": (power): Checking to see if GPS should be disabled");
                 // if no movement in a while, shut off GPS. Gets re-enabled when there is movement
                 if (mAccelerometerMonitor.notMovedInAWhile() ||
                         mLocationTracker.notMovedInAWhile()) {
-                    //Log.d(TAG, mTAG +  ": (power): Disabling GPS");
                     mLocationTracker.stop();
                 }
                 mAccelerometerMonitor.start();
