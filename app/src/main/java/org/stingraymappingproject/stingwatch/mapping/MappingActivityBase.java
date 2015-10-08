@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import org.stingraymappingproject.stingwatch.AppAIMSICD;
@@ -38,6 +39,13 @@ public class MappingActivityBase extends AppCompatActivity {
         } else {
             startMappingService();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.stingray_mapping_toolbar, menu);
+        return true;
     }
 
     @Override

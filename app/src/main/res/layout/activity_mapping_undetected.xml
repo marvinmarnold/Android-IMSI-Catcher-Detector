@@ -19,7 +19,6 @@
         android:textColor="?attr/colorPrimaryDark"
         android:layout_alignParentBottom="true" />
 
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
