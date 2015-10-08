@@ -31,15 +31,15 @@ public class MappingPrefActivity extends FragmentActivity {
         super.onRestart();
         loadFragment();
     }
+    final static String TAG = "MappingPrefActivity";
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        
+        String prefString = getResources().getString(R.string.mapping_pref_expert_key);
 
-        if (!prefs.getBoolean(getResources().getString(R.string.mapping_pref_expert_key), false)) {
-            Intent intent = new Intent(MappingPrefActivity.this, MappingActivityUndetected.class);
-            startActivity(intent);
-        } else {
+        if (prefs.getBoolean(prefString, false)) {
             Intent intent = new Intent(MappingPrefActivity.this, AIMSICD.class);
             startActivity(intent);
         }

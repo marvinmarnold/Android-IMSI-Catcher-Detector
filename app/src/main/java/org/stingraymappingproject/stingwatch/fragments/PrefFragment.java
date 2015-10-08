@@ -9,12 +9,15 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 
 import org.stingraymappingproject.stingwatch.R;
+import org.stingraymappingproject.stingwatch.service.AimsicdService;
 
 public class PrefFragment extends PreferenceFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getPreferenceManager().setSharedPreferencesName(AimsicdService.SHARED_PREFERENCES_BASENAME);
+
         addPreferencesFromResource(R.xml.preferences);
     }
 
