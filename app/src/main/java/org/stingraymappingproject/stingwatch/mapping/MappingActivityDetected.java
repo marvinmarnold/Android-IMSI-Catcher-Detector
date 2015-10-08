@@ -1,8 +1,6 @@
 package org.stingraymappingproject.stingwatch.mapping;
 
-import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -136,12 +134,6 @@ public class MappingActivityDetected extends MappingActivityBase {
 //        builder.show();
     }
 
-    private void handleLearnPressed() {
-        String url = getString(R.string.mapping_information_url);
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(url));
-        startActivity(i);
-    }
 
     private void initLogo() {
         ImageView iv = (ImageView)findViewById(R.id.mapper_danger_logo);

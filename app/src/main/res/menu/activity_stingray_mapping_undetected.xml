@@ -6,13 +6,12 @@
           android:icon="@drawable/twitter"
           app:showAsAction="always"
           android:title="Tell your friends"
-          android:paddingRight="60dp"/>
+          android:right="60dp"
+        />
 
     <item android:id="@+id/menu_activity_stingray_mapping_undetected_learn"
         android:icon="@drawable/learn"
         app:showAsAction="always"
         android:title="Learn more"
-        android:paddingRight="40dp"/>
-
-
+        android:right="40dp"/>
 </menu>

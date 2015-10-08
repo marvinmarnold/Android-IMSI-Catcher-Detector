@@ -29,7 +29,6 @@ public class MappingActivityUndetected extends MappingActivityBase {
         setContentView(R.layout.activity_mapping_undetected);
         initToolbar();
         initActionBar();
-//        initLearnMoreButton();
 
         if (!MappingPreferences.areTermsAccepted(this)) {
             displayTerms();
@@ -52,20 +51,6 @@ public class MappingActivityUndetected extends MappingActivityBase {
         setSupportActionBar(mToolbar);
         mToolbar.setTitle("No threats detected");
     }
-
-//    private void initLearnMoreButton() {
-//        Button mLearnMoreButton = (Button) findViewById(R.id.activity_mapping_safe_learn_more_button);
-//        mLearnMoreButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String url = getString(R.string.mapping_information_url);
-//                Intent i = new Intent(Intent.ACTION_VIEW);
-//                i.setData(Uri.parse(url));
-//                startActivity(i);
-//            }
-//        });
-//    }
-
 
     private void displayTerms() {
         // Accept terms
@@ -107,7 +92,7 @@ public class MappingActivityUndetected extends MappingActivityBase {
 
                         break;
                     case R.id.menu_activity_stingray_mapping_undetected_learn:
-
+                        handleLearnPressed();
                         break;
                 }
                 return true;

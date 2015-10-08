@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
@@ -97,6 +98,13 @@ public class MappingActivityBase extends AppCompatActivity {
             mBoundToMapping = false;
         }
     };
+
+    protected void handleLearnPressed() {
+        String url = getString(R.string.mapping_information_url);
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
+    }
 
 
 }
