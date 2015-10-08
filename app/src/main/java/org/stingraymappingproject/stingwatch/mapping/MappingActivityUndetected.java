@@ -8,13 +8,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.widget.TextView;
+import android.view.MenuItem;
 
-import org.stingraymappingproject.api.clientandroid.models.Factoid;
 import org.stingraymappingproject.stingwatch.R;
 import org.stingraymappingproject.stingwatch.utils.Status;
-
-import java.util.List;
 
 /**
  * Created by Marvin Arnold on 9/09/15.
@@ -22,22 +19,16 @@ import java.util.List;
 public class MappingActivityUndetected extends MappingActivityBase {
     private final static String TAG = "MappingUndetected";
 
-    private int currentFactoid = 0;
-    Handler mFactoidSwitcherHandler;
-    public static final int MILISECS_BETWEEN_FACTOIDS = 8 * 1000;
-    protected static final int NUM_PRELOADED_FACTOIDS = 5;
-
-    private TextView mFactoidText;
-
-    private List<Factoid> mFactoids;
+    protected Toolbar mActionToolbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
 
-        setContentView(R.layout.activity_mapping_safe);
+        setContentView(R.layout.activity_mapping_undetected);
         initToolbar();
+        initActionBar();
 //        initLearnMoreButton();
 
         if (!MappingPreferences.areTermsAccepted(this)) {
@@ -103,5 +94,25 @@ public class MappingActivityUndetected extends MappingActivityBase {
         }
     }
 
+    private void initActionBar() {
+        mActionToolbar = (Toolbar) findViewById(R.id.action_toolbar_stingray_mapping_undetected);
+        mActionToolbar.setTitle("Take Action:");
+        mActionToolbar.inflateMenu(R.menu.activity_stingray_mapping_undetected);
+
+        mActionToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_activity_stingray_mapping_undetected_twitter:
+
+                        break;
+                    case R.id.menu_activity_stingray_mapping_undetected_learn:
+
+                        break;
+                }
+                return true;
+            }
+        });
+    }
 
 }

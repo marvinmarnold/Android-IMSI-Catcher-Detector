@@ -94,7 +94,7 @@
     <application
             tools:replace="allowBackup"
             android:allowBackup="false"
-            android:icon="@drawable/stingwatch_logo"
+            android:icon="@drawable/ic_launcher"
             android:label="@string/main_app_name"
             android:theme="@style/AppTheme"
             android:name=".AppAIMSICD">
