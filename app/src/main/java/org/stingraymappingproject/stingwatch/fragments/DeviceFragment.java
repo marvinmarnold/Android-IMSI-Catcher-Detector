@@ -27,7 +27,6 @@ import com.kaichunlin.transition.animation.AnimationManager;
 import org.stingraymappingproject.stingwatch.R;
 import org.stingraymappingproject.stingwatch.service.AimsicdService;
 import org.stingraymappingproject.stingwatch.utils.Device;
-import org.stingraymappingproject.stingwatch.utils.Helpers;
 import org.stingraymappingproject.stingwatch.widget.HighlightTextView;
 
 public class DeviceFragment extends Fragment {
@@ -114,7 +113,7 @@ public class DeviceFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             final Bundle bundle = intent.getExtras();
             if (bundle != null && bundle.getBoolean("update")) {
-                Helpers.msgShort(mContext, context.getString(R.string.refreshing_display));
+//                Helpers.msgShort(mContext, context.getString(R.string.refreshing_display));
                 updateUI();
             }
         }

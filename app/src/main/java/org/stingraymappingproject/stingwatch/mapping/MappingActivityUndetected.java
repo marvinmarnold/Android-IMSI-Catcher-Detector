@@ -8,16 +8,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.stingraymappingproject.api.clientandroid.models.Factoid;
 import org.stingraymappingproject.stingwatch.R;
 import org.stingraymappingproject.stingwatch.utils.Status;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,9 +38,7 @@ public class MappingActivityUndetected extends MappingActivityBase {
 
         setContentView(R.layout.activity_mapping_safe);
         initToolbar();
-        initLearnMoreButton();
-        initLogo();
-        initFactoids();
+//        initLearnMoreButton();
 
         if (!MappingPreferences.areTermsAccepted(this)) {
             displayTerms();
@@ -68,44 +62,19 @@ public class MappingActivityUndetected extends MappingActivityBase {
         mToolbar.setTitle("No threats detected");
     }
 
-    private void initLearnMoreButton() {
-        Button mLearnMoreButton = (Button) findViewById(R.id.activity_mapping_safe_learn_more_button);
-        mLearnMoreButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String url = getString(R.string.mapping_information_url);
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                startActivity(i);
-            }
-        });
-    }
+//    private void initLearnMoreButton() {
+//        Button mLearnMoreButton = (Button) findViewById(R.id.activity_mapping_safe_learn_more_button);
+//        mLearnMoreButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String url = getString(R.string.mapping_information_url);
+//                Intent i = new Intent(Intent.ACTION_VIEW);
+//                i.setData(Uri.parse(url));
+//                startActivity(i);
+//            }
+//        });
+//    }
 
-    private void initLogo() {
-        ImageView iv = (ImageView)findViewById(R.id.mapper_safe_logo);
-        iv.setImageResource(R.drawable.stingwatch_logo);
-    }
-
-    private void initFactoids() {
-        mFactoidText = (TextView) findViewById(R.id.activity_mapping_safe_factoid);
-        loadFactoids();
-        mFactoidSwitcherHandler = new Handler();
-        mFactoidSwitcher.run();
-    }
-
-    Runnable mFactoidSwitcher = new Runnable() {
-        @Override
-        public void run() {
-            if(mBoundToMapping) {
-                loadFactoids();
-                int numFactoids = mFactoids.size();
-                if(++currentFactoid >= numFactoids) currentFactoid = 0;
-                if(numFactoids > 0 ) mFactoidText.setText(mFactoids.get(currentFactoid).getFact());
-            }
-
-            mFactoidSwitcherHandler.postDelayed(mFactoidSwitcher, MILISECS_BETWEEN_FACTOIDS);
-        }
-    };
 
     private void displayTerms() {
         // Accept terms
@@ -134,38 +103,5 @@ public class MappingActivityUndetected extends MappingActivityBase {
         }
     }
 
-    private void loadFactoids() {
-        if(mFactoids == null) mFactoids = new ArrayList<>();
-        if(MappingPreferences.areTermsAccepted(this) && mBoundToMapping) {
-            List<Factoid> factoids = mMappingService.getFactoids();
-            if (!factoids.isEmpty()) {
-                mFactoids = factoids;
-                return;
-            }
-        }
-        loadLocalFactoids();
-    }
 
-    private void loadLocalFactoids() {
-        for (int i = 0; i < NUM_PRELOADED_FACTOIDS; i++) {
-            mFactoids.add(createPreloadedFactoid(i));
-        }
-    }
-
-    public Factoid createPreloadedFactoid(int n) {
-        if(n < 0 || n >= NUM_PRELOADED_FACTOIDS) return null;
-        switch(n) {
-            case 0:
-                return new Factoid(getString(R.string.mapping_factoids_1));
-            case 1:
-                return new Factoid(getString(R.string.mapping_factoids_2));
-            case 2:
-                return new Factoid(getString(R.string.mapping_factoids_3));
-            case 3:
-                return new Factoid(getString(R.string.mapping_factoids_4));
-            case 4:
-                return new Factoid(getString(R.string.mapping_factoids_5));
-        }
-        return null;
-    }
 }

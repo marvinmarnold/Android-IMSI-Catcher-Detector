@@ -27,7 +27,6 @@ import org.stingraymappingproject.api.clientandroid.RecurringRequest;
 import org.stingraymappingproject.api.clientandroid.StingrayAPIClientService;
 import org.stingraymappingproject.api.clientandroid.models.Factoid;
 import org.stingraymappingproject.api.clientandroid.models.StingrayReading;
-import org.stingraymappingproject.api.clientandroid.requesters.FactoidsRequester;
 import org.stingraymappingproject.api.clientandroid.requesters.NearbyRequester;
 import org.stingraymappingproject.api.clientandroid.requesters.PostStingrayReadingRequester;
 import org.stingraymappingproject.stingwatch.R;
@@ -245,7 +244,7 @@ public class MappingService extends StingrayAPIClientService {
 
     protected void scheduleRequesters() {
 //        Log.d(TAG, "scheduleRequesters");
-        scheduleFactoidsRequester();
+//        scheduleFactoidsRequester();
         scheduleNearbyRequester();
         schedulePostStingrayReadingRequester();
     }
@@ -333,28 +332,28 @@ public class MappingService extends StingrayAPIClientService {
         return true;
     }
 
-    /**
-     *
-     */
-    private void scheduleFactoidsRequester() {
-//        Log.d(TAG, "scheduleFactoidsRequester");
-        FactoidsRequester factoidsRequester = new FactoidsRequester(this) {
-            @Override
-            public void onResponse(Factoid[] response) {
-//                Log.d(TAG, "scheduleFactoidsRequester:onResponse");
-                if(response.length > 0) {
-                    setFactoids(response);
-                }
-            }
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-//                Log.d(TAG, "onErrorResponse");
-            }
-        };
-        RecurringRequest recurringRequest = new RecurringRequest(FACTOIDS_FREQUENCY_VALUE, FACTOIDS_FREQUENCY_UNIT, factoidsRequester);
-        addRecurringRequest(recurringRequest);
-    }
+//    /**
+//     *
+//     */
+//    private void scheduleFactoidsRequester() {
+////        Log.d(TAG, "scheduleFactoidsRequester");
+//        FactoidsRequester factoidsRequester = new FactoidsRequester(this) {
+//            @Override
+//            public void onResponse(Factoid[] response) {
+////                Log.d(TAG, "scheduleFactoidsRequester:onResponse");
+//                if(response.length > 0) {
+//                    setFactoids(response);
+//                }
+//            }
+//
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+////                Log.d(TAG, "onErrorResponse");
+//            }
+//        };
+//        RecurringRequest recurringRequest = new RecurringRequest(FACTOIDS_FREQUENCY_VALUE, FACTOIDS_FREQUENCY_UNIT, factoidsRequester);
+//        addRecurringRequest(recurringRequest);
+//    }
 
     private PostStingrayReadingRequester newPostStingrayReadingRequest() {
         return new PostStingrayReadingRequester(this) {

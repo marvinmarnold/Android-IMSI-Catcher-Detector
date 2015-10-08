@@ -46,7 +46,7 @@ public class BaseActivity extends FragmentActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, mTAG +  ": StatusWatcher received status change to " + Status.getStatus().name()+", updating icon");
-                    updateIcon(context);
+//                    updateIcon(context);
         }
     };
 
