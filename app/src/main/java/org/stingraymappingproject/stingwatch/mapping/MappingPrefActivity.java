@@ -36,7 +36,7 @@ public class MappingPrefActivity extends FragmentActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        
+
         String prefString = getResources().getString(R.string.mapping_pref_expert_key);
 
         if (prefs.getBoolean(prefString, false)) {

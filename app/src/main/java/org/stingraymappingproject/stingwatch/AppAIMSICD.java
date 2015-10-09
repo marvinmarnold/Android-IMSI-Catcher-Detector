@@ -28,12 +28,17 @@ import io.fabric.sdk.android.Fabric;
 
 public class AppAIMSICD extends Application {
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
-    private static final String TWITTER_KEY = "6iOIyy2Cs70rq7QQbjam9ZtIG";
-    private static final String TWITTER_SECRET = "GJQrufmB2C6fqZRTzVAemy1k6eJgkwVQWiIYE1ZqfKB1lL0Fqx";
+    private static final String TWITTER_KEY = "SPvnJs4r6Hc2I4vbE2quVguGc";
+    private static final String TWITTER_SECRET = "3uDfzZXm7wnrmv3PXVeazLdcbqL5s4IaaioaYzcF3iSBn4dhsZ";
 
     final static String TAG = "AIMSICD";
     final static String mTAG = "AppAIMSICD";
 
+    public TwitterAuthConfig getTwitterAuthConfig() {
+        return authConfig;
+    }
+
+    private TwitterAuthConfig authConfig;
     /**
      * Maps between an activity class name and the list of currently running
      * AsyncTasks that were spawned while it was active.

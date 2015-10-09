@@ -34,6 +34,7 @@ public class MappingActivityUndetected extends MappingActivityBase {
             displayTerms();
         }
 //        goCrazy();
+
     }
 
     private void goCrazy() {
@@ -87,15 +88,22 @@ public class MappingActivityUndetected extends MappingActivityBase {
         mActionToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.menu_activity_stingray_mapping_undetected_twitter:
-
-                        break;
-                    case R.id.menu_activity_stingray_mapping_undetected_learn:
-                        handleLearnPressed();
-                        break;
-                }
-                return true;
+            switch (item.getItemId()) {
+                case R.id.menu_activity_stingray_mapping_twitter:
+                    String location;
+        //        if(mBoundToStingrayAPIService) {
+        //            location = mStingrayAPIService.getStingrayReadings()
+        //        } else {
+                            location = "me";
+        //        }
+                   String tweet = "The police may be using Stingray surveillance near " + location + " #stingraymapping";
+                    handleTwitterPressed(tweet);
+                    break;
+                case R.id.menu_activity_stingray_mapping_undetected_learn:
+                    handleLearnPressed();
+                    break;
+            }
+            return true;
             }
         });
     }

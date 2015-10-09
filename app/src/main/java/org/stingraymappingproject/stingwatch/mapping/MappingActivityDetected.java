@@ -33,8 +33,6 @@ public class MappingActivityDetected extends MappingActivityBase {
     private CompassOverlay mCompassOverlay;
     private ScaleBarOverlay mScaleBarOverlay;
 
-//    TwitterAuthClient mTwitterAuthClient;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,22 +40,16 @@ public class MappingActivityDetected extends MappingActivityBase {
         setContentView(R.layout.activity_mapping_danger);
 
         initToolbar();
-//        initTwitter();
         initActionBar();
         initLogo();
         initMap();
+
     }
 
     private void initToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar_stingray_mapping);
         setSupportActionBar(mToolbar);
         mToolbar.setTitle("Threat detected");
-    }
-
-    private void initTwitter() {
-//        mTwitterAuthClient = new TwitterAuthClient();
-//        TwitterAuthConfig authConfig =  new TwitterAuthConfig("consumerKey", "consumerSecret");
-//        Fabric.with(this, new TwitterCore(authConfig), new TweetComposer());
     }
 
     private void initActionBar() {
@@ -72,9 +64,9 @@ public class MappingActivityDetected extends MappingActivityBase {
                     case R.id.menu_activity_stingray_mapping_danger_airplane:
                         handleAirplanePressed();
                         break;
-//                    case R.id.menu_activity_stingray_mapping_danger_twitter:
+                    case R.id.menu_activity_stingray_mapping_twitter:
 //                        handleTwitterPressed();
-//                        break;
+                        break;
                     case R.id.menu_activity_stingray_mapping_danger_learn:
                         handleLearnPressed();
                         break;
@@ -90,48 +82,6 @@ public class MappingActivityDetected extends MappingActivityBase {
 
         Toast toast = Toast.makeText(getApplicationContext(), text, duration);
         toast.show();
-    }
-
-    private void handleTwitterPressed() {
-//        mTwitterAuthClient.authorize(this, new com.twitter.sdk.android.core.Callback<TwitterSession>() {
-//            @Override
-//            public void onResponse(Response<TwitterSession> response) {
-//            }
-//
-//            @Override
-//            public void onFailure(Throwable t) {
-//            }
-//
-//            @Override
-//            public void success(Result<TwitterSession> result) {
-//                TwitterSession session = result.data;
-//                TwitterAuthToken authToken = session.getAuthToken();
-//                String consumerKey = authToken.token;
-//                String consumerSecret = authToken.secret;
-//
-//                postToTwitter(consumerKey, consumerSecret);
-//            }
-//
-//            @Override
-//            public void failure(TwitterException e) {
-//                e.printStackTrace();
-//            }
-//        });
-    }
-
-    private void postToTwitter(String consumerKey, String consumerSecret) {
-//        String location;
-////        if(mBoundToStingrayAPIService) {
-////            location = mStingrayAPIService.getStingrayReadings()
-////        } else {
-//        location = "me";
-////        }
-//        TwitterAuthConfig authConfig =  new TwitterAuthConfig(consumerKey, consumerSecret);
-//        Fabric.with(this, new TwitterCore(authConfig), new TweetComposer());
-//
-//        TweetComposer.Builder builder = new TweetComposer.Builder(this)
-//                .text("The police may be using a Stingray surveillance near " + location + " #stingraymapping");
-//        builder.show();
     }
 
 

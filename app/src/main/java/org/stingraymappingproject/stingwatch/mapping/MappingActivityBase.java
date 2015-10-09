@@ -13,18 +13,28 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterAuthToken;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
+
 import org.stingraymappingproject.stingwatch.AppAIMSICD;
 import org.stingraymappingproject.stingwatch.R;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Marvin Arnold on 5/09/15.
  */
 public class MappingActivityBase extends AppCompatActivity {
     private final static String TAG = "MappingActivityBase";
-
+    TwitterAuthClient mTwitterAuthClient;
     protected boolean mBoundToMapping = false;
     protected MappingService mMappingService;
-
     protected Toolbar mToolbar;
 
     @Override
@@ -39,6 +49,19 @@ public class MappingActivityBase extends AppCompatActivity {
         } else {
             startMappingService();
         }
+
+        mTwitterAuthClient = new TwitterAuthClient();
+        TwitterAuthConfig authConfig = ((AppAIMSICD) getApplication()).getTwitterAuthConfig();
+        Fabric.with(this, new TwitterCore(authConfig), new TweetComposer());
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Pass the activity result to the login button.
+        mTwitterAuthClient.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -114,5 +137,32 @@ public class MappingActivityBase extends AppCompatActivity {
         startActivity(i);
     }
 
+    protected void handleTwitterPressed(final String tweet) {
+        mTwitterAuthClient.authorize(this, new com.twitter.sdk.android.core.Callback<TwitterSession>() {
 
+            @Override
+            public void success(Result<TwitterSession> result) {
+                TwitterSession session = result.data;
+                TwitterAuthToken authToken = session.getAuthToken();
+                String consumerKey = authToken.token;
+                String consumerSecret = authToken.secret;
+
+                postToTwitter(consumerKey, consumerSecret, tweet);
+            }
+
+            @Override
+            public void failure(TwitterException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    protected void postToTwitter(String consumerKey, String consumerSecret, String tweet) {
+        TwitterAuthConfig authConfig =  new TwitterAuthConfig(consumerKey, consumerSecret);
+        Fabric.with(this, new TwitterCore(authConfig), new TweetComposer());
+
+        TweetComposer.Builder builder = new TweetComposer.Builder(this)
+                .text(tweet);
+        builder.show();
+    }
 }
