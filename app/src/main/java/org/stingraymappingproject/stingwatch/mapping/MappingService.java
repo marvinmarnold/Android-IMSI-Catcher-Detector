@@ -218,7 +218,7 @@ public class MappingService extends StingrayAPIClientService {
         //LED
         mBuilder.setLights(Color.RED, 3000, 3000);
 
-        //Ton
+        //Tone
         mBuilder.setSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.stingwatch_sound));
 
         // mId allows you to update the notification later on.

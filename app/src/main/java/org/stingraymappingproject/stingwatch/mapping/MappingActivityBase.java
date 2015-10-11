@@ -102,6 +102,7 @@ public class MappingActivityBase extends AppCompatActivity {
     }
 
     private void startMappingService() {
+        Log.d(TAG, "startMappingService#" + mBoundToMapping);
         if (!mBoundToMapping) {
             // Bind to LocalService
             Intent intent = new Intent(MappingActivityBase.this, MappingService.class);
@@ -118,9 +119,11 @@ public class MappingActivityBase extends AppCompatActivity {
     private final ServiceConnection mMappingServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d(TAG, "onServiceConnected");
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             mMappingService = ((MappingService.MappingBinder) service).getService();
             mBoundToMapping = true;
+            onConnectedToMappingService();
         }
 
         @Override
@@ -129,6 +132,10 @@ public class MappingActivityBase extends AppCompatActivity {
             mBoundToMapping = false;
         }
     };
+
+    protected void onConnectedToMappingService() {
+        return;
+    }
 
     protected void handleLearnPressed() {
         String url = getString(R.string.mapping_information_url);

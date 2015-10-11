@@ -40,8 +40,10 @@ public class MappingActivityDetected extends MappingActivityBase {
 
         initToolbar();
         initActionBar();
-        initMap();
+    }
 
+    protected void onConnectedToMappingService() {
+        initMap();
     }
 
     private void initToolbar() {
@@ -82,7 +84,7 @@ public class MappingActivityDetected extends MappingActivityBase {
     }
 
     private void handleAirplanePressed() {
-        CharSequence text = "Consider turning your phone off or putting it into Airplane Mode.";
+        CharSequence text = "Go to your phone's settings to put it into airplane mode.";
         int duration = Toast.LENGTH_LONG;
 
         Toast toast = Toast.makeText(getApplicationContext(), text, duration);
@@ -113,41 +115,38 @@ public class MappingActivityDetected extends MappingActivityBase {
         mMap.getOverlays().add(mCompassOverlay);
         mMap.getOverlays().add(mScaleBarOverlay);
 
-        double lastLat = DEFAULT_MAP_LAT;
-        double lastLong = DEFAULT_MAP_LONG;
+        Log.d(TAG, mBoundToMapping + " Localized");
 
         if(mBoundToMapping && mMappingService.lastKnownLocation() != null) {
             GeoLocation lastLoc = mMappingService.lastKnownLocation();
-            lastLat = lastLoc.getLatitudeInDegrees();
-            lastLong = lastLoc.getLongitudeInDegrees();
+            double lastLat = lastLoc.getLatitudeInDegrees();
+            double lastLong = lastLoc.getLongitudeInDegrees();
+            GeoPoint currentLocation = new GeoPoint(lastLat, lastLong);
+            mMap.getController().setCenter(currentLocation);
         }
 
         addMarkerToMap();
 
         mScaleBarOverlay.setCentred(true);
         mMap.getController().setZoom(14);
-        GeoPoint currentLocation = new GeoPoint(lastLat, lastLong);
-        mMap.getController().setCenter(currentLocation);
         mMap.invalidate();
     }
 
     private void addMarkerToMap() {
-        double lastLat = DEFAULT_MAP_LAT;
-        double lastLong = DEFAULT_MAP_LONG;
         if(mBoundToMapping && mMappingService.lastKnownLocation() != null) {
             Log.d(TAG, "addMarkerToMap");
             GeoLocation lastLoc = mMappingService.lastKnownLocation();
-            lastLat = lastLoc.getLatitudeInDegrees();
-            lastLong = lastLoc.getLongitudeInDegrees();
+            double lastLat = lastLoc.getLatitudeInDegrees();
+            double lastLong = lastLoc.getLongitudeInDegrees();
+
+            Polygon circle = new Polygon(this);
+            circle.setPoints(Polygon.pointsAsCircle(new GeoPoint(lastLat, lastLong), 550.0)); // radius = 550
+
+            circle.setFillColor(Color.TRANSPARENT);
+            circle.setStrokeColor(Color.RED);
+            circle.setStrokeWidth(5);
+
+            mMap.getOverlays().add(circle);
         }
-
-        Polygon circle = new Polygon(this);
-        circle.setPoints(Polygon.pointsAsCircle(new GeoPoint(lastLat, lastLong), 550.0)); // radius = 550
-
-        circle.setFillColor(Color.RED);
-        circle.setStrokeColor(Color.RED);
-        circle.setStrokeWidth(2);
-
-        mMap.getOverlays().add(circle);
     }
 }
