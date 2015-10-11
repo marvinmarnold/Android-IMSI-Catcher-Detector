@@ -19,28 +19,34 @@
         android:textColor="?attr/colorPrimaryDark"
         android:layout_alignParentBottom="true" />
 
-
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_above="@id/toolbar_stingray_mapping_danger_action"
         android:layout_below="@id/toolbar_stingray_mapping"
-        android:background="#ededed">
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/mapping_activity_detected_background"
-            android:scaleType="fitCenter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/detected"
-            android:background="#ededed"/>
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="#ededed">
+
+            <ImageView
+                android:id="@+id/mapping_activity_detected_background"
+                android:scaleType="fitCenter"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:src="@drawable/detected"
+                android:background="#ededed"/>
+        </FrameLayout>
 
         <org.osmdroid.views.MapView
             android:id="@+id/stingray_mapping_danger_map"
             android:layout_width="fill_parent"
+            android:layout_weight="1.6"
             android:layout_height="fill_parent" />
-
-
-    </FrameLayout>
+    </LinearLayout>
     
 </RelativeLayout>

@@ -69,7 +69,7 @@ public class MappingActivityDetected extends MappingActivityBase {
                         //        } else {
                         location = "me";
                         //        }
-                        String tweet = "The police may be using Stingray surveillance near " + location + " #stingraymapping";
+                        String tweet = "The police may be using Stingray surveillance near " + location + "stingraymappingproject.org #stingraymapping";
                         handleTwitterPressed(tweet);
                         break;
                     case R.id.menu_activity_stingray_mapping_danger_learn:
