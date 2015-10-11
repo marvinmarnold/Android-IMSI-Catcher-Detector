@@ -33,7 +33,7 @@ public class MappingActivityUndetected extends MappingActivityBase {
         if (!MappingPreferences.areTermsAccepted(this)) {
             displayTerms();
         }
-//        goCrazy();
+        goCrazy();
 
     }
 
@@ -90,13 +90,7 @@ public class MappingActivityUndetected extends MappingActivityBase {
             public boolean onMenuItemClick(MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.menu_activity_stingray_mapping_twitter:
-                    String location;
-        //        if(mBoundToStingrayAPIService) {
-        //            location = mStingrayAPIService.getStingrayReadings()
-        //        } else {
-                            location = "me";
-        //        }
-                   String tweet = "The police may be using Stingray surveillance near " + location + " #stingraymapping";
+                   String tweet = "Local police are using military grade surveillance technology against citizens. stingraymappingproject.org #stingraymapping";
                     handleTwitterPressed(tweet);
                     break;
                 case R.id.menu_activity_stingray_mapping_undetected_learn:

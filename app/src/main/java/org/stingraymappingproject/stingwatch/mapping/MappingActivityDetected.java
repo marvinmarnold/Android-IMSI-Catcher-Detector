@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.osmdroid.bonuspack.overlays.Polygon;
@@ -41,7 +40,6 @@ public class MappingActivityDetected extends MappingActivityBase {
 
         initToolbar();
         initActionBar();
-        initLogo();
         initMap();
 
     }
@@ -65,7 +63,14 @@ public class MappingActivityDetected extends MappingActivityBase {
                         handleAirplanePressed();
                         break;
                     case R.id.menu_activity_stingray_mapping_twitter:
-//                        handleTwitterPressed();
+                        String location;
+                        //        if(mBoundToStingrayAPIService) {
+                        //            location = mStingrayAPIService.getStingrayReadings()
+                        //        } else {
+                        location = "me";
+                        //        }
+                        String tweet = "The police may be using Stingray surveillance near " + location + " #stingraymapping";
+                        handleTwitterPressed(tweet);
                         break;
                     case R.id.menu_activity_stingray_mapping_danger_learn:
                         handleLearnPressed();
@@ -82,12 +87,6 @@ public class MappingActivityDetected extends MappingActivityBase {
 
         Toast toast = Toast.makeText(getApplicationContext(), text, duration);
         toast.show();
-    }
-
-
-    private void initLogo() {
-        ImageView iv = (ImageView)findViewById(R.id.mapper_danger_logo);
-        iv.setImageResource(R.drawable.stingwatch_danger);
     }
 
     private void initMap() {

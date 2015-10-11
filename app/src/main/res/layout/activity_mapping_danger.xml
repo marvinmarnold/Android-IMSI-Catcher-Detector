@@ -20,47 +20,20 @@
         android:layout_alignParentBottom="true" />
 
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/toolbar_stingray_mapping_danger_action"
         android:layout_below="@id/toolbar_stingray_mapping"
-        android:background="#fff">
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/activity_mapping_danger_description"
-            android:id="@+id/mapper_danger_description"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:textColor="#000"
-            android:textSize="30dp"
-            android:maxWidth="400dp" />
+        android:background="#ededed">
 
         <ImageView
+            android:id="@+id/mapping_activity_detected_background"
+            android:scaleType="fitCenter"
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:id="@+id/mapper_danger_logo"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"
-            android:layout_marginBottom="25dp"
-            android:textSize="20dp"
-            android:maxWidth="550dp" />
-
-        <TextView
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/activity_mapping_danger_hint"
-            android:id="@+id/mapper_danger_hint"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:textColor="#000"
-            android:maxWidth="550dp" />
+            android:src="@drawable/detected"
+            android:background="#ededed"/>
 
         <org.osmdroid.views.MapView
             android:id="@+id/stingray_mapping_danger_map"
@@ -68,5 +41,6 @@
             android:layout_height="fill_parent" />
 
 
-    </LinearLayout>
+    </FrameLayout>
+    
 </RelativeLayout>
