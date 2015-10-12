@@ -73,6 +73,7 @@ public static final android.os.Parcelable$Creator *;
 }
 
 -dontwarn org.apache.**
+-dontwarn com.kaichunlin.transition.**
 
 -dontwarn com.squareup.okhttp.**
 -dontwarn com.google.appengine.api.urlfetch.**

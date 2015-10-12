@@ -3,7 +3,6 @@ package org.stingraymappingproject.stingwatch.mapping;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -35,7 +34,6 @@ public class MappingActivityDetected extends MappingActivityBase {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_mapping_danger);
 
         initToolbar();
@@ -115,8 +113,6 @@ public class MappingActivityDetected extends MappingActivityBase {
         mMap.getOverlays().add(mCompassOverlay);
         mMap.getOverlays().add(mScaleBarOverlay);
 
-        Log.d(TAG, mBoundToMapping + " Localized");
-
         if(mBoundToMapping && mMappingService.lastKnownLocation() != null) {
             GeoLocation lastLoc = mMappingService.lastKnownLocation();
             double lastLat = lastLoc.getLatitudeInDegrees();
@@ -134,7 +130,6 @@ public class MappingActivityDetected extends MappingActivityBase {
 
     private void addMarkerToMap() {
         if(mBoundToMapping && mMappingService.lastKnownLocation() != null) {
-            Log.d(TAG, "addMarkerToMap");
             GeoLocation lastLoc = mMappingService.lastKnownLocation();
             double lastLat = lastLoc.getLatitudeInDegrees();
             double lastLong = lastLoc.getLongitudeInDegrees();

@@ -33,7 +33,7 @@ public class MappingActivityUndetected extends MappingActivityBase {
         if (!MappingPreferences.areTermsAccepted(this)) {
             displayTerms();
         }
-        goCrazy();
+//        goCrazy();
 
     }
 

@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
           package="org.stingraymappingproject.stingwatch"
-          android:versionCode="42"
-          android:versionName="0.1.42-alpha">
+          android:versionCode="43"
+          android:versionName="0.1.43-alpha">
 
     <!-- If we ever wanna make this a system app, we can add the following 2 lines above:
           coreApp="true"
